@@ -1,6 +1,13 @@
 import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import { AlarmItem } from '../types/alarm';
+
+interface IAlarmPermissionPlugin {
+  requestBatteryOptimization(): Promise<void>;
+  requestExactAlarm(): Promise<void>;
+}
+
+const AlarmPermission = registerPlugin<IAlarmPermissionPlugin>('AlarmPermission');
 
 class NotificationService {
   private isNative: boolean;
@@ -20,6 +27,30 @@ class NotificationService {
     } catch (e) {
       console.warn('LocalNotifications not available', e);
       return false;
+    }
+  }
+
+  /**
+   * Directly trigger the native Android Battery Optimization exemption dialog
+   */
+  public async triggerBatteryOptimization() {
+    if (!this.isNative) return;
+    try {
+      await AlarmPermission.requestBatteryOptimization();
+    } catch (e) {
+      console.error('Failed to trigger battery optimization intent', e);
+    }
+  }
+
+  /**
+   * Directly trigger the native Android Exact Alarm permission intent
+   */
+  public async triggerExactAlarm() {
+    if (!this.isNative) return;
+    try {
+      await AlarmPermission.requestExactAlarm();
+    } catch (e) {
+      console.error('Failed to trigger exact alarm intent', e);
     }
   }
 

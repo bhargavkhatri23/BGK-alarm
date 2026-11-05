@@ -14,7 +14,6 @@ import { HomeScreen } from './components/HomeScreen';
 import { ForgotPasswordModal } from './components/ForgotPasswordModal';
 import { CreateAlarmSheet } from './components/CreateAlarmSheet';
 import { AlarmRingingModal } from './components/AlarmRingingModal';
-import { NativePermissionDialog } from './components/NativePermissionDialog';
 import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
 import { notificationService } from './utils/notificationService';
 import { LocalNotifications } from '@capacitor/local-notifications';
@@ -69,9 +68,6 @@ export default function App() {
   const [isCreateAlarmOpen, setIsCreateAlarmOpen] = useState<boolean>(false);
   const [alarmToEdit, setAlarmToEdit] = useState<AlarmItem | null>(null);
   const [activeRingingAlarm, setActiveRingingAlarm] = useState<AlarmItem | null>(null);
-
-  // Native system permission dialog prompt state
-  const [showNativePermissionDialog, setShowNativePermissionDialog] = useState<boolean>(false);
 
   // Audio Context unlocker on user interaction
   useEffect(() => {
@@ -141,18 +137,24 @@ export default function App() {
     };
   }, [currentUserEmail, userAlarms]);
 
-  // Request native permission dynamically
-  const triggerNativePermissionCheck = () => {
+  const triggerNativePermissionCheck = async () => {
+    // 1. Post Notifications (Runtime Dialog)
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'default') {
-        setShowNativePermissionDialog(true);
         try {
-          Notification.requestPermission();
+          await notificationService.requestPermissions();
         } catch {
           // Ignored
         }
       }
     }
+
+    // 2. Battery Optimization Exemption (Native Intent/Dialog)
+    await notificationService.triggerBatteryOptimization();
+
+    // 3. Exact Alarm Permission (Native Intent/Settings)
+    await notificationService.triggerExactAlarm();
+
     try {
       backgroundTimer.requestWakeLock();
       audioEngine.initContext();
@@ -573,13 +575,6 @@ export default function App() {
           onToggleLanguage={() => setIsHindi(!isHindi)}
         />
       )}
-
-      {/* Standard Native System Permission Dialog (like WhatsApp/Instagram/Gemini) */}
-      <NativePermissionDialog
-        isOpen={showNativePermissionDialog}
-        onClose={() => setShowNativePermissionDialog(false)}
-        isHindi={isHindi}
-      />
 
       {/* Forgot Password Modal with 6-digit verification code */}
       {showForgotPassword && (
