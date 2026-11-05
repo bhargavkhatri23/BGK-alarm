@@ -1,0 +1,22 @@
+{
+	"appId": "com.bgkyadgiri.alarm",
+	"appName": "BGK Yadgiri",
+	"webDir": "dist",
+	"bundledWebRuntime": false,
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	},
+	"android": {
+		"allowMixedContent": true,
+		"captureInput": true,
+		"webContentsDebuggingEnabled": true
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 1500,
+			"backgroundColor": "#070B12",
+			"showSpinner": false
+		}
+	}
+}

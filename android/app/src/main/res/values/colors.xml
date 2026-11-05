@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00FF66</color>
+    <color name="colorPrimaryDark">#070B12</color>
+    <color name="colorAccent">#00FF66</color>
+    <color name="omnitrixGreen">#00FF66</color>
+    <color name="omnitrixDark">#070B12</color>
+    <color name="omnitrixSurface">#0C121E</color>
+</resources>
