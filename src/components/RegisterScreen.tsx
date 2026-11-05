@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock, UserPlus, ArrowLeft, AlertCircle, CheckCircle2, Shield, Zap } from 'lucide-react';
 
 interface RegisterScreenProps {
-  onRegister: (email: string, password: string) => boolean;
+  onRegister: (email: string, password: string) => Promise<boolean>;
   onBackToLogin: () => void;
   isHindi: boolean;
 }
@@ -17,6 +17,7 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   const [confirmPass, setConfirmPass] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,23 +47,26 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
       return;
     }
 
-    const success = onRegister(cleanEmail, cleanPass);
-    if (success) {
-      setSuccessMsg(
-        isHindi
-          ? 'सफलतापूर्वक रजिस्टर हो गया! अब लॉगिन करें।'
-          : 'Registration successful! You can now log in.'
-      );
-      setTimeout(() => {
-        onBackToLogin();
-      }, 1200);
-    } else {
-      setErrorMsg(
-        isHindi
-          ? 'यह ईमेल पहले से पंजीकृत है! कृपया लॉगिन करें।'
-          : 'This email is already registered! Please login instead.'
-      );
-    }
+    setIsLoading(true);
+    onRegister(cleanEmail, cleanPass).then((success) => {
+      setIsLoading(false);
+      if (success) {
+        setSuccessMsg(
+          isHindi
+            ? 'सफलतापूर्वक रजिस्टर हो गया! अब लॉगिन करें।'
+            : 'Registration successful! You can now log in.'
+        );
+        setTimeout(() => {
+          onBackToLogin();
+        }, 1200);
+      } else {
+        setErrorMsg(
+          isHindi
+            ? 'पंजीकरण विफल! यह ईमेल पहले से मौजूद हो सकता है।'
+            : 'Registration failed! This email might already exist.'
+        );
+      }
+    });
   };
 
   return (
@@ -168,9 +172,14 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
 
           <button
             type="submit"
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-[#00FF66] text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer mt-2 tracking-wide"
+            disabled={isLoading}
+            className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-[#00FF66] text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer mt-2 tracking-wide flex items-center justify-center gap-2"
           >
-            {isHindi ? 'रजिस्टर करें' : 'Register Now'}
+            {isLoading ? (
+              <span className="inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+            ) : (
+              <span>{isHindi ? 'रजिस्टर करें' : 'Register Now'}</span>
+            )}
           </button>
         </form>
 

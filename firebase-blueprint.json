@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Permanent user record for authentication and preferences.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastLogin": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email"]
+    },
+    "Alarm": {
+      "title": "Alarm Record",
+      "description": "User scheduled alarm for reminders.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string" },
+        "task": { "type": "string", "maxLength": 500 },
+        "time": { "type": "string" },
+        "day": { "type": "string" },
+        "hour": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "minute": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "ampm": { "type": "string", "enum": ["AM", "PM"] },
+        "ringtone": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["id", "userId", "task", "time", "day", "hour", "minute", "ampm", "enabled", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "Collection of user profiles."
+    },
+    "users/{userId}/alarms/{alarmId}": {
+      "schema": { "$ref": "Alarm" },
+      "description": "Subcollection of alarms for a specific user."
+    }
+  }
+}

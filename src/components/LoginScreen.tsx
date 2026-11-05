@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BellRing, Mail, Lock, ArrowRight, KeyRound, AlertCircle, Zap } from 'lucide-react';
 
 interface LoginScreenProps {
-  onLogin: (email: string, pass: string) => boolean;
+  onLogin: (email: string, pass: string) => Promise<boolean>;
   onNavigateToRegister: () => void;
   onNavigateToForgotPassword: () => void;
   isHindi: boolean;
@@ -33,17 +33,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
     }
 
     setIsLoading(true);
-    setTimeout(() => {
-      const ok = onLogin(cleanEmail, cleanPass);
+    onLogin(cleanEmail, cleanPass).then((ok) => {
       setIsLoading(false);
       if (!ok) {
         setErrorMsg(
           isHindi
-            ? 'गलत ईमेल या पासवर्ड! कृपया रजिस्टर करें।'
+            ? 'गलत ईमेल या पासवर्ड! कृपया जांचें या रजिस्टर करें।'
             : 'Incorrect email or password! Please check or register.'
         );
       }
-    }, 200);
+    });
   };
 
   return (

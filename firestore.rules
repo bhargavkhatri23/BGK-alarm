@@ -1,0 +1,65 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // User Profile Rules
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) 
+        && incoming().email == request.auth.token.email
+        && incoming().keys().hasAll(['email', 'createdAt'])
+        && incoming().keys().hasOnly(['email', 'createdAt', 'lastLogin']);
+      allow update: if isOwner(userId)
+        && incoming().email == existing().email
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['lastLogin']);
+    }
+
+    // Alarms Rules
+    match /users/{userId}/alarms/{alarmId} {
+      function isValidAlarm(data) {
+        return data.id == alarmId
+          && data.userId == userId
+          && data.task is string && data.task.size() <= 500
+          && data.hour is string && data.hour.size() == 2
+          && data.minute is string && data.minute.size() == 2
+          && data.ampm in ['AM', 'PM']
+          && data.enabled is bool
+          && data.createdAt is number;
+      }
+
+      allow list: if isOwner(userId);
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidAlarm(incoming());
+      allow update: if isOwner(userId) && isValidAlarm(incoming())
+        && incoming().createdAt == existing().createdAt;
+      allow delete: if isOwner(userId);
+    }
+  }
+}

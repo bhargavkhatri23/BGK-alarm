@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AlarmItem } from './types/alarm';
-import { INITIAL_DEMO_USERS, INITIAL_DEMO_ALARMS, DEFAULT_RINGTONE } from './utils/constants';
+import { DEFAULT_RINGTONE } from './utils/constants';
 import { audioEngine } from './utils/audioEngine';
 import { backgroundTimer } from './utils/backgroundTimer';
 import { LoginScreen } from './components/LoginScreen';
@@ -18,58 +18,49 @@ import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
 import { notificationService } from './utils/notificationService';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
+// Firebase Imports
+import { auth } from './firebase';
+import { 
+  onAuthStateChanged, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signOut,
+  sendPasswordResetEmail
+} from 'firebase/auth';
+import { firebaseService } from './utils/firebaseService';
+
 export default function App() {
-  // Persistence in localStorage
-  const [registeredUsers, setRegisteredUsers] = useState<Record<string, string>>(() => {
-    try {
-      const saved = localStorage.getItem('bgk_registered_users');
-      return saved ? JSON.parse(saved) : INITIAL_DEMO_USERS;
-    } catch {
-      return INITIAL_DEMO_USERS;
-    }
-  });
-
-  const [userAlarms, setUserAlarms] = useState<Record<string, AlarmItem[]>>(() => {
-    try {
-      const saved = localStorage.getItem('bgk_user_alarms');
-      if (saved) {
-        const parsed = JSON.parse(saved) as Record<string, AlarmItem[]>;
-        const sanitized: Record<string, AlarmItem[]> = {};
-        for (const [user, list] of Object.entries(parsed)) {
-          sanitized[user] = list.map((a) => ({ ...a, ringtone: DEFAULT_RINGTONE }));
-        }
-        return sanitized;
-      }
-      return INITIAL_DEMO_ALARMS;
-    } catch {
-      return INITIAL_DEMO_ALARMS;
-    }
-  });
-
-  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(() => {
-    try {
-      return localStorage.getItem('bgk_current_user') || null;
-    } catch {
-      return null;
-    }
-  });
-
-  // Strict initial default to Login screen when not authenticated
-  const [currentScreen, setCurrentScreen] = useState<'login' | 'register' | 'home'>(() => {
-    try {
-      return localStorage.getItem('bgk_current_user') ? 'home' : 'login';
-    } catch {
-      return 'login';
-    }
-  });
-
+  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
+  const [currentAlarms, setCurrentAlarms] = useState<AlarmItem[]>([]);
+  const [currentScreen, setCurrentScreen] = useState<'login' | 'register' | 'home'>('login');
   const [isHindi, setIsHindi] = useState<boolean>(true);
   const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
   const [isCreateAlarmOpen, setIsCreateAlarmOpen] = useState<boolean>(false);
   const [alarmToEdit, setAlarmToEdit] = useState<AlarmItem | null>(null);
   const [activeRingingAlarm, setActiveRingingAlarm] = useState<AlarmItem | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Audio Context unlocker on user interaction
+  // 1. Firebase Auth Listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setCurrentUserEmail(user.email);
+        setCurrentScreen('home');
+        // Fetch Alarms from Firestore
+        const alarms = await firebaseService.getUserAlarms();
+        setCurrentAlarms(alarms);
+        triggerNativePermissionCheck();
+      } else {
+        setCurrentUserEmail(null);
+        setCurrentScreen('login');
+        setCurrentAlarms([]);
+      }
+      setIsLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Audio Context unlocker
   useEffect(() => {
     const unlock = () => {
       audioEngine.initContext();
@@ -84,49 +75,20 @@ export default function App() {
     };
   }, []);
 
-  // Save changes to localStorage
+  // Sync alarms with native OS notifications
   useEffect(() => {
-    try {
-      localStorage.setItem('bgk_registered_users', JSON.stringify(registeredUsers));
-    } catch {
-      // Ignored
+    if (currentUserEmail && currentAlarms.length >= 0) {
+      notificationService.syncAlarms(currentAlarms);
     }
-  }, [registeredUsers]);
+  }, [currentUserEmail, currentAlarms]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('bgk_user_alarms', JSON.stringify(userAlarms));
-    } catch {
-      // Ignored
-    }
-  }, [userAlarms]);
-
-  useEffect(() => {
-    try {
-      if (currentUserEmail) {
-        localStorage.setItem('bgk_current_user', currentUserEmail);
-      } else {
-        localStorage.removeItem('bgk_current_user');
-      }
-    } catch {
-      // Ignored
-    }
-  }, [currentUserEmail]);
-
-  // Sync alarms with native OS notifications for closed-app execution
-  useEffect(() => {
-    if (currentUserEmail && userAlarms[currentUserEmail]) {
-      notificationService.syncAlarms(userAlarms[currentUserEmail]);
-    }
-  }, [currentUserEmail, userAlarms]);
-
-  // Listen for notification taps to open the app and trigger the ringing UI
+  // Listen for notification taps
   useEffect(() => {
     let sub: Promise<any>;
     sub = LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
       const alarmId = action.notification.extra?.alarmId;
       if (alarmId && currentUserEmail) {
-        const alarm = (userAlarms[currentUserEmail] || []).find(a => a.id === alarmId);
+        const alarm = currentAlarms.find(a => a.id === alarmId);
         if (alarm) {
           setActiveRingingAlarm(alarm);
         }
@@ -135,10 +97,9 @@ export default function App() {
     return () => {
       sub.then(s => s.remove());
     };
-  }, [currentUserEmail, userAlarms]);
+  }, [currentUserEmail, currentAlarms]);
 
   const triggerNativePermissionCheck = async () => {
-    // 1. Post Notifications (Runtime Dialog)
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'default') {
         try {
@@ -148,11 +109,7 @@ export default function App() {
         }
       }
     }
-
-    // 2. Battery Optimization Exemption (Native Intent/Dialog)
     await notificationService.triggerBatteryOptimization();
-
-    // 3. Exact Alarm Permission (Native Intent/Settings)
     await notificationService.triggerExactAlarm();
 
     try {
@@ -170,16 +127,10 @@ export default function App() {
     if (!currentUserEmail) return;
 
     const now = new Date();
-
     const dayIndex = now.getDay();
     const dayNames = [
-      'रविवार (Sunday)',
-      'सोमवार (Monday)',
-      'मंगलवार (Tuesday)',
-      'बुधवार (Wednesday)',
-      'गुरुवार (Thursday)',
-      'शुक्रवार (Friday)',
-      'शनिवार (Saturday)',
+      'रविवार (Sunday)', 'सोमवार (Monday)', 'मंगलवार (Tuesday)', 'बुधवार (Wednesday)',
+      'गुरुवार (Thursday)', 'शुक्रवार (Friday)', 'शनिवार (Saturday)',
     ];
     const currentDay = dayNames[dayIndex];
     const currentDayShort = currentDay.split(' ')[0];
@@ -191,9 +142,7 @@ export default function App() {
     const formattedHour = hours.toString().padStart(2, '0');
     const formattedMinute = now.getMinutes().toString().padStart(2, '0');
 
-    const currentList = userAlarms[currentUserEmail] || [];
-
-    for (const alarm of currentList) {
+    for (const alarm of currentAlarms) {
       if (!alarm.enabled) continue;
 
       const matchesDay =
@@ -210,22 +159,13 @@ export default function App() {
 
         if (!triggeredAlarmsMapRef.current.has(triggerKey)) {
           triggeredAlarmsMapRef.current.set(triggerKey, Date.now());
-
-          // 1. AUTO-TRIGGER: open ringing UI automatically
           setActiveRingingAlarm(alarm);
-
-          // 2. Play the classic digital beep sound automatically
           audioEngine.play(DEFAULT_RINGTONE, true);
 
-          // 3. Native system notification
-          if (
-            typeof window !== 'undefined' &&
-            'Notification' in window &&
-            Notification.permission === 'granted'
-          ) {
+          if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
             try {
               new Notification(`BGK Yadgiri: ${alarm.task}`, {
-                body: `समय: ${alarm.time} | क्लासिक डिजिटल बीप अलार्म बज रहा है!`,
+                body: `समय: ${alarm.time} | अलार्म बज रहा है!`,
                 icon: '/favicon.ico',
                 tag: triggerKey,
               });
@@ -233,7 +173,6 @@ export default function App() {
               // Ignored
             }
           }
-
           break;
         }
       }
@@ -247,73 +186,54 @@ export default function App() {
         }
       }
     }
-  }, [currentUserEmail, userAlarms]);
+  }, [currentUserEmail, currentAlarms]);
 
-  // Subscribe backgroundTimer service (Web Worker + Main Thread dual tick)
   useEffect(() => {
     const unsubscribe = backgroundTimer.subscribe(checkAlarms);
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [checkAlarms]);
 
   // Authentication Handlers
-  const handleLogin = (email: string, pass: string): boolean => {
-    const cleanEmail = email.trim();
-    if (registeredUsers[cleanEmail] && registeredUsers[cleanEmail] === pass) {
-      setCurrentUserEmail(cleanEmail);
-      if (!userAlarms[cleanEmail]) {
-        setUserAlarms((prev) => ({
-          ...prev,
-          [cleanEmail]: [],
-        }));
-      }
-      setCurrentScreen('home');
-
-      // Trigger standard native permission prompt on login
-      setTimeout(() => {
-        triggerNativePermissionCheck();
-      }, 500);
-
+  const handleLogin = async (email: string, pass: string): Promise<boolean> => {
+    try {
+      await signInWithEmailAndPassword(auth, email.trim(), pass);
+      await firebaseService.saveUser(email.trim());
       return true;
-    }
-    return false;
-  };
-
-  const handleRegister = (email: string, pass: string): boolean => {
-    const cleanEmail = email.trim();
-    if (registeredUsers[cleanEmail]) {
+    } catch (error) {
+      console.error('Login error:', error);
       return false;
     }
-    setRegisteredUsers((prev) => ({
-      ...prev,
-      [cleanEmail]: pass,
-    }));
-    setUserAlarms((prev) => ({
-      ...prev,
-      [cleanEmail]: [],
-    }));
-    return true;
   };
 
-  const handleSavePassword = (email: string, newPass: string) => {
-    setRegisteredUsers((prev) => ({
-      ...prev,
-      [email]: newPass,
-    }));
+  const handleRegister = async (email: string, pass: string): Promise<boolean> => {
+    try {
+      await createUserWithEmailAndPassword(auth, email.trim(), pass);
+      await firebaseService.saveUser(email.trim());
+      return true;
+    } catch (error) {
+      console.error('Registration error:', error);
+      return false;
+    }
   };
 
-  const handleLogout = () => {
+  const handleSavePassword = async (email: string, newPass: string) => {
+    // Note: Firebase reset is usually via link, but we'll use a placeholder for now
+    // In a real app we'd call sendPasswordResetEmail
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleLogout = async () => {
     audioEngine.stop();
     setActiveRingingAlarm(null);
-    setCurrentUserEmail(null);
-    setCurrentScreen('login');
+    await signOut(auth);
   };
 
   // Alarm Management Handlers
-  const currentAlarms = currentUserEmail ? userAlarms[currentUserEmail] || [] : [];
-
-  const handleSaveAlarm = (alarmData: {
+  const handleSaveAlarm = async (alarmData: {
     task: string;
     day: string;
     hour: string;
@@ -326,20 +246,14 @@ export default function App() {
     const timeString = `${alarmData.day}, ${alarmData.hour}:${alarmData.minute} ${alarmData.ampm}`;
 
     if (alarmToEdit) {
-      setUserAlarms((prev) => {
-        const list = prev[currentUserEmail] || [];
-        const updated = list.map((item) =>
-          item.id === alarmToEdit.id
-            ? {
-                ...item,
-                ...alarmData,
-                ringtone: DEFAULT_RINGTONE,
-                time: timeString,
-              }
-            : item
-        );
-        return { ...prev, [currentUserEmail]: updated };
-      });
+      const updatedAlarm: AlarmItem = {
+        ...alarmToEdit,
+        ...alarmData,
+        ringtone: DEFAULT_RINGTONE,
+        time: timeString,
+      };
+      await firebaseService.saveAlarm(updatedAlarm);
+      setCurrentAlarms(prev => prev.map(a => a.id === updatedAlarm.id ? updatedAlarm : a));
     } else {
       const newAlarm: AlarmItem = {
         id: `alarm-${Date.now()}`,
@@ -353,25 +267,16 @@ export default function App() {
         enabled: true,
         createdAt: Date.now(),
       };
-
-      setUserAlarms((prev) => {
-        const list = prev[currentUserEmail] || [];
-        return {
-          ...prev,
-          [currentUserEmail]: [newAlarm, ...list],
-        };
-      });
+      await firebaseService.saveAlarm(newAlarm);
+      setCurrentAlarms(prev => [newAlarm, ...prev]);
     }
 
     setIsCreateAlarmOpen(false);
     setAlarmToEdit(null);
-
-    // Prompt native permission when user sets an alarm if not already granted
     triggerNativePermissionCheck();
   };
 
-  // Quick helper to schedule an alarm for 1 minute in the future
-  const handleQuickAddOneMinAlarm = () => {
+  const handleQuickAddOneMinAlarm = async () => {
     if (!currentUserEmail) return;
     const now = new Date();
     const nextMin = new Date(now.getTime() + 60 * 1000);
@@ -385,13 +290,8 @@ export default function App() {
 
     const dayIndex = nextMin.getDay();
     const dayNames = [
-      'रविवार (Sunday)',
-      'सोमवार (Monday)',
-      'मंगलवार (Tuesday)',
-      'बुधवार (Wednesday)',
-      'गुरुवार (Thursday)',
-      'शुक्रवार (Friday)',
-      'शनिवार (Saturday)',
+      'रविवार (Sunday)', 'सोमवार (Monday)', 'मंगलवार (Tuesday)', 'बुधवार (Wednesday)',
+      'गुरुवार (Thursday)', 'शुक्रवार (Friday)', 'शनिवार (Saturday)',
     ];
     const dayStr = dayNames[dayIndex];
     const timeString = `प्रतिदिन (Every Day), ${hourStr}:${minuteStr} ${ampm}`;
@@ -409,14 +309,8 @@ export default function App() {
       createdAt: Date.now(),
     };
 
-    setUserAlarms((prev) => {
-      const list = prev[currentUserEmail] || [];
-      return {
-        ...prev,
-        [currentUserEmail]: [newAlarm, ...list],
-      };
-    });
-
+    await firebaseService.saveAlarm(newAlarm);
+    setCurrentAlarms(prev => [newAlarm, ...prev]);
     triggerNativePermissionCheck();
   };
 
@@ -425,28 +319,20 @@ export default function App() {
     setIsCreateAlarmOpen(true);
   };
 
-  const handleDeleteAlarm = (alarmId: string) => {
+  const handleDeleteAlarm = async (alarmId: string) => {
     if (!currentUserEmail) return;
-    setUserAlarms((prev) => {
-      const list = prev[currentUserEmail] || [];
-      return {
-        ...prev,
-        [currentUserEmail]: list.filter((a) => a.id !== alarmId),
-      };
-    });
+    await firebaseService.deleteAlarm(alarmId);
+    setCurrentAlarms(prev => prev.filter(a => a.id !== alarmId));
   };
 
-  const handleToggleAlarm = (alarmId: string) => {
+  const handleToggleAlarm = async (alarmId: string) => {
     if (!currentUserEmail) return;
-    setUserAlarms((prev) => {
-      const list = prev[currentUserEmail] || [];
-      return {
-        ...prev,
-        [currentUserEmail]: list.map((a) =>
-          a.id === alarmId ? { ...a, enabled: !a.enabled } : a
-        ),
-      };
-    });
+    const alarm = currentAlarms.find(a => a.id === alarmId);
+    if (!alarm) return;
+    
+    const newStatus = !alarm.enabled;
+    await firebaseService.updateAlarmToggle(alarmId, newStatus);
+    setCurrentAlarms(prev => prev.map(a => a.id === alarmId ? { ...a, enabled: newStatus } : a));
   };
 
   const handleTriggerTestAlarm = (specificAlarm?: AlarmItem) => {
@@ -467,8 +353,7 @@ export default function App() {
     setActiveRingingAlarm(alarmToRing);
   };
 
-  // Snooze and Dismiss actions
-  const handleSnooze = (alarmId: string, snoozeMinutes: number = 5) => {
+  const handleSnooze = async (alarmId: string, snoozeMinutes: number = 5) => {
     audioEngine.stop();
     setActiveRingingAlarm(null);
 
@@ -486,47 +371,22 @@ export default function App() {
 
     const dayIndex = snoozedTime.getDay();
     const dayNames = [
-      'रविवार (Sunday)',
-      'सोमवार (Monday)',
-      'मंगलवार (Tuesday)',
-      'बुधवार (Wednesday)',
-      'गुरुवार (Thursday)',
-      'शुक्रवार (Friday)',
-      'शनिवार (Saturday)',
+      'रविवार (Sunday)', 'सोमवार (Monday)', 'मंगलवार (Tuesday)', 'बुधवार (Wednesday)',
+      'गुरुवार (Thursday)', 'शुक्रवार (Friday)', 'शनिवार (Saturday)',
     ];
     const newDay = dayNames[dayIndex];
 
-    setUserAlarms((prev) => {
-      const list = prev[currentUserEmail] || [];
-      const updated = list.map((a) => {
-        if (a.id === alarmId) {
-          const newTimeString = `${a.day === 'प्रतिदिन (Every Day)' ? 'प्रतिदिन (Every Day)' : newDay}, ${newHour}:${newMinute} ${ampm}`;
-          return {
-            ...a,
-            hour: newHour,
-            minute: newMinute,
-            ampm: ampm,
-            time: newTimeString,
-            enabled: true,
-          };
-        }
-        return a;
-      });
-      return { ...prev, [currentUserEmail]: updated };
-    });
+    const updatedAlarm: AlarmItem = {
+      ...currentAlarms.find(a => a.id === alarmId)!,
+      hour: newHour,
+      minute: newMinute,
+      ampm: ampm,
+      time: `${currentAlarms.find(a => a.id === alarmId)!.day === 'प्रतिदिन (Every Day)' ? 'प्रतिदिन (Every Day)' : newDay}, ${newHour}:${newMinute} ${ampm}`,
+      enabled: true,
+    };
 
-    setTimeout(() => {
-      setUserAlarms((currentMap) => {
-        if (!currentUserEmail) return currentMap;
-        const list = currentMap[currentUserEmail] || [];
-        const found = list.find((a) => a.id === alarmId);
-        if (found && found.enabled) {
-          setActiveRingingAlarm(found);
-          audioEngine.play(DEFAULT_RINGTONE, true);
-        }
-        return currentMap;
-      });
-    }, snoozeMinutes * 60 * 1000);
+    await firebaseService.saveAlarm(updatedAlarm);
+    setCurrentAlarms(prev => prev.map(a => a.id === alarmId ? updatedAlarm : a));
   };
 
   const handleDismiss = () => {
@@ -534,11 +394,16 @@ export default function App() {
     setActiveRingingAlarm(null);
   };
 
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-[#070B12] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-[#00FF66] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <DeviceFrameWrapper
-      isHindi={isHindi}
-      onTriggerTestAlarm={() => handleTriggerTestAlarm()}
-    >
+    <DeviceFrameWrapper isHindi={isHindi} onTriggerTestAlarm={() => handleTriggerTestAlarm()}>
       {currentScreen === 'login' && (
         <LoginScreen
           onLogin={handleLogin}
@@ -576,17 +441,15 @@ export default function App() {
         />
       )}
 
-      {/* Forgot Password Modal with 6-digit verification code */}
       {showForgotPassword && (
         <ForgotPasswordModal
-          registeredUsers={registeredUsers}
+          registeredUsers={{}} // Not used with Firebase email reset
           onSavePassword={handleSavePassword}
           onClose={() => setShowForgotPassword(false)}
           isHindi={isHindi}
         />
       )}
 
-      {/* Create / Edit Alarm Bottom Sheet */}
       {isCreateAlarmOpen && (
         <CreateAlarmSheet
           existingAlarm={alarmToEdit}
@@ -599,7 +462,6 @@ export default function App() {
         />
       )}
 
-      {/* Real-world Auto-Triggered Alarm Ringing Modal */}
       {activeRingingAlarm && (
         <AlarmRingingModal
           alarm={activeRingingAlarm}
