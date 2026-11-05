@@ -5,6 +5,8 @@ import { AlarmItem } from '../types/alarm';
 interface IAlarmPermissionPlugin {
   requestBatteryOptimization(): Promise<void>;
   requestExactAlarm(): Promise<void>;
+  scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
+  cancelAlarm(options: { alarmId: string }): Promise<void>;
 }
 
 const AlarmPermission = registerPlugin<IAlarmPermissionPlugin>('AlarmPermission');
@@ -66,10 +68,7 @@ class NotificationService {
     if (!scheduleDate) return;
 
     // If the time has already passed today, don't schedule it for today
-    // (though in a real app you might schedule for tomorrow)
     if (scheduleDate.getTime() <= Date.now()) {
-      // For daily alarms, we could add 24 hours, but for simplicity we'll just skip if past
-      // In this app, we assume scheduling for the next occurrence.
       if (alarm.day === 'प्रतिदिन (Every Day)') {
         scheduleDate.setDate(scheduleDate.getDate() + 1);
       } else {
@@ -77,9 +76,19 @@ class NotificationService {
       }
     }
 
-    // Use an integer ID for the notification
-    const notificationId = this.stringToHash(alarm.id);
+    // 1. Schedule Native AlarmManager trigger (Wakes app/plays sound even when closed)
+    try {
+      await AlarmPermission.scheduleAlarm({
+        alarmId: alarm.id,
+        task: alarm.task,
+        triggerTime: scheduleDate.getTime()
+      });
+    } catch (e) {
+      console.error('Failed to schedule native alarm trigger', e);
+    }
 
+    // 2. Also schedule Local Notification as secondary UI alert
+    const notificationId = this.stringToHash(alarm.id);
     const options: ScheduleOptions = {
       notifications: [
         {
@@ -87,7 +96,6 @@ class NotificationService {
           body: `समय: ${alarm.time} | अलार्म बज रहा है!`,
           id: notificationId,
           schedule: { at: scheduleDate, allowWhileIdle: true },
-          sound: 'beep.wav', // We'll try to provide this natively
           extra: { alarmId: alarm.id },
           channelId: 'alarms',
         },
@@ -108,6 +116,15 @@ class NotificationService {
    */
   public async cancelAlarm(alarmId: string) {
     if (!this.isNative) return;
+    
+    // 1. Cancel native AlarmManager trigger
+    try {
+      await AlarmPermission.cancelAlarm({ alarmId });
+    } catch (e) {
+      console.error('Failed to cancel native alarm trigger', e);
+    }
+
+    // 2. Cancel Local Notification
     const id = this.stringToHash(alarmId);
     await LocalNotifications.cancel({ notifications: [{ id }] });
   }

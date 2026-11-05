@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.WindowManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import java.util.Calendar;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -34,7 +37,7 @@ public class MainActivity extends BridgeActivity {
 }
 
 /**
- * Custom Capacitor Plugin to handle Native Android Permissions for Alarms
+ * Custom Capacitor Plugin to handle Native Android Permissions and Alarms
  */
 @CapacitorPlugin(name = "AlarmPermission")
 class AlarmPermissionPlugin extends Plugin {
@@ -78,5 +81,57 @@ class AlarmPermissionPlugin extends Plugin {
     } else {
       call.resolve();
     }
+  }
+
+  @PluginMethod
+  public void scheduleAlarm(PluginCall call) {
+    String alarmId = call.getString("alarmId");
+    String task = call.getString("task");
+    Long triggerTime = call.getLong("triggerTime"); // Expects timestamp in milliseconds
+
+    if (alarmId == null || triggerTime == null) {
+      call.reject("alarmId and triggerTime are required");
+      return;
+    }
+
+    Context context = getContext();
+    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    
+    Intent intent = new Intent(context, AlarmReceiver.class);
+    intent.putExtra("alarmId", alarmId);
+    intent.putExtra("task", task);
+
+    // Use a unique request code based on the alarmId string hash
+    int requestCode = Math.abs(alarmId.hashCode());
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+    } else {
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+    }
+
+    call.resolve();
+  }
+
+  @PluginMethod
+  public void cancelAlarm(PluginCall call) {
+    String alarmId = call.getString("alarmId");
+    if (alarmId == null) {
+      call.reject("alarmId is required");
+      return;
+    }
+
+    Context context = getContext();
+    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    
+    Intent intent = new Intent(context, AlarmReceiver.class);
+    int requestCode = Math.abs(alarmId.hashCode());
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+
+    alarmManager.cancel(pendingIntent);
+    call.resolve();
   }
 }
