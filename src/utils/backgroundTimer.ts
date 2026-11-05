@@ -73,6 +73,10 @@ class BackgroundTimerService {
   }
 
   private emitTick() {
+    // Periodically re-request wake lock if armed
+    if (this.tickCallbacks.size > 0 && Math.random() < 0.01) {
+      this.requestWakeLock();
+    }
     this.tickCallbacks.forEach((cb) => {
       try {
         cb();

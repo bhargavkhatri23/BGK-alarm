@@ -2,6 +2,7 @@ import React from 'react';
 import { Bell } from 'lucide-react';
 import { audioEngine } from '../utils/audioEngine';
 import { backgroundTimer } from '../utils/backgroundTimer';
+import { notificationService } from '../utils/notificationService';
 
 interface NativePermissionDialogProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export const NativePermissionDialog: React.FC<NativePermissionDialogProps> = ({
     if (typeof window !== 'undefined' && 'Notification' in window) {
       try {
         await Notification.requestPermission();
+        await notificationService.requestPermissions();
       } catch {
         // Ignored
       }

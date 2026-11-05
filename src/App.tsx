@@ -16,6 +16,8 @@ import { CreateAlarmSheet } from './components/CreateAlarmSheet';
 import { AlarmRingingModal } from './components/AlarmRingingModal';
 import { NativePermissionDialog } from './components/NativePermissionDialog';
 import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
+import { notificationService } from './utils/notificationService';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 export default function App() {
   // Persistence in localStorage
@@ -114,6 +116,30 @@ export default function App() {
       // Ignored
     }
   }, [currentUserEmail]);
+
+  // Sync alarms with native OS notifications for closed-app execution
+  useEffect(() => {
+    if (currentUserEmail && userAlarms[currentUserEmail]) {
+      notificationService.syncAlarms(userAlarms[currentUserEmail]);
+    }
+  }, [currentUserEmail, userAlarms]);
+
+  // Listen for notification taps to open the app and trigger the ringing UI
+  useEffect(() => {
+    let sub: Promise<any>;
+    sub = LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
+      const alarmId = action.notification.extra?.alarmId;
+      if (alarmId && currentUserEmail) {
+        const alarm = (userAlarms[currentUserEmail] || []).find(a => a.id === alarmId);
+        if (alarm) {
+          setActiveRingingAlarm(alarm);
+        }
+      }
+    });
+    return () => {
+      sub.then(s => s.remove());
+    };
+  }, [currentUserEmail, userAlarms]);
 
   // Request native permission dynamically
   const triggerNativePermissionCheck = () => {
