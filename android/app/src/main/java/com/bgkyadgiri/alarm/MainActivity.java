@@ -36,11 +36,44 @@ public class MainActivity extends BridgeActivity {
   }
 }
 
+import com.getcapacitor.JSObject;
+
 /**
  * Custom Capacitor Plugin to handle Native Android Permissions and Alarms
  */
 @CapacitorPlugin(name = "AlarmPermission")
 class AlarmPermissionPlugin extends Plugin {
+
+  @PluginMethod
+  public void checkStatus(PluginCall call) {
+    Context context = getContext();
+    JSObject ret = new JSObject();
+    
+    // Check Battery Optimization
+    boolean batteryIgnored = true;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+      batteryIgnored = pm.isIgnoringBatteryOptimizations(context.getPackageName());
+    }
+    ret.put("batteryOptimizationIgnored", batteryIgnored);
+
+    // Check Exact Alarm
+    boolean canExact = true;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      android.app.AlarmManager alarmManager = (android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+      canExact = alarmManager.canScheduleExactAlarms();
+    }
+    ret.put("canScheduleExactAlarms", canExact);
+
+    // Check Notification Permission
+    boolean notificationGranted = true;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        notificationGranted = context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED;
+    }
+    ret.put("notificationsGranted", notificationGranted);
+
+    call.resolve(ret);
+  }
 
   @PluginMethod
   public void requestBatteryOptimization(PluginCall call) {

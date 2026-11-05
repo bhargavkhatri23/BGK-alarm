@@ -7,6 +7,11 @@ interface IAlarmPermissionPlugin {
   requestExactAlarm(): Promise<void>;
   scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
   cancelAlarm(options: { alarmId: string }): Promise<void>;
+  checkStatus(): Promise<{ 
+    batteryOptimizationIgnored: boolean, 
+    canScheduleExactAlarms: boolean,
+    notificationsGranted: boolean 
+  }>;
 }
 
 const AlarmPermission = registerPlugin<IAlarmPermissionPlugin>('AlarmPermission');
@@ -16,6 +21,29 @@ class NotificationService {
 
   constructor() {
     this.isNative = Capacitor.isNativePlatform();
+  }
+
+  /**
+   * Diagnoses the system health for background alarms.
+   */
+  public async checkSystemStatus() {
+    if (!this.isNative) {
+      return { 
+        batteryOptimizationIgnored: true, 
+        canScheduleExactAlarms: true,
+        notificationsGranted: true 
+      };
+    }
+    try {
+      return await AlarmPermission.checkStatus();
+    } catch (e) {
+      console.error('Failed to check native alarm status', e);
+      return { 
+        batteryOptimizationIgnored: true, 
+        canScheduleExactAlarms: true,
+        notificationsGranted: true 
+      };
+    }
   }
 
   /**

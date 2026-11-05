@@ -21,6 +21,8 @@ import {
   Zap,
   Activity,
 } from 'lucide-react';
+import { DiagnosticCard } from './DiagnosticCard';
+import { notificationService } from '../utils/notificationService';
 
 interface HomeScreenProps {
   userEmail: string;
@@ -34,6 +36,12 @@ interface HomeScreenProps {
   onLogout: () => void;
   isHindi: boolean;
   onToggleLanguage: () => void;
+  diagnosticStatus: {
+    batteryOptimizationIgnored: boolean;
+    canScheduleExactAlarms: boolean;
+    notificationsGranted: boolean;
+  };
+  onRefreshDiagnostics: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -48,6 +56,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onLogout,
   isHindi,
   onToggleLanguage,
+  diagnosticStatus,
+  onRefreshDiagnostics,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMode, setFilterMode] = useState<'all' | 'active' | 'inactive'>('all');
@@ -188,6 +198,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
       {/* Main Container */}
       <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28">
+        {/* ================= 1.5 SYSTEM DIAGNOSTICS ================= */}
+        <DiagnosticCard 
+          status={diagnosticStatus}
+          onFixBattery={async () => {
+            await notificationService.triggerBatteryOptimization();
+            setTimeout(onRefreshDiagnostics, 3000);
+          }}
+          onFixExactAlarm={async () => {
+            await notificationService.triggerExactAlarm();
+            setTimeout(onRefreshDiagnostics, 3000);
+          }}
+          onFixNotifications={async () => {
+            await notificationService.requestPermissions();
+            setTimeout(onRefreshDiagnostics, 1000);
+          }}
+          isHindi={isHindi}
+        />
+
         {/* ================= 2. LIVE CLOCK & DASHBOARD HERO (Omnitrix Core UI) ================= */}
         <section className="bg-gradient-to-br from-[#0C121E] via-[#090E18] to-[#070B12] border border-emerald-500/35 rounded-3xl p-5 sm:p-6 mb-5 shadow-[0_0_30px_rgba(0,255,102,0.08)] relative overflow-hidden">
           {/* Subtle sci-fi ambient glow background */}

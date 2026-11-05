@@ -39,6 +39,16 @@ export default function App() {
   const [alarmToEdit, setAlarmToEdit] = useState<AlarmItem | null>(null);
   const [activeRingingAlarm, setActiveRingingAlarm] = useState<AlarmItem | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [diagnosticStatus, setDiagnosticStatus] = useState({
+    batteryOptimizationIgnored: true,
+    canScheduleExactAlarms: true,
+    notificationsGranted: true,
+  });
+
+  const checkDiagnostics = async () => {
+    const status = await notificationService.checkSystemStatus();
+    setDiagnosticStatus(status);
+  };
 
   // 1. Firebase Auth Listener
   useEffect(() => {
@@ -49,7 +59,7 @@ export default function App() {
         // Fetch Alarms from Firestore
         const alarms = await firebaseService.getUserAlarms();
         setCurrentAlarms(alarms);
-        triggerNativePermissionCheck();
+        checkDiagnostics();
       } else {
         setCurrentUserEmail(null);
         setCurrentScreen('login');
@@ -426,6 +436,8 @@ export default function App() {
         <HomeScreen
           userEmail={currentUserEmail}
           alarms={currentAlarms}
+          diagnosticStatus={diagnosticStatus}
+          onRefreshDiagnostics={checkDiagnostics}
           onAddAlarm={() => {
             setAlarmToEdit(null);
             setIsCreateAlarmOpen(true);
