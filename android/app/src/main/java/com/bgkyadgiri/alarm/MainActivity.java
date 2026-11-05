@@ -16,6 +16,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.JSObject;
 
 public class MainActivity extends BridgeActivity {
   @Override
@@ -35,8 +36,6 @@ public class MainActivity extends BridgeActivity {
     }
   }
 }
-
-import com.getcapacitor.JSObject;
 
 /**
  * Custom Capacitor Plugin to handle Native Android Permissions and Alarms
