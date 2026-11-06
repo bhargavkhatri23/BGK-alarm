@@ -110,8 +110,16 @@ public class AlarmPermissionPlugin extends Plugin {
 
     // Use a unique request code based on the alarmId string hash
     int requestCode = Math.abs(alarmId.hashCode());
-    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+    
+    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        flags |= PendingIntent.FLAG_MUTABLE;
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        // Fallback for M-R where IMMUTABLE was recommended but we want MUTABLE
+        // Actually MUTABLE only exists in S+, but before S everything was mutable.
+    }
+
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
@@ -135,8 +143,13 @@ public class AlarmPermissionPlugin extends Plugin {
     
     Intent intent = new Intent(context, AlarmReceiver.class);
     int requestCode = Math.abs(alarmId.hashCode());
-    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+    
+    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        flags |= PendingIntent.FLAG_MUTABLE;
+    }
+
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
 
     alarmManager.cancel(pendingIntent);
     call.resolve();

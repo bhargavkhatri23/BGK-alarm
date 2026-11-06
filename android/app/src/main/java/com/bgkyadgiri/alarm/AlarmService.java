@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -40,20 +38,28 @@ public class AlarmService extends Service {
 
         String task = intent != null ? intent.getStringExtra("task") : "Scheduled Reminder";
 
+        // 1. Acquire Service WakeLock to keep CPU running while alarm rings
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BGK:AlarmWakeLock");
-        wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
+        if (powerManager != null) {
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BGK:AlarmServiceWakeLock");
+            wakeLock.acquire(10 * 60 * 1000L /*10 minutes max*/);
+        }
+
+        // 2. Prepare PendingIntents with correct Mutability flags for Android 12+
+        int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntentFlags |= PendingIntent.FLAG_MUTABLE;
+        }
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingIntentFlags);
 
         Intent stopIntent = new Intent(this, AlarmService.class);
         stopIntent.setAction("STOP_ALARM");
-        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_IMMUTABLE : 0));
+        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, pendingIntentFlags);
 
+        // 3. Build High-Priority Notification for Lock Screen & Heads-up
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("BGK Yadgiri: " + task)
                 .setContentText("अलार्म बज रहा है! (Alarm Ringing)")
@@ -62,12 +68,19 @@ public class AlarmService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setFullScreenIntent(pendingIntent, true)
+                .setFullScreenIntent(pendingIntent, true) // Crucial for Android 14+ background launch
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel, "DISMISS / बंद करें", stopPendingIntent)
                 .setOngoing(true)
+                .setAutoCancel(false)
                 .build();
 
-        startForeground(NOTIFICATION_ID, notification);
+        // 4. Start Foreground with specific type if on Android 14+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            // Android 14 requirements are handled via manifest property_special_use_fgs_subtype
+            startForeground(NOTIFICATION_ID, notification);
+        } else {
+            startForeground(NOTIFICATION_ID, notification);
+        }
 
         startAlarmSound();
 
@@ -100,16 +113,13 @@ public class AlarmService extends Service {
 
                 audioTrack.play();
 
-                double freq = 1046.5; // C6 - same as web synthesis
+                double freq = 1046.5; // C6
                 short[] buffer = new short[bufferSize];
-                int totalSamples = 0;
 
                 while (isPlaying) {
-                    // Loop 4 beeps
                     for (int b = 0; b < 4; b++) {
                         if (!isPlaying) break;
                         
-                        // 100ms beep (square wave)
                         int beepSamples = (int) (sampleRate * 0.1);
                         for (int i = 0; i < beepSamples; i++) {
                             double angle = 2.0 * Math.PI * i * freq / sampleRate;
@@ -119,16 +129,11 @@ public class AlarmService extends Service {
                                 audioTrack.write(buffer, 0, bufferSize);
                             }
                         }
-                        // Write remainder of last buffer for beep
                         if (beepSamples % bufferSize != 0) {
                             audioTrack.write(buffer, 0, beepSamples % bufferSize);
                         }
-
-                        // 50ms silence between pips
                         try { Thread.sleep(50); } catch (InterruptedException e) {}
                     }
-                    
-                    // 600ms silence between cycles
                     try { Thread.sleep(600); } catch (InterruptedException e) {}
                 }
             }
@@ -164,6 +169,9 @@ public class AlarmService extends Service {
             );
             serviceChannel.setDescription("Ensures alarms ring even when app is closed.");
             serviceChannel.setSound(null, null); 
+            serviceChannel.enableVibration(true);
+            serviceChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(serviceChannel);
