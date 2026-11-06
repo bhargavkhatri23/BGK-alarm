@@ -61,6 +61,9 @@ export default function App() {
         const alarms = await firebaseService.getUserAlarms();
         setCurrentAlarms(alarms);
         checkDiagnostics();
+        if (alarms.some(a => a.enabled)) {
+          notificationService.enableBackgroundProtection(true);
+        }
       } else {
         setCurrentUserEmail(null);
         setCurrentScreen('login');
@@ -90,6 +93,10 @@ export default function App() {
   useEffect(() => {
     if (currentUserEmail && currentAlarms.length >= 0) {
       notificationService.syncAlarms(currentAlarms);
+      // Enable persistent protection if there are any alarms
+      if (currentAlarms.some(a => a.enabled)) {
+        notificationService.enableBackgroundProtection(true);
+      }
     }
   }, [currentUserEmail, currentAlarms]);
 
@@ -241,6 +248,7 @@ export default function App() {
   const handleLogout = async () => {
     audioEngine.stop();
     setActiveRingingAlarm(null);
+    notificationService.enableBackgroundProtection(false);
     await signOut(auth);
   };
 

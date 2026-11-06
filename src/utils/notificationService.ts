@@ -6,6 +6,7 @@ interface IAlarmPermissionPlugin {
   requestBatteryOptimization(): Promise<void>;
   requestExactAlarm(): Promise<void>;
   requestOverlayPermission(): Promise<void>;
+  setBackgroundProtection(options: { enabled: boolean }): Promise<void>;
   scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
   cancelAlarm(options: { alarmId: string }): Promise<void>;
   checkStatus(): Promise<{ 
@@ -97,6 +98,18 @@ class NotificationService {
       await AlarmPermission.requestOverlayPermission();
     } catch (e) {
       console.error('Failed to trigger overlay permission intent', e);
+    }
+  }
+
+  /**
+   * Toggle the persistent background protection service
+   */
+  public async enableBackgroundProtection(enabled: boolean) {
+    if (!this.isNative) return;
+    try {
+      await AlarmPermission.setBackgroundProtection({ enabled });
+    } catch (e) {
+      console.error('Failed to toggle background protection', e);
     }
   }
 

@@ -181,4 +181,23 @@ public class AlarmPermissionPlugin extends Plugin {
     alarmManager.cancel(pendingIntent);
     call.resolve();
   }
+
+  @PluginMethod
+  public void setBackgroundProtection(PluginCall call) {
+    boolean enabled = call.getBoolean("enabled", true);
+    Context context = getContext();
+    Intent intent = new Intent(context, BGKKeepAliveService.class);
+
+    if (enabled) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        context.startForegroundService(intent);
+      } else {
+        context.startService(intent);
+      }
+    } else {
+      intent.setAction("STOP_SERVICE");
+      context.startService(intent);
+    }
+    call.resolve();
+  }
 }
