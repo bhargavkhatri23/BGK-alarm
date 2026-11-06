@@ -11,8 +11,9 @@ public class BootReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || 
             "android.intent.action.QUICKBOOT_POWERON".equals(intent.getAction())) {
             
-            // Start the keep-alive protection service automatically on boot
-            Intent serviceIntent = new Intent(context, BGKKeepAliveService.class);
+            // Start the alarm service in Guardian mode automatically on boot
+            Intent serviceIntent = new Intent(context, AlarmService.class);
+            serviceIntent.setAction(AlarmService.ACTION_START_GUARDIAN);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(serviceIntent);
             } else {
