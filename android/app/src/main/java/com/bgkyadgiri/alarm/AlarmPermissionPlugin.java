@@ -145,7 +145,10 @@ public class AlarmPermissionPlugin extends Plugin {
 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        AlarmManager.AlarmClockInfo alarmClockInfo = new AlarmManager.AlarmClockInfo(triggerTime, pendingIntent);
+        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
     } else {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
