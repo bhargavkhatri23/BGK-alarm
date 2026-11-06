@@ -5,12 +5,14 @@ import { AlarmItem } from '../types/alarm';
 interface IAlarmPermissionPlugin {
   requestBatteryOptimization(): Promise<void>;
   requestExactAlarm(): Promise<void>;
+  requestOverlayPermission(): Promise<void>;
   scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
   cancelAlarm(options: { alarmId: string }): Promise<void>;
   checkStatus(): Promise<{ 
     batteryOptimizationIgnored: boolean, 
     canScheduleExactAlarms: boolean,
-    notificationsGranted: boolean 
+    notificationsGranted: boolean,
+    overlayPermissionGranted: boolean 
   }>;
 }
 
@@ -31,7 +33,8 @@ class NotificationService {
       return { 
         batteryOptimizationIgnored: true, 
         canScheduleExactAlarms: true,
-        notificationsGranted: true 
+        notificationsGranted: true,
+        overlayPermissionGranted: true 
       };
     }
     try {
@@ -41,7 +44,8 @@ class NotificationService {
       return { 
         batteryOptimizationIgnored: true, 
         canScheduleExactAlarms: true,
-        notificationsGranted: true 
+        notificationsGranted: true,
+        overlayPermissionGranted: true 
       };
     }
   }
@@ -85,6 +89,18 @@ class NotificationService {
   }
 
   /**
+   * Directly trigger the native Android Overlay Permission (Display over other apps) intent
+   */
+  public async triggerOverlayPermission() {
+    if (!this.isNative) return;
+    try {
+      await AlarmPermission.requestOverlayPermission();
+    } catch (e) {
+      console.error('Failed to trigger overlay permission intent', e);
+    }
+  }
+
+  /**
    * Schedule a native OS-level notification for a specific alarm.
    * This ensures the alarm triggers even if the app is closed or minimized.
    */
@@ -120,7 +136,7 @@ class NotificationService {
     const options: ScheduleOptions = {
       notifications: [
         {
-          title: `BGK Yadgiri: ${alarm.task}`,
+          title: `BGK SMART ALARM: ${alarm.task}`,
           body: `समय: ${alarm.time} | अलार्म बज रहा है!`,
           id: notificationId,
           schedule: { at: scheduleDate, allowWhileIdle: true },

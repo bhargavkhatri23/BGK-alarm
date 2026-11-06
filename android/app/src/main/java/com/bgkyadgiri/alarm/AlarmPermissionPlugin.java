@@ -46,7 +46,31 @@ public class AlarmPermissionPlugin extends Plugin {
     }
     ret.put("notificationsGranted", notificationGranted);
 
+    // Check Overlay Permission (Display over other apps)
+    boolean overlayGranted = true;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        overlayGranted = Settings.canDrawOverlays(context);
+    }
+    ret.put("overlayPermissionGranted", overlayGranted);
+
     call.resolve(ret);
+  }
+
+  @PluginMethod
+  public void requestOverlayPermission(PluginCall call) {
+    Context context = getContext();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      if (!Settings.canDrawOverlays(context)) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        call.resolve();
+      } else {
+        call.resolve();
+      }
+    } else {
+      call.resolve();
+    }
   }
 
   @PluginMethod

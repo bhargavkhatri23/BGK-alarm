@@ -40,6 +40,7 @@ interface HomeScreenProps {
     batteryOptimizationIgnored: boolean;
     canScheduleExactAlarms: boolean;
     notificationsGranted: boolean;
+    overlayPermissionGranted: boolean;
   };
   onRefreshDiagnostics: () => void;
 }
@@ -151,7 +152,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </div>
             <div>
               <h1 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
-                <span className="font-['Orbitron',sans-serif] tracking-wider text-white">BGK Yadgiri</span>
+                <span className="font-['Orbitron',sans-serif] tracking-wider text-white">BGK SMART ALARM</span>
                 <span className="text-[11px] font-semibold text-[#00FF66] px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-500/30 hidden sm:inline">
                   OMNITRIX {isHindi ? 'रिमाइंडर्स' : 'REMINDERS'}
                 </span>
@@ -213,6 +214,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             await notificationService.requestPermissions();
             setTimeout(onRefreshDiagnostics, 1000);
           }}
+          onFixOverlay={async () => {
+            await notificationService.triggerOverlayPermission();
+            setTimeout(onRefreshDiagnostics, 3000);
+          }}
           isHindi={isHindi}
         />
 
@@ -238,7 +243,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               </div>
               <p className="text-xs text-slate-400 mt-1.5 flex items-center gap-1.5">
                 <Activity className="w-3.5 h-3.5 text-[#00FF66]" />
-                <span>{isHindi ? 'BGK Yadgiri: समय पर सटीक अलर्ट, कभी न भूलें!' : 'BGK Yadgiri: Precision alerts, never forget!'}</span>
+                <span>{isHindi ? 'BGK SMART ALARM: समय पर सटीक अलर्ट, कभी न भूलें!' : 'BGK SMART ALARM: Precision alerts, never forget!'}</span>
               </p>
             </div>
 

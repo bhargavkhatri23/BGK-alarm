@@ -43,6 +43,7 @@ export default function App() {
     batteryOptimizationIgnored: true,
     canScheduleExactAlarms: true,
     notificationsGranted: true,
+    overlayPermissionGranted: true,
   });
 
   const checkDiagnostics = async () => {
@@ -121,6 +122,7 @@ export default function App() {
     }
     await notificationService.triggerBatteryOptimization();
     await notificationService.triggerExactAlarm();
+    await notificationService.triggerOverlayPermission();
 
     try {
       backgroundTimer.requestWakeLock();
@@ -174,7 +176,7 @@ export default function App() {
 
           if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
             try {
-              new Notification(`BGK Yadgiri: ${alarm.task}`, {
+              new Notification(`BGK SMART ALARM: ${alarm.task}`, {
                 body: `समय: ${alarm.time} | अलार्म बज रहा है!`,
                 icon: '/favicon.ico',
                 tag: triggerKey,
@@ -413,7 +415,7 @@ export default function App() {
   }
 
   return (
-    <DeviceFrameWrapper isHindi={isHindi} onTriggerTestAlarm={() => handleTriggerTestAlarm()}>
+    <DeviceFrameWrapper>
       {currentScreen === 'login' && (
         <LoginScreen
           onLogin={handleLogin}

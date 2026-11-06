@@ -61,7 +61,7 @@ public class AlarmService extends Service {
 
         // 3. Build High-Priority Notification for Lock Screen & Heads-up
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("BGK Yadgiri: " + task)
+                .setContentTitle("BGK SMART ALARM: " + task)
                 .setContentText("अलार्म बज रहा है! (Alarm Ringing)")
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                 .setContentIntent(pendingIntent)

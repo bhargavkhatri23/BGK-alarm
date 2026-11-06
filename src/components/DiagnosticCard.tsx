@@ -1,10 +1,11 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2, Zap, Settings, Bell, Clock } from 'lucide-react';
+import { AlertTriangle, Zap, Bell, Clock, Monitor } from 'lucide-react';
 
 interface DiagnosticStatus {
   batteryOptimizationIgnored: boolean;
   canScheduleExactAlarms: boolean;
   notificationsGranted: boolean;
+  overlayPermissionGranted: boolean;
 }
 
 interface DiagnosticCardProps {
@@ -12,6 +13,7 @@ interface DiagnosticCardProps {
   onFixBattery: () => void;
   onFixExactAlarm: () => void;
   onFixNotifications: () => void;
+  onFixOverlay: () => void;
   isHindi: boolean;
 }
 
@@ -20,9 +22,14 @@ export const DiagnosticCard: React.FC<DiagnosticCardProps> = ({
   onFixBattery,
   onFixExactAlarm,
   onFixNotifications,
+  onFixOverlay,
   isHindi,
 }) => {
-  const hasIssues = !status.batteryOptimizationIgnored || !status.canScheduleExactAlarms || !status.notificationsGranted;
+  const hasIssues = 
+    !status.batteryOptimizationIgnored || 
+    !status.canScheduleExactAlarms || 
+    !status.notificationsGranted || 
+    !status.overlayPermissionGranted;
 
   if (!hasIssues) return null;
 
@@ -63,7 +70,31 @@ export const DiagnosticCard: React.FC<DiagnosticCardProps> = ({
             </div>
             <p className="text-[10px] text-slate-400 leading-tight">
               <span className="font-bold text-slate-300">{isHindi ? 'कारण: ' : 'Reason: '}</span>
-              {isHindi ? 'सिस्टम नोटिफिकेशन बंद होने पर अलार्म स्क्रीन पर नहीं दिखेगा।' : 'The OS is blocking visual alarm alerts.'}
+              {isHindi ? 'सिस्टम नोटिफिकेशन बंद होने पर अलार्म स्क्रीन पर नहीं दिखेगा। ' : 'The OS is blocking visual alarm alerts.'}
+            </p>
+          </div>
+        )}
+
+        {/* Overlay Permission Issue */}
+        {!status.overlayPermissionGranted && (
+          <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Monitor className="w-4 h-4 text-purple-500" />
+                <span className="text-xs font-bold text-slate-200">
+                  {isHindi ? 'अन्य ऐप्स के ऊपर दिखाएं' : 'Display Over Apps'}
+                </span>
+              </div>
+              <button
+                onClick={onFixOverlay}
+                className="px-2.5 py-1 bg-purple-600 text-white text-[10px] font-bold rounded-lg hover:bg-purple-500 transition-colors"
+              >
+                {isHindi ? 'अनुमति दें' : 'ALLOW'}
+              </button>
+            </div>
+            <p className="text-[10px] text-slate-400 leading-tight">
+              <span className="font-bold text-slate-300">{isHindi ? 'कारण: ' : 'Reason: '}</span>
+              {isHindi ? 'इसके बिना अलार्म फुल स्क्रीन पर नहीं दिखेगा।' : 'Required to show the alarm screen over other apps.'}
             </p>
           </div>
         )}
