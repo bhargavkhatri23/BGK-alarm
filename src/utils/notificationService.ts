@@ -6,7 +6,7 @@ interface IAlarmPermissionPlugin {
   requestBatteryOptimization(): Promise<void>;
   requestExactAlarm(): Promise<void>;
   requestOverlayPermission(): Promise<void>;
-  setBackgroundProtection(options: { enabled: boolean }): Promise<void>;
+  setBackgroundProtection(options: { enabled: boolean, nextTask?: string, nextTime?: string }): Promise<void>;
   scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
   cancelAlarm(options: { alarmId: string }): Promise<void>;
   checkStatus(): Promise<{ 
@@ -104,10 +104,10 @@ class NotificationService {
   /**
    * Toggle the persistent background protection service
    */
-  public async enableBackgroundProtection(enabled: boolean) {
+  public async enableBackgroundProtection(enabled: boolean, nextTask?: string, nextTime?: string) {
     if (!this.isNative) return;
     try {
-      await AlarmPermission.setBackgroundProtection({ enabled });
+      await AlarmPermission.setBackgroundProtection({ enabled, nextTask, nextTime });
     } catch (e) {
       console.error('Failed to toggle background protection', e);
     }
@@ -191,17 +191,37 @@ class NotificationService {
    */
   public async syncAlarms(alarms: AlarmItem[]) {
     if (!this.isNative) return;
+    
+    const enabledAlarms = alarms.filter(a => a.enabled);
+    
     // Clear all existing and re-schedule
-    // This is safer than individual updates for consistency
     const pending = await LocalNotifications.getPending();
     if (pending.notifications.length > 0) {
       await LocalNotifications.cancel(pending);
     }
 
-    for (const alarm of alarms) {
-      if (alarm.enabled) {
-        await this.scheduleAlarm(alarm);
+    let soonestAlarm: AlarmItem | null = null;
+    let soonestTime = Infinity;
+
+    for (const alarm of enabledAlarms) {
+      await this.scheduleAlarm(alarm);
+      
+      // Calculate soonest alarm for the guardian notification
+      const date = this.parseAlarmToDate(alarm);
+      if (date) {
+        const time = date.getTime();
+        if (time < soonestTime) {
+          soonestTime = time;
+          soonestAlarm = alarm;
+        }
       }
+    }
+
+    // Update the guardian notification with the next alarm details
+    if (soonestAlarm) {
+      await this.enableBackgroundProtection(true, soonestAlarm.task, soonestAlarm.time);
+    } else {
+      await this.enableBackgroundProtection(false);
     }
   }
 

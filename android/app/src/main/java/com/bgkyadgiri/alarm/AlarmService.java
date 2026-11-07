@@ -30,6 +30,10 @@ public class AlarmService extends Service {
     public static final String ACTION_STOP_ALARM = "STOP_ALARM";
     public static final String ACTION_START_GUARDIAN = "START_GUARDIAN";
     public static final String ACTION_STOP_GUARDIAN = "STOP_GUARDIAN";
+    public static final String ACTION_UPDATE_GUARDIAN = "UPDATE_GUARDIAN";
+
+    private String lastNextAlarmTask = null;
+    private String lastNextAlarmTime = null;
 
     @Override
     public void onCreate() {
@@ -45,7 +49,11 @@ public class AlarmService extends Service {
             handleStartAlarm(intent);
         } else if (ACTION_STOP_ALARM.equals(action)) {
             handleStopAlarm();
-        } else if (ACTION_START_GUARDIAN.equals(action)) {
+        } else if (ACTION_START_GUARDIAN.equals(action) || ACTION_UPDATE_GUARDIAN.equals(action)) {
+            if (intent != null) {
+                lastNextAlarmTask = intent.getStringExtra("nextTask");
+                lastNextAlarmTime = intent.getStringExtra("nextTime");
+            }
             showGuardianNotification();
         } else if (ACTION_STOP_GUARDIAN.equals(action)) {
             stopForeground(true);
@@ -59,10 +67,12 @@ public class AlarmService extends Service {
     }
 
     private void showGuardianNotification() {
-        // Stop alarm sound if it was playing
-        stopAlarmSound();
-        if (wakeLock != null && wakeLock.isHeld()) {
-            wakeLock.release();
+        // Stop alarm sound if it was playing (unless explicitly started again)
+        if (!isPlaying) {
+            stopAlarmSound();
+            if (wakeLock != null && wakeLock.isHeld()) {
+                wakeLock.release();
+            }
         }
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -72,9 +82,14 @@ public class AlarmService extends Service {
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingIntentFlags);
 
+        String contentText = "Background alarm protection active";
+        if (lastNextAlarmTask != null && lastNextAlarmTime != null) {
+            contentText = "Next: " + lastNextAlarmTask + " at " + lastNextAlarmTime;
+        }
+
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_GUARDIAN_ID)
                 .setContentTitle("BGK SMART ALARM")
-                .setContentText("Background alarm protection active")
+                .setContentText(contentText)
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -137,7 +152,7 @@ public class AlarmService extends Service {
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
-        // Instead of stopping the service, downgrade to Guardian mode
+        // Return to Guardian mode
         showGuardianNotification();
     }
 

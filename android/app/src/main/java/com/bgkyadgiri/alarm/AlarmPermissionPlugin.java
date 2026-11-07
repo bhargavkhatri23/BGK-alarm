@@ -185,11 +185,16 @@ public class AlarmPermissionPlugin extends Plugin {
   @PluginMethod
   public void setBackgroundProtection(PluginCall call) {
     boolean enabled = call.getBoolean("enabled", true);
+    String nextTask = call.getString("nextTask");
+    String nextTime = call.getString("nextTime");
+    
     Context context = getContext();
     Intent intent = new Intent(context, AlarmService.class);
 
     if (enabled) {
       intent.setAction(AlarmService.ACTION_START_GUARDIAN);
+      intent.putExtra("nextTask", nextTask);
+      intent.putExtra("nextTime", nextTime);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         context.startForegroundService(intent);
       } else {
