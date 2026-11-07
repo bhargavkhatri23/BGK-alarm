@@ -3,44 +3,45 @@ package com.bgkyadgiri.alarm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.PowerManager;
+import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/** Fired by the Android system at alarm time, even if the app is closed. */
 public class AlarmReceiver extends BroadcastReceiver {
+    private static final String TAG = "BGAlarm";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wakeLock = null;
-        if (pm != null) {
-            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "BGK:AlarmReceiverWakeLock");
-            wakeLock.acquire(15 * 1000L); // 15 seconds
-        }
-
-        String id = intent.getStringExtra("id");
+        int id = intent.getIntExtra("id", 0);
         String label = intent.getStringExtra("label");
-        String repeatDays = intent.getStringExtra("repeatDays");
-        long timeMillis = intent.getLongExtra("timeMillis", System.currentTimeMillis());
+        if (label == null) label = "";
+        Log.d(TAG, "Alarm fired id=" + id);
 
-        // Start Foreground Service to play sound and show notification
-        Intent serviceIntent = new Intent(context, AlarmService.class);
-        serviceIntent.putExtra("id", id);
-        serviceIntent.putExtra("label", label);
-        serviceIntent.putExtra("repeatDays", repeatDays);
-        serviceIntent.putExtra("timeMillis", timeMillis);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(serviceIntent);
-        } else {
-            context.startService(serviceIntent);
+        // Repeating alarm: schedule the next occurrence. One-time alarm: remove it.
+        try {
+            JSONObject a = AlarmStore.get(context, id);
+            if (a != null) {
+                JSONArray days = a.optJSONArray("repeatDays");
+                if (days != null && days.length() > 0) {
+                    a.put("time", AlarmStore.nextOccurrence(a.optLong("time"), days));
+                    AlarmStore.put(context, a);
+                    AlarmStore.schedule(context, a);
+                } else {
+                    AlarmStore.remove(context, id);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "reschedule failed", e);
         }
 
-        // Also launch AlarmActivity directly for lockscreen appearance
-        Intent activityIntent = new Intent(context, AlarmActivity.class);
-        activityIntent.putExtra("id", id);
-        activityIntent.putExtra("label", label);
-        activityIntent.putExtra("repeatDays", repeatDays);
-        activityIntent.putExtra("timeMillis", timeMillis);
-        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        context.startActivity(activityIntent);
+        Intent svc = new Intent(context, AlarmService.class);
+        svc.setAction(AlarmService.ACTION_RING);
+        svc.putExtra("id", id);
+        svc.putExtra("label", label);
+        ContextCompat.startForegroundService(context, svc);
     }
 }
