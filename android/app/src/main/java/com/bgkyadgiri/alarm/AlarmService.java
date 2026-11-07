@@ -80,7 +80,7 @@ public class AlarmService extends Service {
         }
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, pendingIntentFlags);
 
-        String contentText = "Background alarm protection active";
+        String contentText = "Active Alarm Guard";
         if (lastNextAlarmTask != null && lastNextAlarmTime != null) {
             contentText = "Next: " + lastNextAlarmTask + " at " + lastNextAlarmTime;
         }

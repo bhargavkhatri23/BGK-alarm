@@ -138,9 +138,6 @@ public class AlarmPermissionPlugin extends Plugin {
     int flags = PendingIntent.FLAG_UPDATE_CURRENT;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         flags |= PendingIntent.FLAG_MUTABLE;
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        // Fallback for M-R where IMMUTABLE was recommended but we want MUTABLE
-        // Actually MUTABLE only exists in S+, but before S everything was mutable.
     }
 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
