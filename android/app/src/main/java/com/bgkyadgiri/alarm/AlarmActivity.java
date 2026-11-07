@@ -52,8 +52,9 @@ public class AlarmActivity extends Activity {
         layout.setPadding(48, 48, 48, 48);
 
         Intent intent = getIntent();
-        String label = intent != null ? intent.getStringExtra("label") : "अलार्म";
-        if (label == null) label = "रिमाइंडर";
+        String rawLabel = intent != null ? intent.getStringExtra("label") : "अलार्म";
+        final String label = (rawLabel != null) ? rawLabel : "रिमाइंडर";
+        final String alarmId = intent != null ? intent.getStringExtra("id") : "alarm_id";
 
         // Title
         TextView title = new TextView(this);
@@ -99,6 +100,7 @@ public class AlarmActivity extends Activity {
         snoozeBtn.setOnClickListener(v -> {
             Intent snoozeIntent = new Intent(this, AlarmService.class);
             snoozeIntent.setAction(AlarmService.ACTION_SNOOZE);
+            snoozeIntent.putExtra("id", alarmId);
             snoozeIntent.putExtra("label", label);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(snoozeIntent);
