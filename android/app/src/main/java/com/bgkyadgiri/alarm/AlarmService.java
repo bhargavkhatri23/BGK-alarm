@@ -25,20 +25,63 @@ public class AlarmService extends Service {
     private Vibrator vibrator;
     
     private static final String CHANNEL_ID = "bgk_native_alarm_channel";
+    private static final String GUARDIAN_CHANNEL_ID = "bgk_guardian_channel";
     private static final int NOTIFICATION_ID = 3001;
+    private static final int GUARDIAN_NOTIFICATION_ID = 3002;
 
     public static final String ACTION_STOP = "ACTION_STOP";
     public static final String ACTION_SNOOZE = "ACTION_SNOOZE";
+    public static final String ACTION_START_GUARDIAN = "com.bgkyadgiri.alarm.ACTION_START_GUARDIAN";
+    public static final String ACTION_STOP_GUARDIAN = "com.bgkyadgiri.alarm.ACTION_STOP_GUARDIAN";
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        createGuardianNotificationChannel();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent != null ? intent.getAction() : null;
+
+        if (ACTION_STOP_GUARDIAN.equals(action)) {
+            stopForeground(true);
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
+        if (ACTION_START_GUARDIAN.equals(action)) {
+            String nextTask = intent.getStringExtra("nextTask");
+            String nextTime = intent.getStringExtra("nextTime");
+            String contentText = "Active Alarm Guard protecting alarms";
+            if (nextTask != null && !nextTask.isEmpty()) {
+                contentText = "Next: " + nextTask + (nextTime != null ? " at " + nextTime : "");
+            }
+
+            int flagsPending = PendingIntent.FLAG_UPDATE_CURRENT;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                flagsPending |= PendingIntent.FLAG_IMMUTABLE;
+            } else {
+                flagsPending |= PendingIntent.FLAG_MUTABLE;
+            }
+
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, flagsPending);
+
+            Notification guardianNotification = new NotificationCompat.Builder(this, GUARDIAN_CHANNEL_ID)
+                    .setContentTitle("BGK Smart Alarm: Background protection active")
+                    .setContentText(contentText)
+                    .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                    .setContentIntent(mainPendingIntent)
+                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                    .setOngoing(true)
+                    .setAutoCancel(false)
+                    .build();
+
+            startForeground(GUARDIAN_NOTIFICATION_ID, guardianNotification);
+            return START_STICKY;
+        }
 
         if (ACTION_STOP.equals(action)) {
             stopAlarmAndService();
@@ -234,6 +277,21 @@ public class AlarmService extends Service {
                 channel.setDescription("Playing active alarms with maximum priority");
                 channel.enableVibration(true);
                 channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                manager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    private void createGuardianNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                NotificationChannel channel = new NotificationChannel(
+                        GUARDIAN_CHANNEL_ID,
+                        "BGK Guardian Channel",
+                        NotificationManager.IMPORTANCE_LOW
+                );
+                channel.setDescription("Keeps background protection active for reliable alarms");
                 manager.createNotificationChannel(channel);
             }
         }
