@@ -9,30 +9,38 @@ import android.os.PowerManager;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        // 1. Acquire temporary WakeLock
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (powerManager != null) {
-            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, 
-                "BGK:AlarmReceiverWakeLock"
-            );
-            wakeLock.acquire(10 * 1000L);
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = null;
+        if (pm != null) {
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "BGK:AlarmReceiverWakeLock");
+            wakeLock.acquire(15 * 1000L); // 15 seconds
         }
 
-        // 2. Safely extract intent extras
-        String task = intent.getStringExtra("task");
-        String alarmId = intent.getStringExtra("alarmId");
+        String id = intent.getStringExtra("id");
+        String label = intent.getStringExtra("label");
+        String repeatDays = intent.getStringExtra("repeatDays");
+        long timeMillis = intent.getLongExtra("timeMillis", System.currentTimeMillis());
 
-        // 3. Launch/Upgrade AlarmService to Ringing mode
+        // Start Foreground Service to play sound and show notification
         Intent serviceIntent = new Intent(context, AlarmService.class);
-        serviceIntent.setAction(AlarmService.ACTION_START_ALARM);
-        serviceIntent.putExtra("task", task != null ? task : "Scheduled Reminder");
-        serviceIntent.putExtra("alarmId", alarmId);
+        serviceIntent.putExtra("id", id);
+        serviceIntent.putExtra("label", label);
+        serviceIntent.putExtra("repeatDays", repeatDays);
+        serviceIntent.putExtra("timeMillis", timeMillis);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(serviceIntent);
         } else {
             context.startService(serviceIntent);
         }
+
+        // Also launch AlarmActivity directly for lockscreen appearance
+        Intent activityIntent = new Intent(context, AlarmActivity.class);
+        activityIntent.putExtra("id", id);
+        activityIntent.putExtra("label", label);
+        activityIntent.putExtra("repeatDays", repeatDays);
+        activityIntent.putExtra("timeMillis", timeMillis);
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(activityIntent);
     }
 }
