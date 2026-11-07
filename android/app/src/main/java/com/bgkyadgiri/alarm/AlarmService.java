@@ -59,7 +59,6 @@ public class AlarmService extends Service {
             stopForeground(true);
             stopSelf();
         } else if (action == null) {
-            // Service was likely restarted by the system (START_STICKY)
             showGuardianNotification();
         }
 
@@ -67,7 +66,6 @@ public class AlarmService extends Service {
     }
 
     private void showGuardianNotification() {
-        // Stop alarm sound if it was playing (unless explicitly started again)
         if (!isPlaying) {
             stopAlarmSound();
             if (wakeLock != null && wakeLock.isHeld()) {
@@ -104,7 +102,6 @@ public class AlarmService extends Service {
     private void handleStartAlarm(Intent intent) {
         String task = intent != null ? intent.getStringExtra("task") : "Scheduled Reminder";
 
-        // 1. Acquire Service WakeLock
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (powerManager != null) {
             if (wakeLock == null) {
@@ -128,7 +125,6 @@ public class AlarmService extends Service {
         stopIntent.setAction(ACTION_STOP_ALARM);
         PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, pendingIntentFlags);
 
-        // 2. Build High-Priority Notification
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ALARM_ID)
                 .setContentTitle("BGK SMART ALARM: " + task)
                 .setContentText("अलार्म बज रहा है! (Alarm Ringing)")
@@ -152,7 +148,6 @@ public class AlarmService extends Service {
         if (wakeLock != null && wakeLock.isHeld()) {
             wakeLock.release();
         }
-        // Return to Guardian mode
         showGuardianNotification();
     }
 
@@ -228,7 +223,6 @@ public class AlarmService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {
-                // 1. High Priority Alarm Channel
                 NotificationChannel alarmChannel = new NotificationChannel(
                         CHANNEL_ALARM_ID, "Alarm Alerts", NotificationManager.IMPORTANCE_HIGH
                 );
@@ -238,7 +232,6 @@ public class AlarmService extends Service {
                 alarmChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
                 manager.createNotificationChannel(alarmChannel);
 
-                // 2. Low Priority Guardian Channel
                 NotificationChannel guardianChannel = new NotificationChannel(
                         CHANNEL_GUARDIAN_ID, "Background Protection", NotificationManager.IMPORTANCE_LOW
                 );
