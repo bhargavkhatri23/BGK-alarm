@@ -19,7 +19,6 @@ export const AlarmRingingModal: React.FC<AlarmRingingModalProps> = ({
   const [pulseScale, setPulseScale] = useState(1);
 
   useEffect(() => {
-    // Play the classic digital beep in loop
     audioEngine.play(alarm.ringtone, true);
 
     const interval = setInterval(() => {
@@ -43,63 +42,61 @@ export const AlarmRingingModal: React.FC<AlarmRingingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 animate-in fade-in duration-300">
-      <div className="bg-gradient-to-b from-[#0C121E] to-[#070B12] border-2 border-emerald-500 rounded-3xl w-full max-w-sm p-6 sm:p-8 text-center shadow-[0_0_50px_rgba(0,255,102,0.4)] relative overflow-hidden flex flex-col items-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-300">
+      <div className="bg-white border-2 border-blue-500 rounded-3xl w-full max-w-sm p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden flex flex-col items-center text-slate-800">
         {/* Glow ambient background */}
-        <div className="absolute inset-0 bg-emerald-500/10 pointer-events-none rounded-3xl" />
+        <div className="absolute inset-0 bg-blue-500/5 pointer-events-none rounded-3xl" />
 
-        {/* Omnitrix Dial Ringing Icon */}
+        {/* Ringing Icon */}
         <div
-          className="relative w-24 h-24 rounded-full bg-[#070B12] border-4 border-[#00FF66] flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,255,102,0.6)] transition-transform duration-300"
+          className="relative w-24 h-24 rounded-full bg-blue-50 border-4 border-blue-600 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-transform duration-300"
           style={{ transform: `scale(${pulseScale})` }}
         >
-          <div className="w-12 h-12 rounded-full border-2 border-[#00FF66] flex items-center justify-center">
-            <Bell className="w-6 h-6 text-[#00FF66] animate-bounce" />
+          <div className="w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center">
+            <Bell className="w-6 h-6 text-blue-600 animate-bounce" />
           </div>
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF66] opacity-75" />
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#00FF66]" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75" />
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-600" />
           </span>
         </div>
 
         {/* Title */}
-        <div className="flex items-center gap-1.5 text-[#00FF66] text-xs font-bold font-mono tracking-widest uppercase mb-1">
+        <div className="flex items-center gap-1.5 text-blue-600 text-xs font-bold font-mono tracking-widest uppercase mb-1">
           <Radio className="w-3.5 h-3.5 animate-pulse" />
           <span>{isHindi ? 'अलार्म बज रहा है!' : 'ALARM RINGING!'}</span>
         </div>
 
         {/* Task Name */}
-        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight mb-2 drop-shadow-md">
+        <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mb-2">
           {alarm.task}
         </h2>
 
         {/* Time Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-[#00FF66] font-mono text-sm font-bold mb-4 shadow-[0_0_15px_rgba(0,255,102,0.2)]">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 font-['Orbitron',monospace] text-sm font-bold mb-4 shadow-sm">
           <Clock className="w-4 h-4" />
           <span>{alarm.time}</span>
         </div>
 
         {/* Tone info */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono mb-8">
-          <Volume2 className="w-3.5 h-3.5 text-[#00FF66]" />
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono mb-8">
+          <Volume2 className="w-3.5 h-3.5 text-blue-600" />
           <span>{alarm.ringtone}</span>
         </div>
 
-        {/* Action Buttons: Snooze & Dismiss */}
+        {/* Action Buttons */}
         <div className="w-full space-y-3">
-          {/* Snooze Button */}
           <button
             onClick={handleSnoozeClick}
-            className="w-full py-3.5 px-4 bg-[#0F172A] hover:bg-[#1E293B] border border-amber-500/50 hover:border-amber-400 text-amber-300 font-bold rounded-2xl text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer flex items-center justify-center gap-2"
+            className="w-full py-3.5 px-4 bg-slate-100 hover:bg-slate-200 border border-amber-300 text-amber-800 font-bold rounded-2xl text-sm transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2"
           >
             <Clock className="w-4 h-4" />
             <span>{isHindi ? 'स्नूज़ करें (+5 मिनट)' : 'Snooze (+5 mins)'}</span>
           </button>
 
-          {/* Dismiss Button */}
           <button
             onClick={handleDismissClick}
-            className="w-full py-4 px-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-2xl text-base transition-all shadow-[0_0_25px_rgba(239,68,68,0.4)] active:scale-95 cursor-pointer font-['Orbitron',sans-serif] tracking-wider"
+            className="w-full py-4 px-4 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl text-base transition-all shadow-[0_4px_20px_rgba(239,68,68,0.35)] active:scale-95 cursor-pointer font-['Orbitron',sans-serif] tracking-wider"
           >
             {isHindi ? 'बंद करें (DISMISS)' : 'DISMISS'}
           </button>

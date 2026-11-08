@@ -89,19 +89,64 @@ public class AlarmService extends Service {
         } else if (ACTION_SNOOZE.equals(action)) {
             String id = intent.getStringExtra("id");
             String label = intent.getStringExtra("label");
-            String repeatDays = intent.getStringExtra("repeatDays");
-            snoozeAlarm(id, label, repeatDays);
+            String callContactName = intent.getStringExtra("callContactName");
+            String callContactNumber = intent.getStringExtra("callContactNumber");
+            String whatsappContactName = intent.getStringExtra("whatsappContactName");
+            String whatsappContactNumber = intent.getStringExtra("whatsappContactNumber");
+            String whatsappMessage = intent.getStringExtra("whatsappMessage");
+            snoozeAlarm(id, label, callContactName, callContactNumber, whatsappContactName, whatsappContactNumber, whatsappMessage);
             stopAlarmAndService();
             return START_NOT_STICKY;
         }
 
         String id = intent != null ? intent.getStringExtra("id") : "alarm";
         String label = intent != null ? intent.getStringExtra("label") : "BGK Smart Alarm";
-        String repeatDays = intent != null ? intent.getStringExtra("repeatDays") : "";
+        String callContactName = intent != null ? intent.getStringExtra("callContactName") : "";
+        String callContactNumber = intent != null ? intent.getStringExtra("callContactNumber") : "";
+        String whatsappContactName = intent != null ? intent.getStringExtra("whatsappContactName") : "";
+        String whatsappContactNumber = intent != null ? intent.getStringExtra("whatsappContactNumber") : "";
+        String whatsappMessage = intent != null ? intent.getStringExtra("whatsappMessage") : "";
         long timeMillis = intent != null ? intent.getLongExtra("timeMillis", System.currentTimeMillis()) : System.currentTimeMillis();
 
-        // Handle repeat re-scheduling
-        handleRepeatRescheduling(id, label, repeatDays, timeMillis);
+        // 1. Execute independent Call action if callContactNumber is present
+        if (callContactNumber != null && !callContactNumber.trim().isEmpty()) {
+            try {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(android.net.Uri.parse("tel:" + callContactNumber));
+                callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    startActivity(callIntent);
+                } else {
+                    Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                    dialIntent.setData(android.net.Uri.parse("tel:" + callContactNumber));
+                    dialIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(dialIntent);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // 2. Execute independent WhatsApp action if whatsappContactNumber is present and message is non-empty
+        if (whatsappContactNumber != null && !whatsappContactNumber.trim().isEmpty() && whatsappMessage != null && !whatsappMessage.trim().isEmpty()) {
+            try {
+                String cleanNumber = whatsappContactNumber.replaceAll("[^0-9+]", "");
+                String encodedMsg = android.net.Uri.encode(whatsappMessage);
+                String url = "https://api.whatsapp.com/send?phone=" + cleanNumber + "&text=" + encodedMsg;
+                
+                Intent waIntent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
+                waIntent.setPackage("com.whatsapp");
+                waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(waIntent);
+            } catch (Exception e) {
+                try {
+                    String cleanNumber = whatsappContactNumber.replaceAll("[^0-9+]", "");
+                    String encodedMsg = android.net.Uri.encode(whatsappMessage);
+                    String url = "https://api.whatsapp.com/send?phone=" + cleanNumber + "&text=" + encodedMsg;
+                    Intent waIntent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
+                    waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(waIntent);
+                } catch (Exception ignored) {}
+            }
+        }
 
         // Acquire WakeLock
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -121,6 +166,11 @@ public class AlarmService extends Service {
         Intent fullScreenIntent = new Intent(this, AlarmActivity.class);
         fullScreenIntent.putExtra("id", id);
         fullScreenIntent.putExtra("label", label);
+        fullScreenIntent.putExtra("callContactName", callContactName);
+        fullScreenIntent.putExtra("callContactNumber", callContactNumber);
+        fullScreenIntent.putExtra("whatsappContactName", whatsappContactName);
+        fullScreenIntent.putExtra("whatsappContactNumber", whatsappContactNumber);
+        fullScreenIntent.putExtra("whatsappMessage", whatsappMessage);
         fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         
         int flagsPending = PendingIntent.FLAG_UPDATE_CURRENT;
@@ -140,11 +190,17 @@ public class AlarmService extends Service {
         snoozeIntent.setAction(ACTION_SNOOZE);
         snoozeIntent.putExtra("id", id);
         snoozeIntent.putExtra("label", label);
-        snoozeIntent.putExtra("repeatDays", repeatDays);
+        snoozeIntent.putExtra("callContactName", callContactName);
+        snoozeIntent.putExtra("callContactNumber", callContactNumber);
+        snoozeIntent.putExtra("whatsappContactName", whatsappContactName);
+        snoozeIntent.putExtra("whatsappContactNumber", whatsappContactNumber);
+        snoozeIntent.putExtra("whatsappMessage", whatsappMessage);
         PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, flagsPending);
 
+        String notificationTitle = "अलार्म बज रहा है: " + label;
+
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("अलार्म बज रहा है: " + label)
+                .setContentTitle(notificationTitle)
                 .setContentText("समय हो गया है! (Time to wake up)")
                 .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -164,16 +220,9 @@ public class AlarmService extends Service {
         return START_STICKY;
     }
 
-    private void handleRepeatRescheduling(String id, String label, String repeatDays, long originalTime) {
-        if (repeatDays != null && !repeatDays.isEmpty() && !repeatDays.equals("None")) {
-            long nextTime = originalTime + 24L * 60L * 60L * 1000L; // Next day
-            NativeAlarmPlugin.scheduleExactAlarmInternal(this, id, nextTime, label, repeatDays);
-        }
-    }
-
-    private void snoozeAlarm(String id, String label, String repeatDays) {
+    private void snoozeAlarm(String id, String label, String callContactName, String callContactNumber, String whatsappContactName, String whatsappContactNumber, String whatsappMessage) {
         long snoozeTime = System.currentTimeMillis() + 5L * 60L * 1000L; // +5 mins
-        NativeAlarmPlugin.scheduleExactAlarmInternal(this, id + "_snooze", snoozeTime, label + " (Snooze)", repeatDays);
+        NativeAlarmPlugin.scheduleExactAlarmInternal(this, id + "_snooze", snoozeTime, label + " (Snooze)", "", callContactName, callContactNumber, whatsappContactName, whatsappContactNumber, whatsappMessage);
     }
 
     private void startAlarmSoundAndVibration() {

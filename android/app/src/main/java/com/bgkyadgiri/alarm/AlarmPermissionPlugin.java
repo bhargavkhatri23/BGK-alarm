@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -22,36 +21,23 @@ public class AlarmPermissionPlugin extends Plugin {
   public void checkStatus(PluginCall call) {
     Context context = getContext();
     JSObject ret = new JSObject();
-    
-    // Check Battery Optimization
-    boolean batteryIgnored = true;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-      batteryIgnored = pm.isIgnoringBatteryOptimizations(context.getPackageName());
-    }
-    ret.put("batteryOptimizationIgnored", batteryIgnored);
 
-    // Check Exact Alarm
-    boolean canExact = true;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-      android.app.AlarmManager alarmManager = (android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-      canExact = alarmManager.canScheduleExactAlarms();
-    }
-    ret.put("canScheduleExactAlarms", canExact);
-
-    // Check Notification Permission
+    // 1. Check Notification Permission
     boolean notificationGranted = true;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         notificationGranted = context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED;
     }
     ret.put("notificationsGranted", notificationGranted);
 
-    // Check Overlay Permission (Display over other apps)
+    // 2. Check Display Over Other Apps (Overlay) Permission
     boolean overlayGranted = true;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         overlayGranted = Settings.canDrawOverlays(context);
     }
     ret.put("overlayPermissionGranted", overlayGranted);
+
+    // Both mandatory permissions status
+    ret.put("allMandatoryGranted", notificationGranted && overlayGranted);
 
     call.resolve(ret);
   }
@@ -64,61 +50,16 @@ public class AlarmPermissionPlugin extends Plugin {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-        call.resolve();
-      } else {
-        call.resolve();
       }
-    } else {
-      call.resolve();
     }
-  }
-
-  @PluginMethod
-  public void requestBatteryOptimization(PluginCall call) {
-    Context context = getContext();
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      String packageName = context.getPackageName();
-      PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-      if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-        intent.setData(Uri.parse("package:" + packageName));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        call.resolve();
-      } else {
-        call.resolve();
-      }
-    } else {
-      call.resolve();
-    }
-  }
-
-  @PluginMethod
-  public void requestExactAlarm(PluginCall call) {
-    Context context = getContext();
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-      android.app.AlarmManager alarmManager = (android.app.AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-      if (!alarmManager.canScheduleExactAlarms()) {
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
-        intent.setData(Uri.parse("package:" + context.getPackageName()));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        call.resolve();
-      } else {
-        call.resolve();
-      }
-    } else {
-      call.resolve();
-    }
+    call.resolve();
   }
 
   @PluginMethod
   public void scheduleAlarm(PluginCall call) {
     String alarmId = call.getString("alarmId");
     String task = call.getString("task");
-    Long triggerTime = call.getLong("triggerTime"); // Expects timestamp in milliseconds
+    Long triggerTime = call.getLong("triggerTime");
 
     if (alarmId == null || triggerTime == null) {
       call.reject("alarmId and triggerTime are required");
@@ -132,7 +73,6 @@ public class AlarmPermissionPlugin extends Plugin {
     intent.putExtra("alarmId", alarmId);
     intent.putExtra("task", task);
 
-    // Use a unique request code based on the alarmId string hash
     int requestCode = Math.abs(alarmId.hashCode());
     
     int flags = PendingIntent.FLAG_UPDATE_CURRENT;

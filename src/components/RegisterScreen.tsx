@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, UserPlus, ArrowLeft, AlertCircle, CheckCircle2, Shield, Zap } from 'lucide-react';
+import { Mail, Lock, UserPlus, ArrowLeft, AlertCircle, CheckCircle2, Shield, Clock } from 'lucide-react';
 
 interface RegisterScreenProps {
   onRegister: (email: string, password: string) => Promise<boolean>;
@@ -70,102 +70,98 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-center px-4 py-8 sm:px-6">
-      {/* Top Bar matching Omnitrix tech bar */}
+    <div className="min-h-full flex flex-col justify-center px-4 py-8 sm:px-6 bg-slate-50 text-slate-800">
       <div className="w-full max-w-md mx-auto mb-6 flex items-center justify-between">
         <button
           onClick={onBackToLogin}
-          className="flex items-center text-slate-300 hover:text-[#00FF66] transition-colors gap-2 text-xs font-bold p-2 rounded-xl hover:bg-emerald-950/40 border border-transparent hover:border-emerald-500/20"
+          className="flex items-center text-slate-600 hover:text-blue-600 transition-colors gap-2 text-xs font-bold p-2 rounded-xl hover:bg-slate-100 border border-transparent hover:border-slate-200 cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-[#00FF66]" />
+          <ArrowLeft className="w-4 h-4 text-blue-600" />
           <span>{isHindi ? 'लॉगिन पर वापस' : 'Back to Login'}</span>
         </button>
-        <span className="text-xs px-2.5 py-1 bg-emerald-950/70 text-[#00FF66] border border-emerald-500/40 rounded-full font-mono font-bold tracking-wider flex items-center gap-1 shadow-[0_0_10px_rgba(0,255,102,0.15)]">
-          <Zap className="w-3 h-3 text-[#00FF66]" />
-          OMNITRIX ID
+        <span className="text-xs px-3 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded-full font-mono font-bold tracking-wider flex items-center gap-1 shadow-sm">
+          <Clock className="w-3.5 h-3.5 text-blue-600" />
+          ACCOUNT SETUP
         </span>
       </div>
 
-      <div className="w-full max-w-md mx-auto bg-[#0C121E] border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(0,255,102,0.12)] backdrop-blur-md relative overflow-hidden">
-        {/* Top edge glow */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent opacity-80" />
+      <div className="w-full max-w-md mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl backdrop-blur-md relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent opacity-90" />
 
         <div className="text-center mb-6">
-          <div className="relative w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-600 to-[#00FF66] p-0.5 flex items-center justify-center shadow-[0_0_20px_rgba(0,255,102,0.35)] mb-4">
-            <div className="w-full h-full rounded-2xl bg-[#08150C] flex items-center justify-center">
-              <UserPlus className="w-8 h-8 text-[#00FF66]" />
-            </div>
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shadow-sm mb-4">
+            <UserPlus className="w-8 h-8 text-blue-600" />
           </div>
-          <h2 className="text-2xl font-extrabold text-white tracking-wider font-mono">
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-wider font-['Orbitron',sans-serif]">
             {isHindi ? 'नया खाता रजिस्टर करें' : 'Create New Account'}
           </h2>
-          <p className="text-emerald-400/80 text-xs mt-1.5 font-medium">
-            {isHindi ? 'अपने जरूरी रिमाइंडर्स सुरक्षित रखने के लिए' : 'Sync your reminders with Omnitrix persistence'}
+          <p className="text-slate-500 text-xs mt-1.5 font-medium">
+            {isHindi ? 'अपने जरूरी रिमाइंडर्स सुरक्षित रखने के लिए' : 'Sync your reminders securely'}
           </p>
         </div>
 
         {errorMsg && (
-          <div className="mb-4 p-3 bg-red-950/80 border border-red-700/70 rounded-xl text-red-200 text-xs sm:text-sm flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs sm:text-sm flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="mb-4 p-3 bg-emerald-950/80 border border-emerald-500/70 rounded-xl text-emerald-200 text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,102,0.2)]">
-            <CheckCircle2 className="w-4 h-4 shrink-0 text-[#00FF66]" />
+          <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs sm:text-sm flex items-center gap-2 shadow-sm">
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
             <span>{successMsg}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1.5 tracking-wide">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5 tracking-wide">
               {isHindi ? 'ईमेल आईडी' : 'Email ID'}
             </label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" />
+              <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1.5 tracking-wide">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5 tracking-wide">
               {isHindi ? 'पासवर्ड बनाएँ' : 'Create Password'}
             </label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" />
+              <Lock className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1.5 tracking-wide">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5 tracking-wide">
               {isHindi ? 'पासवर्ड पुनः दर्ज करें' : 'Confirm Password'}
             </label>
             <div className="relative">
-              <Shield className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" />
+              <Shield className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 required
                 value={confirmPass}
                 onChange={(e) => setConfirmPass(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
               />
             </div>
           </div>
@@ -173,20 +169,20 @@ export const RegisterScreen: React.FC<RegisterScreenProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-[#00FF66] text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer mt-2 tracking-wide flex items-center justify-center gap-2"
+            className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer mt-2 tracking-wide flex items-center justify-center gap-2"
           >
             {isLoading ? (
-              <span className="inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+              <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <span>{isHindi ? 'रजिस्टर करें' : 'Register Now'}</span>
             )}
           </button>
         </form>
 
-        <div className="mt-6 text-center border-t border-emerald-500/20 pt-4">
+        <div className="mt-6 text-center border-t border-slate-100 pt-4">
           <button
             onClick={onBackToLogin}
-            className="text-xs text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer font-medium"
+            className="text-xs text-slate-600 hover:text-blue-600 transition-colors cursor-pointer font-semibold"
           >
             {isHindi ? 'पहले से खाता है? लॉग इन करें' : 'Already have an account? Log In'}
           </button>

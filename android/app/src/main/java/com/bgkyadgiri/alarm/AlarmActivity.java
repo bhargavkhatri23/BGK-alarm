@@ -55,6 +55,11 @@ public class AlarmActivity extends Activity {
         String rawLabel = intent != null ? intent.getStringExtra("label") : "अलार्म";
         final String label = (rawLabel != null) ? rawLabel : "रिमाइंडर";
         final String alarmId = intent != null ? intent.getStringExtra("id") : "alarm_id";
+        final String callContactName = intent != null ? intent.getStringExtra("callContactName") : "";
+        final String callContactNumber = intent != null ? intent.getStringExtra("callContactNumber") : "";
+        final String whatsappContactName = intent != null ? intent.getStringExtra("whatsappContactName") : "";
+        final String whatsappContactNumber = intent != null ? intent.getStringExtra("whatsappContactNumber") : "";
+        final String whatsappMessage = intent != null ? intent.getStringExtra("whatsappMessage") : "";
 
         // Title
         TextView title = new TextView(this);
@@ -81,8 +86,40 @@ public class AlarmActivity extends Activity {
         labelView.setTextColor(0xFF94A3B8);
         labelView.setTextSize(18);
         labelView.setGravity(android.view.Gravity.CENTER);
-        labelView.setPadding(0, 0, 0, 64);
+        labelView.setPadding(0, 0, 0, 12);
         layout.addView(labelView);
+
+        // Call Contact Info display if present
+        if (callContactName != null && !callContactName.isEmpty()) {
+            TextView callView = new TextView(this);
+            callView.setText("📞 ऑटो कॉल: " + callContactName + " (" + callContactNumber + ")");
+            callView.setTextColor(0xFF00FF66);
+            callView.setTextSize(14);
+            callView.setGravity(android.view.Gravity.CENTER);
+            callView.setPadding(0, 0, 0, 6);
+            layout.addView(callView);
+        }
+
+        // WhatsApp Contact & Message Info display if present
+        if (whatsappContactName != null && !whatsappContactName.isEmpty()) {
+            TextView waView = new TextView(this);
+            waView.setText("💬 WhatsApp: " + whatsappContactName + " (" + whatsappContactNumber + ")");
+            waView.setTextColor(0xFF00FF66);
+            waView.setTextSize(14);
+            waView.setGravity(android.view.Gravity.CENTER);
+            waView.setPadding(0, 0, 0, 4);
+            layout.addView(waView);
+        }
+
+        if (whatsappMessage != null && !whatsappMessage.isEmpty()) {
+            TextView msgView = new TextView(this);
+            msgView.setText("संदेश: \"" + whatsappMessage + "\"");
+            msgView.setTextColor(0xFFA3E635);
+            msgView.setTextSize(13);
+            msgView.setGravity(android.view.Gravity.CENTER);
+            msgView.setPadding(0, 0, 0, 32);
+            layout.addView(msgView);
+        }
 
         // Snooze Button (+5 min)
         Button snoozeBtn = new Button(this);
@@ -102,6 +139,11 @@ public class AlarmActivity extends Activity {
             snoozeIntent.setAction(AlarmService.ACTION_SNOOZE);
             snoozeIntent.putExtra("id", alarmId);
             snoozeIntent.putExtra("label", label);
+            snoozeIntent.putExtra("callContactName", callContactName);
+            snoozeIntent.putExtra("callContactNumber", callContactNumber);
+            snoozeIntent.putExtra("whatsappContactName", whatsappContactName);
+            snoozeIntent.putExtra("whatsappContactNumber", whatsappContactNumber);
+            snoozeIntent.putExtra("whatsappMessage", whatsappMessage);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(snoozeIntent);
             } else {

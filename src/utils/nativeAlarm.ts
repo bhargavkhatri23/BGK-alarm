@@ -2,11 +2,23 @@ import { registerPlugin, Capacitor } from '@capacitor/core';
 import { AlarmItem } from '../types/alarm';
 
 interface INativeAlarmPlugin {
-  schedule(options: { id: string; timeMillis: number; label: string; repeatDays?: string }): Promise<void>;
+  schedule(options: { 
+    id: string; 
+    timeMillis: number; 
+    label: string; 
+    repeatDays?: string;
+    callContactName?: string;
+    callContactNumber?: string;
+    whatsappContactName?: string;
+    whatsappContactNumber?: string;
+    whatsappMessage?: string;
+  }): Promise<void>;
   cancel(options: { id: string }): Promise<void>;
   cancelAll(): Promise<void>;
   canScheduleExact(): Promise<{ granted: boolean }>;
   openExactAlarmSettings(): Promise<void>;
+  getContacts(): Promise<{ contacts: Array<{ name: string; phoneNumber: string }> }>;
+  requestContactsAndCallPermissions(): Promise<void>;
 }
 
 const NativeAlarm = registerPlugin<INativeAlarmPlugin>('NativeAlarm');
@@ -35,6 +47,30 @@ class NativeAlarmService {
     } catch {}
   }
 
+  public async requestContactsAndCall() {
+    if (!this.isNative) return;
+    try {
+      await NativeAlarm.requestContactsAndCallPermissions();
+    } catch {}
+  }
+
+  public async getDeviceContacts(): Promise<Array<{ name: string; phoneNumber: string }>> {
+    if (!this.isNative) {
+      return [
+        { name: 'Dr. Sharma (Cardio)', phoneNumber: '+919876543210' },
+        { name: 'Dad (Family)', phoneNumber: '+919123456789' },
+        { name: 'Office Manager', phoneNumber: '+919988776655' },
+        { name: 'Pharmacy Store', phoneNumber: '+919811223344' }
+      ];
+    }
+    try {
+      const res = await NativeAlarm.getContacts();
+      return res.contacts || [];
+    } catch {
+      return [];
+    }
+  }
+
   public async scheduleAlarm(alarm: AlarmItem) {
     if (!this.isNative || !alarm.enabled) return;
     const timeMillis = this.parseAlarmToMillis(alarm);
@@ -45,9 +81,14 @@ class NativeAlarmService {
         id: alarm.id,
         timeMillis: timeMillis,
         label: alarm.task,
-        repeatDays: alarm.day
+        repeatDays: alarm.day,
+        callContactName: alarm.callContactName || '',
+        callContactNumber: alarm.callContactNumber || '',
+        whatsappContactName: alarm.whatsappContactName || '',
+        whatsappContactNumber: alarm.whatsappContactNumber || '',
+        whatsappMessage: alarm.whatsappMessage || ''
       });
-      console.log(`NativeAlarm scheduled for ${alarm.task} at ${new Date(timeMillis)}`);
+      console.log(`NativeAlarm scheduled for ${alarm.task} with independent call & whatsapp contacts`);
     } catch (e) {
       console.error('Failed to schedule native alarm', e);
     }

@@ -10,6 +10,11 @@ export interface AlarmItem {
   ringtone: string;
   enabled: boolean;
   category?: 'health' | 'work' | 'fuel' | 'study' | 'general';
+  callContactName?: string;
+  callContactNumber?: string;
+  whatsappContactName?: string;
+  whatsappContactNumber?: string;
+  whatsappMessage?: string;
   createdAt: number;
 }
 

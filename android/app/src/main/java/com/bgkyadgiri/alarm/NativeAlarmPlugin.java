@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.provider.Settings;
+import android.provider.ContactsContract;
+import android.database.Cursor;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -50,19 +52,81 @@ public class NativeAlarmPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void requestContactsAndCallPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.CALL_PHONE
+            }, 9988);
+        }
+        JSObject ret = new JSObject();
+        ret.put("success", true);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void getContacts(PluginCall call) {
+        Context context = getContext();
+        JSONArray contactArray = new JSONArray();
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{
+                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                    ContactsContract.CommonDataKinds.Phone.NUMBER
+                },
+                null, null,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+            );
+
+            if (cursor != null) {
+                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                int numIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                
+                while (cursor.moveToNext()) {
+                    String name = nameIdx != -1 ? cursor.getString(nameIdx) : "";
+                    String number = numIdx != -1 ? cursor.getString(numIdx) : "";
+                    if (name != null && number != null && !number.trim().isEmpty()) {
+                        JSONObject obj = new JSONObject();
+                        obj.put("name", name);
+                        obj.put("phoneNumber", number);
+                        contactArray.put(obj);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignored
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        JSObject ret = new JSObject();
+        ret.put("contacts", contactArray);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void schedule(PluginCall call) {
         String id = call.getString("id");
         Long timeMillis = call.getLong("timeMillis");
         String label = call.getString("label", "Alarm");
         String repeatDays = call.getString("repeatDays", "");
+        String callContactName = call.getString("callContactName", "");
+        String callContactNumber = call.getString("callContactNumber", "");
+        String whatsappContactName = call.getString("whatsappContactName", "");
+        String whatsappContactNumber = call.getString("whatsappContactNumber", "");
+        String whatsappMessage = call.getString("whatsappMessage", "");
 
         if (id == null || timeMillis == null) {
             call.reject("id and timeMillis are required");
             return;
         }
 
-        scheduleExactAlarmInternal(getContext(), id, timeMillis, label, repeatDays);
-        saveAlarmToPrefs(getContext(), id, timeMillis, label, repeatDays);
+        scheduleExactAlarmInternal(getContext(), id, timeMillis, label, repeatDays, callContactName, callContactNumber, whatsappContactName, whatsappContactNumber, whatsappMessage);
+        saveAlarmToPrefs(getContext(), id, timeMillis, label, repeatDays, callContactName, callContactNumber, whatsappContactName, whatsappContactNumber, whatsappMessage);
         call.resolve();
     }
 
@@ -94,7 +158,7 @@ public class NativeAlarmPlugin extends Plugin {
         call.resolve();
     }
 
-    public static void scheduleExactAlarmInternal(Context context, String id, long triggerTime, String label, String repeatDays) {
+    public static void scheduleExactAlarmInternal(Context context, String id, long triggerTime, String label, String repeatDays, String callContactName, String callContactNumber, String whatsappContactName, String whatsappContactNumber, String whatsappMessage) {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (am == null) return;
 
@@ -103,6 +167,11 @@ public class NativeAlarmPlugin extends Plugin {
         intent.putExtra("task", label);
         intent.putExtra("repeatDays", repeatDays);
         intent.putExtra("timeMillis", triggerTime);
+        intent.putExtra("callContactName", callContactName != null ? callContactName : "");
+        intent.putExtra("callContactNumber", callContactNumber != null ? callContactNumber : "");
+        intent.putExtra("whatsappContactName", whatsappContactName != null ? whatsappContactName : "");
+        intent.putExtra("whatsappContactNumber", whatsappContactNumber != null ? whatsappContactNumber : "");
+        intent.putExtra("whatsappMessage", whatsappMessage != null ? whatsappMessage : "");
 
         int requestCode = Math.abs(id.hashCode());
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
@@ -115,6 +184,11 @@ public class NativeAlarmPlugin extends Plugin {
         Intent showIntent = new Intent(context, AlarmActivity.class);
         showIntent.putExtra("id", id);
         showIntent.putExtra("label", label);
+        showIntent.putExtra("callContactName", callContactName != null ? callContactName : "");
+        showIntent.putExtra("callContactNumber", callContactNumber != null ? callContactNumber : "");
+        showIntent.putExtra("whatsappContactName", whatsappContactName != null ? whatsappContactName : "");
+        showIntent.putExtra("whatsappContactNumber", whatsappContactNumber != null ? whatsappContactNumber : "");
+        showIntent.putExtra("whatsappMessage", whatsappMessage != null ? whatsappMessage : "");
         PendingIntent showPendingIntent = PendingIntent.getActivity(context, requestCode, showIntent, flags);
 
         AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(triggerTime, showPendingIntent);
@@ -135,7 +209,7 @@ public class NativeAlarmPlugin extends Plugin {
         am.cancel(pendingIntent);
     }
 
-    private static void saveAlarmToPrefs(Context context, String id, long timeMillis, String label, String repeatDays) {
+    private static void saveAlarmToPrefs(Context context, String id, long timeMillis, String label, String repeatDays, String callContactName, String callContactNumber, String whatsappContactName, String whatsappContactNumber, String whatsappMessage) {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
             JSONArray arr = new JSONArray(prefs.getString(KEY_STORED_ALARMS, "[]"));
@@ -151,6 +225,11 @@ public class NativeAlarmPlugin extends Plugin {
             newObj.put("timeMillis", timeMillis);
             newObj.put("label", label);
             newObj.put("repeatDays", repeatDays);
+            newObj.put("callContactName", callContactName != null ? callContactName : "");
+            newObj.put("callContactNumber", callContactNumber != null ? callContactNumber : "");
+            newObj.put("whatsappContactName", whatsappContactName != null ? whatsappContactName : "");
+            newObj.put("whatsappContactNumber", whatsappContactNumber != null ? whatsappContactNumber : "");
+            newObj.put("whatsappMessage", whatsappMessage != null ? whatsappMessage : "");
             newArr.put(newObj);
             prefs.edit().putString(KEY_STORED_ALARMS, newArr.toString()).apply();
         } catch (Exception ignored) {}
@@ -182,8 +261,13 @@ public class NativeAlarmPlugin extends Plugin {
                 String id = obj.getString("id");
                 String label = obj.getString("label");
                 String repeatDays = obj.getString("repeatDays");
+                String callContactName = obj.optString("callContactName", "");
+                String callContactNumber = obj.optString("callContactNumber", "");
+                String whatsappContactName = obj.optString("whatsappContactName", "");
+                String whatsappContactNumber = obj.optString("whatsappContactNumber", "");
+                String whatsappMessage = obj.optString("whatsappMessage", "");
                 if (time > now) {
-                    scheduleExactAlarmInternal(context, id, time, label, repeatDays);
+                    scheduleExactAlarmInternal(context, id, time, label, repeatDays, callContactName, callContactNumber, whatsappContactName, whatsappContactNumber, whatsappMessage);
                 }
             }
         } catch (Exception ignored) {}

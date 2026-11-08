@@ -3,21 +3,24 @@ import { Capacitor, registerPlugin } from '@capacitor/core';
 import { AlarmItem } from '../types/alarm';
 
 interface IAlarmPermissionPlugin {
-  requestBatteryOptimization(): Promise<void>;
-  requestExactAlarm(): Promise<void>;
   requestOverlayPermission(): Promise<void>;
   setBackgroundProtection(options: { enabled: boolean, nextTask?: string, nextTime?: string }): Promise<void>;
   scheduleAlarm(options: { alarmId: string, task: string, triggerTime: number }): Promise<void>;
   cancelAlarm(options: { alarmId: string }): Promise<void>;
   checkStatus(): Promise<{ 
-    batteryOptimizationIgnored: boolean, 
-    canScheduleExactAlarms: boolean,
-    notificationsGranted: boolean,
-    overlayPermissionGranted: boolean 
+    notificationsGranted: boolean, 
+    overlayPermissionGranted: boolean,
+    allMandatoryGranted?: boolean
   }>;
 }
 
 const AlarmPermission = registerPlugin<IAlarmPermissionPlugin>('AlarmPermission');
+
+export interface PermissionStatusResult {
+  notificationsGranted: boolean;
+  overlayPermissionGranted: boolean;
+  allMandatoryGranted: boolean;
+}
 
 class NotificationService {
   private isNative: boolean;
@@ -26,29 +29,42 @@ class NotificationService {
     this.isNative = Capacitor.isNativePlatform();
   }
 
-  public async checkSystemStatus() {
+  public async checkSystemStatus(): Promise<PermissionStatusResult> {
     if (!this.isNative) {
       return { 
-        batteryOptimizationIgnored: true, 
-        canScheduleExactAlarms: true,
-        notificationsGranted: true,
-        overlayPermissionGranted: true 
+        notificationsGranted: true, 
+        overlayPermissionGranted: true,
+        allMandatoryGranted: true
       };
     }
     try {
-      return await AlarmPermission.checkStatus();
+      const res = await AlarmPermission.checkStatus();
+      return {
+        notificationsGranted: Boolean(res.notificationsGranted),
+        overlayPermissionGranted: Boolean(res.overlayPermissionGranted),
+        allMandatoryGranted: Boolean(res.notificationsGranted && res.overlayPermissionGranted)
+      };
     } catch (e) {
       return { 
-        batteryOptimizationIgnored: true, 
-        canScheduleExactAlarms: true,
-        notificationsGranted: true,
-        overlayPermissionGranted: true 
+        notificationsGranted: true, 
+        overlayPermissionGranted: true,
+        allMandatoryGranted: true
       };
     }
   }
 
-  public async requestPermissions(): Promise<boolean> {
-    if (!this.isNative) return false;
+  public async requestNotificationPermission(): Promise<boolean> {
+    if (!this.isNative) {
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        try {
+          const res = await Notification.requestPermission();
+          return res === 'granted';
+        } catch {
+          return true;
+        }
+      }
+      return true;
+    }
     try {
       const status = await LocalNotifications.requestPermissions();
       return status.display === 'granted';
@@ -57,19 +73,11 @@ class NotificationService {
     }
   }
 
-  public async triggerBatteryOptimization() {
+  public async triggerOverlayPermission(): Promise<void> {
     if (!this.isNative) return;
-    try { await AlarmPermission.requestBatteryOptimization(); } catch (e) {}
-  }
-
-  public async triggerExactAlarm() {
-    if (!this.isNative) return;
-    try { await AlarmPermission.requestExactAlarm(); } catch (e) {}
-  }
-
-  public async triggerOverlayPermission() {
-    if (!this.isNative) return;
-    try { await AlarmPermission.requestOverlayPermission(); } catch (e) {}
+    try {
+      await AlarmPermission.requestOverlayPermission();
+    } catch (e) {}
   }
 
   public async enableBackgroundProtection(enabled: boolean, nextTask?: string, nextTime?: string) {

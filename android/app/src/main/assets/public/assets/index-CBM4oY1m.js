@@ -12260,6 +12260,16 @@ var Pen = createLucideIcon("pen", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Phone = createLucideIcon("phone", [["path", {
+	d: "M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",
+	key: "9njp5v"
+}]]);
+/**
+* @license lucide-react v0.546.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Play = createLucideIcon("play", [["path", {
 	d: "M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z",
 	key: "10ikf1"
@@ -12411,26 +12421,6 @@ var Trash2 = createLucideIcon("trash-2", [
 	["path", {
 		d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2",
 		key: "e791ji"
-	}]
-]);
-/**
-* @license lucide-react v0.546.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
-var TriangleAlert = createLucideIcon("triangle-alert", [
-	["path", {
-		d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
-		key: "wmoenq"
-	}],
-	["path", {
-		d: "M12 9v4",
-		key: "juzpu7"
-	}],
-	["path", {
-		d: "M12 17h.01",
-		key: "p32p05"
 	}]
 ]);
 /**
@@ -12593,78 +12583,75 @@ var LoginScreen = ({ onLogin, onNavigateToRegister, onNavigateToForgotPassword, 
 		});
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-full flex flex-col justify-center px-4 py-8 sm:px-6",
+		className: "min-h-full flex flex-col justify-center px-4 py-8 sm:px-6 bg-slate-50 text-slate-800",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "w-full max-w-md mx-auto mb-4 flex items-center justify-between",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-				className: "text-xs px-2.5 py-1 bg-emerald-950/70 border border-emerald-500/40 text-[#00FF66] rounded-full font-mono font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,255,102,0.2)]",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "w-3 h-3 text-[#00FF66]" }), "OMNITRIX V3.0"]
+				className: "text-xs px-3 py-1 bg-blue-50 border border-blue-200 text-blue-600 rounded-full font-mono font-bold tracking-wider flex items-center gap-1.5 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3.5 h-3.5 text-blue-600" }), "BGK SMART ALARM"]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				onClick: onToggleLanguage,
-				className: "text-xs font-bold px-3 py-1 bg-[#0F172A] hover:bg-slate-800 text-[#00FF66] rounded-full border border-emerald-500/30 transition-colors shadow-sm",
+				className: "text-xs font-bold px-3 py-1.5 bg-white hover:bg-slate-100 text-blue-600 rounded-full border border-blue-200 transition-colors shadow-sm cursor-pointer",
 				children: isHindi ? "English" : "हिंदी"
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "w-full max-w-md mx-auto bg-[#0C121E] border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(0,255,102,0.12)] backdrop-blur-md relative overflow-hidden",
+			className: "w-full max-w-md mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl backdrop-blur-md relative overflow-hidden",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent opacity-80" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent opacity-90" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex flex-col items-center text-center mb-6",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "relative w-24 h-24 rounded-full bg-slate-950 border-2 border-[#00FF66] p-1.5 shadow-[0_0_30px_rgba(0,255,102,0.4)] flex items-center justify-center transform hover:scale-105 transition-transform duration-300 animate-glow-omnitrix",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 rounded-full border-t border-b border-[#00FF66]/40 -rotate-45 pointer-events-none" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full rounded-full bg-[#05140A] border border-emerald-500/60 flex items-center justify-center relative overflow-hidden",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 opacity-20 bg-[radial-gradient(#00FF66_1px,transparent_1px)] [background-size:6px_6px]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BellRing, { className: "w-11 h-11 text-[#00FF66] animate-ring-shake drop-shadow-[0_0_10px_rgba(0,255,102,0.8)] z-10" })]
-							})]
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "relative w-20 h-20 rounded-full bg-blue-50 border-2 border-blue-500 p-1.5 shadow-[0_0_20px_rgba(37,99,235,0.2)] flex items-center justify-center transform hover:scale-105 transition-transform duration-300",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BellRing, { className: "w-9 h-9 text-blue-600 animate-bounce" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-							className: "text-3xl font-extrabold text-white mt-4 tracking-wider font-mono",
+							className: "text-3xl font-extrabold text-slate-900 mt-4 tracking-wider font-['Orbitron',sans-serif]",
 							children: ["BGK ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-[#00FF66] omnitrix-text-glow",
-								children: "YADGIRI"
+								className: "text-blue-600",
+								children: "ALARM"
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-emerald-400/80 text-xs mt-1.5 font-medium tracking-wide",
+							className: "text-slate-500 text-xs mt-1 font-medium tracking-wide",
 							children: isHindi ? "कभी न भूलें, समय पर याद रखें!" : "Never forget, remember on time!"
 						})
 					]
 				}),
 				errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-4 p-3 bg-red-950/80 border border-red-700/70 rounded-xl text-red-200 text-xs sm:text-sm flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
+					className: "mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs sm:text-sm flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 					onSubmit: handleLoginSubmit,
 					className: "space-y-4",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-bold text-slate-300 mb-1.5 tracking-wide",
+							className: "block text-xs font-bold text-slate-700 mb-1.5 tracking-wide",
 							children: isHindi ? "ईमेल आईडी" : "Email Address"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "email",
 								required: true,
 								value: email,
 								onChange: (e) => setEmail(e.target.value),
 								placeholder: "name@example.com",
-								className: "w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+								className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-bold text-slate-300 mb-1.5 tracking-wide",
+							className: "block text-xs font-bold text-slate-700 mb-1.5 tracking-wide",
 							children: isHindi ? "पासवर्ड" : "Password"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "password",
 								required: true,
 								value: password,
 								onChange: (e) => setPassword(e.target.value),
 								placeholder: "••••••••",
-								className: "w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+								className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -12672,24 +12659,24 @@ var LoginScreen = ({ onLogin, onNavigateToRegister, onNavigateToForgotPassword, 
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								type: "button",
 								onClick: onNavigateToForgotPassword,
-								className: "text-xs font-bold text-[#00FF66] hover:text-emerald-300 hover:underline transition-colors cursor-pointer flex items-center gap-1 drop-shadow-[0_0_8px_rgba(0,255,102,0.4)]",
+								className: "text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline transition-colors cursor-pointer flex items-center gap-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "पासवर्ड भूल गए?" : "Forgot Password?" })]
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "submit",
 							disabled: isLoading,
-							className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-[#00FF66] text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-2 tracking-wide",
-							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "लॉग इन करें" : "Log In" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "w-4 h-4 stroke-[3]" })] })
+							className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer flex items-center justify-center gap-2 tracking-wide",
+							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "लॉग इन करें" : "Log In" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowRight, { className: "w-4 h-4 stroke-[3]" })] })
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-6 pt-4 border-t border-emerald-500/20 text-center",
+					className: "mt-6 pt-4 border-t border-slate-100 text-center",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						type: "button",
 						onClick: onNavigateToRegister,
-						className: "text-xs text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer font-medium",
+						className: "text-xs text-slate-600 hover:text-blue-600 transition-colors cursor-pointer font-semibold",
 						children: isHindi ? "नया खाता बनाएँ? रजिस्टर करें" : "Don't have an account? Register"
 					})
 				})
@@ -12739,108 +12726,105 @@ var RegisterScreen = ({ onRegister, onBackToLogin, isHindi }) => {
 		});
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-full flex flex-col justify-center px-4 py-8 sm:px-6",
+		className: "min-h-full flex flex-col justify-center px-4 py-8 sm:px-6 bg-slate-50 text-slate-800",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "w-full max-w-md mx-auto mb-6 flex items-center justify-between",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				onClick: onBackToLogin,
-				className: "flex items-center text-slate-300 hover:text-[#00FF66] transition-colors gap-2 text-xs font-bold p-2 rounded-xl hover:bg-emerald-950/40 border border-transparent hover:border-emerald-500/20",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "लॉगिन पर वापस" : "Back to Login" })]
+				className: "flex items-center text-slate-600 hover:text-blue-600 transition-colors gap-2 text-xs font-bold p-2 rounded-xl hover:bg-slate-100 border border-transparent hover:border-slate-200 cursor-pointer",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "लॉगिन पर वापस" : "Back to Login" })]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-				className: "text-xs px-2.5 py-1 bg-emerald-950/70 text-[#00FF66] border border-emerald-500/40 rounded-full font-mono font-bold tracking-wider flex items-center gap-1 shadow-[0_0_10px_rgba(0,255,102,0.15)]",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "w-3 h-3 text-[#00FF66]" }), "OMNITRIX ID"]
+				className: "text-xs px-3 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded-full font-mono font-bold tracking-wider flex items-center gap-1 shadow-sm",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3.5 h-3.5 text-blue-600" }), "ACCOUNT SETUP"]
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "w-full max-w-md mx-auto bg-[#0C121E] border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(0,255,102,0.12)] backdrop-blur-md relative overflow-hidden",
+			className: "w-full max-w-md mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl backdrop-blur-md relative overflow-hidden",
 			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent opacity-80" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent opacity-90" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "text-center mb-6",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "relative w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-600 to-[#00FF66] p-0.5 flex items-center justify-center shadow-[0_0_20px_rgba(0,255,102,0.35)] mb-4",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full rounded-2xl bg-[#08150C] flex items-center justify-center",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-8 h-8 text-[#00FF66]" })
-							})
+							className: "w-16 h-16 mx-auto rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shadow-sm mb-4",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-8 h-8 text-blue-600" })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							className: "text-2xl font-extrabold text-white tracking-wider font-mono",
+							className: "text-2xl font-extrabold text-slate-900 tracking-wider font-['Orbitron',sans-serif]",
 							children: isHindi ? "नया खाता रजिस्टर करें" : "Create New Account"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-emerald-400/80 text-xs mt-1.5 font-medium",
-							children: isHindi ? "अपने जरूरी रिमाइंडर्स सुरक्षित रखने के लिए" : "Sync your reminders with Omnitrix persistence"
+							className: "text-slate-500 text-xs mt-1.5 font-medium",
+							children: isHindi ? "अपने जरूरी रिमाइंडर्स सुरक्षित रखने के लिए" : "Sync your reminders securely"
 						})
 					]
 				}),
 				errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-4 p-3 bg-red-950/80 border border-red-700/70 rounded-xl text-red-200 text-xs sm:text-sm flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
+					className: "mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs sm:text-sm flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
 				}),
 				successMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-4 p-3 bg-emerald-950/80 border border-emerald-500/70 rounded-xl text-emerald-200 text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,102,0.2)]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: successMsg })]
+					className: "mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs sm:text-sm flex items-center gap-2 shadow-sm",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: successMsg })]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 					onSubmit: handleSubmit,
 					className: "space-y-4",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-bold text-slate-300 mb-1.5 tracking-wide",
+							className: "block text-xs font-bold text-slate-700 mb-1.5 tracking-wide",
 							children: isHindi ? "ईमेल आईडी" : "Email ID"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "email",
 								required: true,
 								value: email,
 								onChange: (e) => setEmail(e.target.value),
 								placeholder: "name@example.com",
-								className: "w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+								className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-bold text-slate-300 mb-1.5 tracking-wide",
+							className: "block text-xs font-bold text-slate-700 mb-1.5 tracking-wide",
 							children: isHindi ? "पासवर्ड बनाएँ" : "Create Password"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "password",
 								required: true,
 								value: password,
 								onChange: (e) => setPassword(e.target.value),
 								placeholder: "••••••••",
-								className: "w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+								className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-bold text-slate-300 mb-1.5 tracking-wide",
+							className: "block text-xs font-bold text-slate-700 mb-1.5 tracking-wide",
 							children: isHindi ? "पासवर्ड पुनः दर्ज करें" : "Confirm Password"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "relative",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-emerald-500/70" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shield, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "password",
 								required: true,
 								value: confirmPass,
 								onChange: (e) => setConfirmPass(e.target.value),
 								placeholder: "••••••••",
-								className: "w-full pl-10 pr-4 py-3 bg-[#080D16] border border-emerald-500/20 rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66] transition-all shadow-inner"
+								className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "submit",
 							disabled: isLoading,
-							className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-[#00FF66] text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer mt-2 tracking-wide flex items-center justify-center gap-2",
-							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-block w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "रजिस्टर करें" : "Register Now" })
+							className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer mt-2 tracking-wide flex items-center justify-center gap-2",
+							children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "रजिस्टर करें" : "Register Now" })
 						})
 					]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-6 text-center border-t border-emerald-500/20 pt-4",
+					className: "mt-6 text-center border-t border-slate-100 pt-4",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: onBackToLogin,
-						className: "text-xs text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer font-medium",
+						className: "text-xs text-slate-600 hover:text-blue-600 transition-colors cursor-pointer font-semibold",
 						children: isHindi ? "पहले से खाता है? लॉग इन करें" : "Already have an account? Log In"
 					})
 				})
@@ -12849,123 +12833,698 @@ var RegisterScreen = ({ onRegister, onBackToLogin, isHindi }) => {
 	});
 };
 // src/components/DiagnosticCard.tsx
-var DiagnosticCard = ({ status, onFixBattery, onFixExactAlarm, onFixNotifications, onFixOverlay, isHindi }) => {
-	if (!(!status.batteryOptimizationIgnored || !status.canScheduleExactAlarms || !status.notificationsGranted || !status.overlayPermissionGranted)) return null;
+var DiagnosticCard = ({ status, isHindi }) => {
+	if (status.allMandatoryGranted) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "bg-white border border-blue-200 rounded-2xl p-3.5 mb-5 flex items-center justify-between shadow-sm",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center space-x-3",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "w-8 h-8 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4" })
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "text-xs font-bold text-slate-900 flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "सभी आवश्यक अनुमतियाँ सक्रिय" : "All Required Permissions Granted" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200 font-mono",
+					children: "Notifications + Overlay OK"
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-[11px] text-slate-500",
+				children: isHindi ? "बैकग्राउंड और लॉकस्क्रीन पर अलार्म 100% सटीक काम करने के लिए तैयार है।" : "App is fully authorized to trigger audio alerts and full-screen alarm screens."
+			})] })]
+		})
+	});
+};
+// src/components/WhatsAppIcon.tsx
+/**
+* Official WhatsApp brand logo SVG component
+* Styled with theme-compatible Royal Blue / Light Blue styling
+*/
+var WhatsAppIcon = ({ size = 16, className = "", color = "currentColor", ...props }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+		xmlns: "http://www.w3.org/2000/svg",
+		viewBox: "0 0 24 24",
+		width: size,
+		height: size,
+		fill: color,
+		className,
+		"aria-hidden": "true",
+		...props,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.59 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67ZM8.53 7.33C8.37 7.33 8.1 7.39 7.87 7.64C7.65 7.89 7.02 8.48 7.02 9.68C7.02 10.88 7.89 12.04 8.01 12.2C8.13 12.36 9.71 14.81 12.16 15.86C14.2 16.73 14.62 16.56 15.06 16.52C15.5 16.48 16.48 15.94 16.68 15.37C16.89 14.81 16.89 14.33 16.82 14.22C16.76 14.12 16.6 14.06 16.36 13.94C16.12 13.82 14.94 13.24 14.72 13.16C14.5 13.08 14.34 13.04 14.18 13.28C14.02 13.52 13.56 14.06 13.42 14.22C13.28 14.38 13.14 14.4 12.9 14.28C12.66 14.16 11.89 13.91 10.97 13.09C10.25 12.45 9.77 11.66 9.63 11.42C9.49 11.18 9.61 11.05 9.73 10.93C9.84 10.82 9.98 10.64 10.1 10.5C10.22 10.36 10.26 10.26 10.34 10.1C10.42 9.94 10.38 9.8 10.32 9.68C10.26 9.56 9.78 8.38 9.58 7.9C9.39 7.43 9.19 7.5 9.04 7.49C8.9 7.48 8.74 7.48 8.58 7.48L8.53 7.33Z" })
+	});
+};
+// src/components/HomeScreen.tsx
+var HomeScreen = ({ userEmail, alarms, onAddAlarm, onEditAlarm, onDeleteAlarm, onToggleAlarm, onTriggerTestAlarm, onQuickAddOneMinAlarm, onLogout, isHindi, onToggleLanguage, permissionStatus }) => {
+	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
+	const [filterMode, setFilterMode] = (0, import_react.useState)("all");
+	const [currentlyPlayingTone, setCurrentlyPlayingTone] = (0, import_react.useState)(null);
+	const [currentTime, setCurrentTime] = (0, import_react.useState)(/* @__PURE__ */ new Date());
+	const [volume, setVolume] = (0, import_react.useState)(audioEngine.getVolume());
+	const [isMuted, setIsMuted] = (0, import_react.useState)(false);
+	const [deleteConfirmId, setDeleteConfirmId] = (0, import_react.useState)(null);
+	(0, import_react.useEffect)(() => {
+		const timer = setInterval(() => {
+			setCurrentTime(/* @__PURE__ */ new Date());
+		}, 1e3);
+		return () => clearInterval(timer);
+	}, []);
+	const formattedLiveTime = currentTime.toLocaleTimeString([], {
+		hour: "2-digit",
+		minute: "2-digit",
+		second: "2-digit",
+		hour12: true
+	});
+	const formattedLiveDate = currentTime.toLocaleDateString(isHindi ? "hi-IN" : "en-US", {
+		weekday: "long",
+		month: "short",
+		day: "numeric"
+	});
+	const handleTogglePlayTone = (ringtoneName) => {
+		if (currentlyPlayingTone === ringtoneName) {
+			audioEngine.stop();
+			setCurrentlyPlayingTone(null);
+		} else {
+			audioEngine.preview(ringtoneName, 3500);
+			setCurrentlyPlayingTone(ringtoneName);
+			setTimeout(() => {
+				setCurrentlyPlayingTone((curr) => curr === ringtoneName ? null : curr);
+			}, 3500);
+		}
+	};
+	const handleVolumeChange = (newVal) => {
+		setVolume(newVal);
+		audioEngine.setVolume(newVal);
+		if (newVal === 0) setIsMuted(true);
+		else setIsMuted(false);
+	};
+	const toggleMute = () => {
+		if (isMuted) {
+			setIsMuted(false);
+			audioEngine.setVolume(volume || .8);
+		} else {
+			setIsMuted(true);
+			audioEngine.setVolume(0);
+		}
+	};
+	const filteredAlarms = alarms.filter((item) => {
+		if (!(item.task.toLowerCase().includes(searchQuery.toLowerCase()) || item.time.toLowerCase().includes(searchQuery.toLowerCase()) || item.ringtone.toLowerCase().includes(searchQuery.toLowerCase()))) return false;
+		if (filterMode === "active") return item.enabled;
+		if (filterMode === "inactive") return !item.enabled;
+		return true;
+	});
+	const activeCount = alarms.filter((a) => a.enabled).length;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "bg-[#0C121E] border border-amber-500/40 rounded-2xl p-4 mb-6 shadow-[0_0_20px_rgba(245,158,11,0.1)] relative overflow-hidden",
+		className: "min-h-full flex flex-col bg-slate-50 text-slate-800 font-sans",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-2 mb-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-500/40",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "w-5 h-5 text-amber-500" })
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-					className: "text-sm font-bold text-white uppercase tracking-wider font-['Orbitron',sans-serif]",
-					children: isHindi ? "सिस्टम डायग्नोस्टिक" : "System Diagnostic"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-[10px] text-amber-400 font-mono",
-					children: isHindi ? "अलार्म की विश्वसनीयता के लिए सुधार आवश्यक" : "Required for alarm reliability"
-				})] })]
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
+				className: "sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 py-3 sm:px-6 shadow-sm",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "max-w-4xl mx-auto flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center space-x-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shadow-sm",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-5 h-5 rounded-full border-2 border-blue-600 flex items-center justify-center",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2 h-2 bg-blue-600 rounded-sm transform rotate-45 animate-pulse" })
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+							className: "text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "font-['Orbitron',sans-serif] tracking-wider text-slate-900",
+								children: "BGK SMART ALARM"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] font-semibold text-blue-600 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 hidden sm:inline",
+								children: isHindi ? "रिमाइंडर्स" : "REMINDERS"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[11px] text-slate-500 font-mono truncate max-w-[180px] sm:max-w-xs",
+							children: userEmail
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center space-x-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: onToggleLanguage,
+								className: "text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-blue-600 border border-slate-200 transition-all cursor-pointer font-mono",
+								title: "भाषा बदलें",
+								children: isHindi ? "EN" : "हिं"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => onTriggerTestAlarm(),
+								className: "px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer",
+								title: "टेस्ट अलार्म बजाएँ",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 text-blue-600 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden sm:inline font-mono",
+									children: isHindi ? "टेस्ट बीप" : "TEST"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: onLogout,
+								className: "p-2 rounded-lg bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 border border-slate-200 hover:border-red-200 transition-colors cursor-pointer",
+								title: isHindi ? "लॉगआउट करें" : "Log Out",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4" })
+							})
+						]
+					})]
+				})
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "space-y-3",
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
+				className: "flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28",
 				children: [
-					!status.notificationsGranted && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-start justify-between gap-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-4 h-4 text-rose-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-bold text-slate-200",
-									children: isHindi ? "नोटिफिकेशन बंद हैं" : "Notifications Disabled"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onFixNotifications,
-								className: "px-2.5 py-1 bg-rose-600 text-white text-[10px] font-bold rounded-lg hover:bg-rose-500 transition-colors",
-								children: isHindi ? "अनुमति दें" : "FIX NOW"
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DiagnosticCard, {
+						status: permissionStatus,
+						isHindi
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+						className: "bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 mb-5 shadow-md relative overflow-hidden",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-12 -right-12 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center space-x-2 text-blue-600 text-xs font-semibold uppercase tracking-wider mb-1 font-mono",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarDays, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formattedLiveDate })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight flex items-baseline gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-['Orbitron',monospace] text-blue-600 text-4xl sm:text-5xl font-extrabold tracking-widest drop-shadow-[0_0_12px_rgba(37,99,235,0.35)]",
+										children: formattedLiveTime
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-xs font-semibold text-blue-700 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 font-mono",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-blue-600 animate-ping" }), isHindi ? "लाइव मॉनिटर" : "ACTIVE"]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+									className: "text-xs text-slate-500 mt-1.5 flex items-center gap-1.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Activity, { className: "w-3.5 h-3.5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "BGK SMART ALARM: समय पर सटीक अलर्ट, कभी न भूलें!" : "BGK SMART ALARM: Precision alerts, never forget!" })]
+								})
+							] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2 text-center min-w-[78px] shadow-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-lg font-bold text-slate-900 font-['Orbitron',monospace]",
+											children: alarms.length
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-[10px] text-slate-400 uppercase font-bold tracking-wider",
+											children: isHindi ? "कुल" : "TOTAL"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-blue-50 border border-blue-200 rounded-2xl px-3.5 py-2 text-center min-w-[78px] shadow-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-lg font-bold text-blue-600 font-['Orbitron',monospace]",
+											children: activeCount
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "text-[10px] text-blue-600 uppercase font-bold tracking-wider",
+											children: isHindi ? "सक्रिय" : "ACTIVE"
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2 flex items-center space-x-2 shadow-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											onClick: toggleMute,
+											className: "text-slate-500 hover:text-blue-600 transition-colors cursor-pointer",
+											title: "Mute / Unmute",
+											children: isMuted || volume === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "w-4 h-4 text-rose-500" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-4 h-4 text-blue-600" })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "range",
+											min: "0",
+											max: "1",
+											step: "0.05",
+											value: isMuted ? 0 : volume,
+											onChange: (e) => handleVolumeChange(parseFloat(e.target.value)),
+											className: "w-16 accent-blue-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg",
+											title: "अलार्म वॉल्यूम"
+										})]
+									})
+								]
 							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-[10px] text-slate-400 leading-tight",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-bold text-slate-300",
-								children: isHindi ? "कारण: " : "Reason: "
-							}), isHindi ? "सिस्टम नोटिफिकेशन बंद होने पर अलार्म स्क्रीन पर नहीं दिखेगा। " : "The OS is blocking visual alarm alerts."]
 						})]
 					}),
-					!status.overlayPermissionGranted && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col gap-2",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bg-white border border-blue-200 rounded-2xl p-3.5 mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-start justify-between gap-3",
+							className: "flex items-center space-x-3",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Monitor, { className: "w-4 h-4 text-purple-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-bold text-slate-200",
-									children: isHindi ? "अन्य ऐप्स के ऊपर दिखाएं" : "Display Over Apps"
+								className: "relative flex h-3.5 w-3.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3.5 w-3.5 bg-blue-600" })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "text-xs font-bold text-slate-900 flex items-center gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "बैकग्राउंड टाइम चेकर सक्रिय" : "Background Time-Checker Active" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200 font-mono",
+									children: "1-Sec Loop"
 								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onFixOverlay,
-								className: "px-2.5 py-1 bg-purple-600 text-white text-[10px] font-bold rounded-lg hover:bg-purple-500 transition-colors",
-								children: isHindi ? "अनुमति दें" : "ALLOW"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-[10px] text-slate-400 leading-tight",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-bold text-slate-300",
-								children: isHindi ? "कारण: " : "Reason: "
-							}), isHindi ? "इसके बिना अलार्म फुल स्क्रीन पर नहीं दिखेगा।" : "Required to show the alarm screen over other apps."]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-[11px] text-slate-500",
+								children: isHindi ? "डिवाइस का समय मिलते ही क्लासिक डिजिटल बीप अलार्म अपने आप बजेगा।" : "Classic Digital Beep triggers automatically when scheduled time matches."
+							})] })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex items-center space-x-2 w-full sm:w-auto justify-end",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								type: "button",
+								onClick: onQuickAddOneMinAlarm,
+								className: "px-3.5 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-extrabold rounded-xl text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all",
+								title: "अगले 1 मिनट बाद का अलार्म सेट करें",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "w-3.5 h-3.5 fill-white text-white" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "+1 मिनट बाद का ऑटो टेस्ट" : "+1 Min Auto Test" })]
+							})
 						})]
 					}),
-					!status.canScheduleExactAlarms && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col gap-2",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col sm:flex-row gap-3 mb-5 items-stretch sm:items-center justify-between",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-start justify-between gap-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4 text-amber-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-bold text-slate-200",
-									children: isHindi ? "सटीक अलार्म अनुमति" : "Exact Alarm Access"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onFixExactAlarm,
-								className: "px-2.5 py-1 bg-amber-600 text-white text-[10px] font-bold rounded-lg hover:bg-amber-500 transition-colors",
-								children: isHindi ? "ठीक करें" : "ENABLE"
+							className: "relative flex-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 absolute left-3.5 top-3 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "text",
+								value: searchQuery,
+								onChange: (e) => setSearchQuery(e.target.value),
+								placeholder: isHindi ? "रिमाइंडर खोजें (दवाई, पेट्रोल, मीटिंग...)" : "Search reminders...",
+								className: "w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm"
 							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-[10px] text-slate-400 leading-tight",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-bold text-slate-300",
-								children: isHindi ? "कारण: " : "Reason: "
-							}), isHindi ? "इसके बिना अलार्म 1-2 मिनट की देरी से बज सकता है।" : "Alarms may trigger late or be grouped by Android."]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center bg-white border border-slate-200 rounded-xl p-1 self-start sm:self-auto space-x-1 shadow-sm",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => setFilterMode("all"),
+									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "all" ? "bg-blue-600 text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`,
+									children: [
+										isHindi ? "सभी" : "All",
+										" (",
+										alarms.length,
+										")"
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => setFilterMode("active"),
+									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "active" ? "bg-blue-600 text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`,
+									children: [
+										isHindi ? "सक्रिय" : "Active",
+										" (",
+										activeCount,
+										")"
+									]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => setFilterMode("inactive"),
+									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "inactive" ? "bg-blue-600 text-white shadow-sm" : "text-slate-600 hover:text-slate-900"}`,
+									children: [
+										isHindi ? "बंद" : "Off",
+										" (",
+										alarms.length - activeCount,
+										")"
+									]
+								})
+							]
 						})]
 					}),
-					!status.batteryOptimizationIgnored && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-slate-900/60 border border-slate-800 rounded-xl p-3 flex flex-col gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-start justify-between gap-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "w-4 h-4 text-emerald-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs font-bold text-slate-200",
-									children: isHindi ? "बैटरी बचत प्रतिबंध" : "Battery Restrictions"
+					filteredAlarms.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bg-white border border-dashed border-slate-300 rounded-3xl p-8 sm:p-12 text-center max-w-lg mx-auto mt-6 shadow-sm",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 border border-blue-200 shadow-sm",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-8 h-8" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-slate-800 font-semibold text-base mb-2 whitespace-pre-line leading-relaxed",
+								children: isHindi ? "कोई अलार्म सेट नहीं है!\nनीचे दिए गए '+' बटन से नया रिमाइंडर जोड़ें।" : "No alarms scheduled!\nTap the '+' button below to add an alert."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-slate-500 mb-6",
+								children: isHindi ? "दवाई, पेट्रोल, मीटिंग या अपने जरूरी काम के लिए अलर्ट लगाएं।" : "Stay punctual for medicines, bike fuel, standups, and daily routines."
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: onAddAlarm,
+								className: "inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-sm shadow-md transition-all cursor-pointer",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-4 h-4 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "नया अलार्म जोड़ें" : "Create Alarm" })]
+							})
+						]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-3",
+						children: filteredAlarms.map((alarm) => {
+							const isPlayingThis = currentlyPlayingTone === alarm.ringtone;
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: `bg-white border transition-all rounded-2xl p-4 sm:p-5 shadow-sm ${alarm.enabled ? "border-blue-200 hover:border-blue-400 shadow-sm" : "border-slate-200 opacity-60 bg-slate-50"}`,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-start sm:items-center justify-between gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-start sm:items-center space-x-3.5 flex-1 min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: `w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${alarm.enabled ? "bg-blue-50 text-blue-600 border border-blue-200 shadow-sm" : "bg-slate-100 text-slate-400 border border-slate-200"}`,
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlarmClock, { className: `w-6 h-6 ${alarm.enabled ? "text-blue-600" : "text-slate-400"}` })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex-1 min-w-0",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "flex items-center gap-2 flex-wrap",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+													className: `text-base sm:text-lg font-bold truncate ${alarm.enabled ? "text-slate-900" : "text-slate-400 line-through"}`,
+													children: alarm.task
+												})
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 mt-1 font-mono",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "flex items-center gap-1 text-blue-600 font-semibold font-['Orbitron',monospace]",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3.5 h-3.5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
+												}), (alarm.callContactName || alarm.whatsappContactName) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-slate-300",
+													children: "•"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "text-blue-600 font-medium inline-flex items-center gap-1.5 flex-wrap",
+													children: [
+														alarm.callContactName && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "inline-flex items-center gap-0.5",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📞" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.callContactName })]
+														}),
+														alarm.callContactName && alarm.whatsappContactName && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+															className: "text-slate-300",
+															children: "|"
+														}),
+														alarm.whatsappContactName && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+															className: "inline-flex items-center gap-1",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppIcon, {
+																size: 12,
+																className: "text-blue-600 inline-block"
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.whatsappContactName })]
+														})
+													]
+												})] })]
+											})]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center space-x-1.5 sm:space-x-2 shrink-0",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => handleTogglePlayTone(alarm.ringtone),
+												className: `p-2 rounded-xl transition-all cursor-pointer ${isPlayingThis ? "bg-blue-600 text-white font-extrabold shadow-sm" : "bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200"}`,
+												title: isPlayingThis ? "रोकें (Stop)" : "टोन सुनें (Preview)",
+												children: isPlayingThis ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Square, { className: "w-4 h-4 fill-current" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { className: "w-4 h-4 fill-current" })
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => onToggleAlarm(alarm.id),
+												className: `relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${alarm.enabled ? "bg-blue-600 shadow-sm" : "bg-slate-300"}`,
+												title: alarm.enabled ? "सक्रिय अलार्म (चालू)" : "निष्क्रिय अलार्म (बंद)",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${alarm.enabled ? "translate-x-5" : "translate-x-0"}` })
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => onEditAlarm(alarm),
+												className: "p-2 rounded-xl bg-slate-100 hover:bg-blue-50 text-blue-600 border border-slate-200 hover:border-blue-200 transition-colors cursor-pointer",
+												title: isHindi ? "संशोधित करें" : "Edit",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pen, { className: "w-4 h-4" })
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												onClick: () => setDeleteConfirmId(alarm.id),
+												className: "p-2 rounded-xl bg-slate-100 hover:bg-red-50 text-red-500 border border-slate-200 hover:border-red-200 transition-colors cursor-pointer",
+												title: isHindi ? "हटाएँ" : "Delete",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+											})
+										]
+									})]
+								}), deleteConfirmId === alarm.id && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs animate-in fade-in",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-red-600 font-medium",
+										children: isHindi ? "क्या आप इस अलार्म को हटाना चाहते हैं?" : "Delete this alarm?"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center space-x-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => {
+												onDeleteAlarm(alarm.id);
+												setDeleteConfirmId(null);
+											},
+											className: "px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg cursor-pointer shadow-sm",
+											children: isHindi ? "हाँ, हटाएँ" : "Delete"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => setDeleteConfirmId(null),
+											className: "px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg cursor-pointer",
+											children: isHindi ? "रद्द करें" : "Cancel"
+										})]
+									})]
 								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onFixBattery,
-								className: "px-2.5 py-1 bg-emerald-600 text-white text-[10px] font-bold rounded-lg hover:bg-emerald-500 transition-colors",
-								children: isHindi ? "अनलिमिटेड करें" : "FIX"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-							className: "text-[10px] text-slate-400 leading-tight",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-bold text-slate-300",
-								children: isHindi ? "कारण: " : "Reason: "
-							}), isHindi ? "फोन की बैटरी बचत सर्विस ऐप को बैकग्राउंड में बंद कर सकती है।" : "Android may kill the app to save battery power."]
-						})]
+							}, alarm.id);
+						})
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-500 animate-ping" })
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "fixed bottom-6 right-6 z-40",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					onClick: onAddAlarm,
+					className: "flex items-center gap-2.5 px-5 py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-extrabold rounded-2xl shadow-xl border border-white/20 transition-all cursor-pointer font-['Orbitron',sans-serif]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-5 h-5 rounded-full bg-white/20 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-4 h-4 stroke-[3] text-white" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-sm font-extrabold tracking-wider",
+						children: isHindi ? "नया अलार्म" : "NEW ALARM"
+					})]
+				})
+			})
 		]
+	});
+};
+// src/components/ForgotPasswordModal.tsx
+var ForgotPasswordModal = ({ registeredUsers, onSavePassword, onClose, isHindi }) => {
+	const [email, setEmail] = (0, import_react.useState)("");
+	const [generatedCode, setGeneratedCode] = (0, import_react.useState)(null);
+	const [showCodeDialog, setShowCodeDialog] = (0, import_react.useState)(false);
+	const [enteredCode, setEnteredCode] = (0, import_react.useState)("");
+	const [codeVerified, setCodeVerified] = (0, import_react.useState)(false);
+	const [newPassword, setNewPassword] = (0, import_react.useState)("");
+	const [confirmPassword, setConfirmPassword] = (0, import_react.useState)("");
+	const [errorMsg, setErrorMsg] = (0, import_react.useState)("");
+	const [successMsg, setSuccessMsg] = (0, import_react.useState)("");
+	const [copied, setCopied] = (0, import_react.useState)(false);
+	const handleSendCode = (e) => {
+		e.preventDefault();
+		setErrorMsg("");
+		const trimmedEmail = email.trim();
+		if (!trimmedEmail) {
+			setErrorMsg(isHindi ? "कृपया ईमेल दर्ज करें!" : "Please enter an email address!");
+			return;
+		}
+		if (registeredUsers[trimmedEmail]) {
+			const code = (1e5 + Math.floor(Math.random() * 9e5)).toString();
+			setGeneratedCode(code);
+			setShowCodeDialog(true);
+		} else setErrorMsg(isHindi ? "यह ईमेल रजिस्टर नहीं है! कृपया पहले खाता बनाएँ।" : "This email is not registered! Please register first.");
+	};
+	const handleVerifyCode = (e) => {
+		e.preventDefault();
+		setErrorMsg("");
+		if (enteredCode.trim() === generatedCode) {
+			setCodeVerified(true);
+			setSuccessMsg(isHindi ? "कोड वेरिफाई हो गया! अब नया पासवर्ड सेट करें।" : "Code verified successfully! Please set your new password.");
+		} else setErrorMsg(isHindi ? "गलत कोड! पुनः प्रयास करें।" : "Incorrect verification code!");
+	};
+	const handleSavePassword = (e) => {
+		e.preventDefault();
+		setErrorMsg("");
+		if (!newPassword || newPassword.length < 4) {
+			setErrorMsg(isHindi ? "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए!" : "Password must be at least 4 characters long!");
+			return;
+		}
+		if (newPassword !== confirmPassword) {
+			setErrorMsg(isHindi ? "दोनों पासवर्ड मेल नहीं खा रहे हैं!" : "Passwords do not match!");
+			return;
+		}
+		onSavePassword(email.trim(), newPassword);
+		setSuccessMsg(isHindi ? "पासवर्ड सफलतापूर्वक बदल गया! कृपया लॉगिन करें।" : "Password updated successfully!");
+		setTimeout(() => {
+			onClose();
+		}, 1500);
+	};
+	const copyCode = () => {
+		if (generatedCode) {
+			navigator.clipboard.writeText(generatedCode);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2e3);
+		}
+	};
+	const autoFillCode = () => {
+		if (generatedCode) {
+			setEnteredCode(generatedCode);
+			setShowCodeDialog(false);
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "bg-white border border-blue-200 rounded-3xl p-6 w-full max-w-md shadow-2xl relative text-slate-800",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between border-b border-slate-100 pb-4 mb-5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center space-x-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							onClick: onClose,
+							className: "p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer",
+							title: "वापस जाएँ",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-5 h-5" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center space-x-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { className: "w-5 h-5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-lg font-bold text-slate-900 font-['Orbitron',sans-serif]",
+								children: isHindi ? "पासवर्ड रीसेट करें" : "Reset Password"
+							})]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: onClose,
+						className: "text-slate-400 hover:text-slate-700 text-sm font-medium px-2 py-1 rounded cursor-pointer",
+						children: "✕"
+					})]
+				}),
+				errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
+				}),
+				successMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-sm flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0 text-emerald-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: successMsg })]
+				}),
+				!generatedCode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleSendCode,
+					className: "space-y-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+						className: "block text-xs font-semibold text-slate-700 mb-1.5 font-mono",
+						children: isHindi ? "अपनी रजिस्टर ईमेल आईडी दर्ज करें" : "Enter Registered Email ID"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "email",
+							required: true,
+							value: email,
+							onChange: (e) => setEmail(e.target.value),
+							placeholder: "name@example.com",
+							className: "w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 text-sm transition-all font-mono"
+						})]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "submit",
+						className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+						children: isHindi ? "सुरक्षा कोड जनरेट करें" : "GENERATE SECURITY CODE"
+					})]
+				}),
+				generatedCode && !codeVerified && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleVerifyCode,
+					className: "space-y-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 flex items-center justify-between",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["ईमेल: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", {
+								className: "text-slate-900 font-mono",
+								children: email
+							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setShowCodeDialog(true),
+								className: "text-blue-600 hover:underline font-semibold cursor-pointer",
+								children: isHindi ? "कोड देखें" : "View Code"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "block text-xs font-semibold text-slate-700 mb-1.5 font-mono",
+							children: isHindi ? "6 अंकों का कोड यहाँ लिखें" : "Enter 6-digit Code"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "text",
+							maxLength: 6,
+							value: enteredCode,
+							onChange: (e) => setEnteredCode(e.target.value),
+							placeholder: "123456",
+							className: "w-full text-center tracking-widest text-2xl font-['Orbitron',monospace] py-3 bg-slate-50 border border-slate-200 rounded-xl text-blue-600 placeholder-slate-400 focus:outline-none focus:border-blue-600"
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "submit",
+							className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+							children: isHindi ? "कोड वेरिफाई करें" : "VERIFY CODE"
+						})
+					]
+				}),
+				codeVerified && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleSavePassword,
+					className: "space-y-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "block text-xs font-semibold text-slate-700 mb-1.5 font-mono",
+							children: isHindi ? "नया पासवर्ड" : "New Password"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "password",
+							required: true,
+							value: newPassword,
+							onChange: (e) => setNewPassword(e.target.value),
+							placeholder: "••••••••",
+							className: "w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 text-sm"
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "block text-xs font-semibold text-slate-700 mb-1.5 font-mono",
+							children: isHindi ? "नया पासवर्ड पुनः दर्ज करें" : "Confirm New Password"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "password",
+							required: true,
+							value: confirmPassword,
+							onChange: (e) => setConfirmPassword(e.target.value),
+							placeholder: "••••••••",
+							className: "w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-600 text-sm"
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "submit",
+							className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+							children: isHindi ? "पासवर्ड सेव करें" : "SAVE PASSWORD"
+						})
+					]
+				}),
+				showCodeDialog && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/70",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bg-white border border-blue-200 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center animate-in zoom-in-95 duration-150",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-12 h-12 bg-blue-50 text-blue-600 border border-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-6 h-6" })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-base font-bold text-slate-900 mb-2 font-['Orbitron',sans-serif]",
+								children: isHindi ? "सुरक्षा कोड" : "Security Verification Code"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-slate-500 mb-4",
+								children: isHindi ? "आपका 6 अंकों का गुप्त कोड है:" : "Your 6-digit verification code is:"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 mb-4 flex items-center justify-center space-x-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-3xl font-['Orbitron',monospace] font-extrabold text-blue-600 tracking-widest",
+									children: generatedCode
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: copyCode,
+									className: "p-1.5 hover:bg-slate-200 rounded-lg text-slate-500 hover:text-blue-600 transition-colors cursor-pointer",
+									title: "कॉपी करें",
+									children: copied ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-4 h-4 text-emerald-600" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "w-4 h-4" })
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid grid-cols-2 gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: autoFillCode,
+									className: "w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs font-mono cursor-pointer shadow-sm",
+									children: isHindi ? "ऑटो-फिल करें" : "Auto Fill"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => setShowCodeDialog(false),
+									className: "w-full py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold cursor-pointer",
+									children: isHindi ? "ठीक है" : "OK"
+								})]
+							})
+						]
+					})
+				})
+			]
+		})
 	});
 };
 // node_modules/@capacitor/core/dist/index.js
@@ -13477,6 +14036,757 @@ var SystemBarsPluginWeb = class extends WebPlugin {
 	}
 };
 registerPlugin("SystemBars", { web: () => new SystemBarsPluginWeb() });
+// src/utils/nativeAlarm.ts
+var NativeAlarm = registerPlugin("NativeAlarm");
+var NativeAlarmService = class {
+	constructor() {
+		this.isNative = Capacitor.isNativePlatform();
+	}
+	async canScheduleExactAlarms() {
+		if (!this.isNative) return true;
+		try {
+			return (await NativeAlarm.canScheduleExact()).granted;
+		} catch {
+			return true;
+		}
+	}
+	async openExactSettings() {
+		if (!this.isNative) return;
+		try {
+			await NativeAlarm.openExactAlarmSettings();
+		} catch {}
+	}
+	async requestContactsAndCall() {
+		if (!this.isNative) return;
+		try {
+			await NativeAlarm.requestContactsAndCallPermissions();
+		} catch {}
+	}
+	async getDeviceContacts() {
+		if (!this.isNative) return [
+			{
+				name: "Dr. Sharma (Cardio)",
+				phoneNumber: "+919876543210"
+			},
+			{
+				name: "Dad (Family)",
+				phoneNumber: "+919123456789"
+			},
+			{
+				name: "Office Manager",
+				phoneNumber: "+919988776655"
+			},
+			{
+				name: "Pharmacy Store",
+				phoneNumber: "+919811223344"
+			}
+		];
+		try {
+			return (await NativeAlarm.getContacts()).contacts || [];
+		} catch {
+			return [];
+		}
+	}
+	async scheduleAlarm(alarm) {
+		if (!this.isNative || !alarm.enabled) return;
+		const timeMillis = this.parseAlarmToMillis(alarm);
+		if (!timeMillis || timeMillis <= Date.now()) return;
+		try {
+			await NativeAlarm.schedule({
+				id: alarm.id,
+				timeMillis,
+				label: alarm.task,
+				repeatDays: alarm.day,
+				callContactName: alarm.callContactName || "",
+				callContactNumber: alarm.callContactNumber || "",
+				whatsappContactName: alarm.whatsappContactName || "",
+				whatsappContactNumber: alarm.whatsappContactNumber || "",
+				whatsappMessage: alarm.whatsappMessage || ""
+			});
+			console.log(`NativeAlarm scheduled for ${alarm.task} with independent call & whatsapp contacts`);
+		} catch (e) {
+			console.error("Failed to schedule native alarm", e);
+		}
+	}
+	async cancelAlarm(alarmId) {
+		if (!this.isNative) return;
+		try {
+			await NativeAlarm.cancel({ id: alarmId });
+		} catch (e) {
+			console.error("Failed to cancel native alarm", e);
+		}
+	}
+	async syncAlarms(alarms) {
+		if (!this.isNative) return;
+		try {
+			await NativeAlarm.cancelAll();
+			for (const alarm of alarms) if (alarm.enabled) await this.scheduleAlarm(alarm);
+		} catch (e) {
+			console.error("Failed to sync native alarms", e);
+		}
+	}
+	parseAlarmToMillis(alarm) {
+		const now = /* @__PURE__ */ new Date();
+		const date = /* @__PURE__ */ new Date();
+		let hours = parseInt(alarm.hour, 10);
+		if (alarm.ampm === "PM" && hours < 12) hours += 12;
+		if (alarm.ampm === "AM" && hours === 12) hours = 0;
+		date.setHours(hours, parseInt(alarm.minute, 10), 0, 0);
+		if (alarm.day !== "प्रतिदिन (Every Day)") {
+			const targetDayIndex = [
+				"Sunday",
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday",
+				"Saturday"
+			].findIndex((d) => alarm.day.includes(d));
+			if (targetDayIndex !== -1) {
+				let daysUntil = (targetDayIndex - now.getDay() + 7) % 7;
+				if (daysUntil === 0 && date.getTime() <= now.getTime()) daysUntil = 7;
+				date.setDate(date.getDate() + daysUntil);
+			}
+		} else if (date.getTime() <= now.getTime()) date.setDate(date.getDate() + 1);
+		return date.getTime();
+	}
+};
+var nativeAlarmService = new NativeAlarmService();
+// src/components/CreateAlarmSheet.tsx
+var CreateAlarmSheet = ({ existingAlarm, onSave, onClose, isHindi }) => {
+	const [task, setTask] = (0, import_react.useState)(existingAlarm ? existingAlarm.task : "");
+	const [selectedDay, setSelectedDay] = (0, import_react.useState)(existingAlarm ? existingAlarm.day : "प्रतिदिन (Every Day)");
+	const [selectedHour, setSelectedHour] = (0, import_react.useState)(existingAlarm ? existingAlarm.hour : "08");
+	const [selectedMinute, setSelectedMinute] = (0, import_react.useState)(existingAlarm ? existingAlarm.minute : "30");
+	const [selectedAmPm, setSelectedAmPm] = (0, import_react.useState)(existingAlarm ? existingAlarm.ampm : "AM");
+	const selectedRingtone = DEFAULT_RINGTONE;
+	const [isPlayingPreview, setIsPlayingPreview] = (0, import_react.useState)(false);
+	const [taskError, setTaskError] = (0, import_react.useState)(false);
+	const [contacts, setContacts] = (0, import_react.useState)([]);
+	const [loadingContacts, setLoadingContacts] = (0, import_react.useState)(false);
+	const [callContactName, setCallContactName] = (0, import_react.useState)(existingAlarm?.callContactName || "");
+	const [callContactNumber, setCallContactNumber] = (0, import_react.useState)(existingAlarm?.callContactNumber || "");
+	const [showCallPicker, setShowCallPicker] = (0, import_react.useState)(false);
+	const [callSearchQuery, setCallSearchQuery] = (0, import_react.useState)("");
+	const [whatsappContactName, setWhatsappContactName] = (0, import_react.useState)(existingAlarm?.whatsappContactName || "");
+	const [whatsappContactNumber, setWhatsappContactNumber] = (0, import_react.useState)(existingAlarm?.whatsappContactNumber || "");
+	const [whatsappMessage, setWhatsappMessage] = (0, import_react.useState)(existingAlarm?.whatsappMessage || "");
+	const [showWhatsappPicker, setShowWhatsappPicker] = (0, import_react.useState)(false);
+	const [whatsappSearchQuery, setWhatsappSearchQuery] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => {
+		loadDeviceContacts();
+		return () => {
+			audioEngine.stop();
+		};
+	}, []);
+	const loadDeviceContacts = async () => {
+		setLoadingContacts(true);
+		try {
+			await nativeAlarmService.requestContactsAndCall();
+			const list = await nativeAlarmService.getDeviceContacts();
+			setContacts(list);
+		} catch (e) {
+			console.error("Error loading contacts", e);
+		} finally {
+			setLoadingContacts(false);
+		}
+	};
+	const filteredCallContacts = contacts.filter((c) => c.name.toLowerCase().includes(callSearchQuery.toLowerCase()) || c.phoneNumber.includes(callSearchQuery));
+	const filteredWhatsappContacts = contacts.filter((c) => c.name.toLowerCase().includes(whatsappSearchQuery.toLowerCase()) || c.phoneNumber.includes(whatsappSearchQuery));
+	const handleTestRingtone = () => {
+		if (isPlayingPreview) {
+			audioEngine.stop();
+			setIsPlayingPreview(false);
+		} else {
+			setIsPlayingPreview(true);
+			audioEngine.preview(selectedRingtone, 3500);
+			setTimeout(() => {
+				setIsPlayingPreview(false);
+			}, 3500);
+		}
+	};
+	const handleSave = (e) => {
+		e.preventDefault();
+		const cleanTask = task.trim();
+		if (!cleanTask) {
+			setTaskError(true);
+			return;
+		}
+		audioEngine.stop();
+		onSave({
+			task: cleanTask,
+			day: selectedDay,
+			hour: selectedHour,
+			minute: selectedMinute,
+			ampm: selectedAmPm,
+			ringtone: selectedRingtone,
+			callContactName,
+			callContactNumber,
+			whatsappContactName,
+			whatsappContactNumber,
+			whatsappMessage: whatsappMessage.trim()
+		});
+	};
+	const applyPreset = (preset) => {
+		setTask(preset.task);
+		setTaskError(false);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md animate-in fade-in duration-200 p-0 sm:p-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "bg-white border border-blue-200 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[92vh] flex flex-col shadow-2xl relative overflow-hidden text-slate-800",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100 bg-slate-50",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center space-x-2.5",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-8 h-8 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shadow-sm",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-4 h-4" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "text-lg font-bold text-slate-900 font-['Orbitron',sans-serif] tracking-wide flex items-center gap-2",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: existingAlarm ? isHindi ? "अलार्म संशोधित करें" : "Edit Alarm" : isHindi ? "नया अलार्म सेट करें" : "Set New Alarm" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					onClick: () => {
+						audioEngine.stop();
+						onClose();
+					},
+					className: "p-1.5 hover:bg-slate-200 rounded-full text-slate-500 hover:text-slate-900 transition-colors cursor-pointer",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "w-5 h-5" })
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				onSubmit: handleSave,
+				className: "overflow-y-auto px-6 py-5 space-y-5",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "block text-xs font-bold text-slate-700 mb-1.5 font-mono",
+							children: isHindi ? "क्या काम करना है? (जैसे: दवाई लेना, पेट्रोल भरवाना)" : "What is the task? (e.g. Medicine, Fuel)"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "text",
+							required: true,
+							value: task,
+							onChange: (e) => {
+								setTask(e.target.value);
+								if (taskError) setTaskError(false);
+							},
+							placeholder: isHindi ? "जैसे: शुगर की दवाई लेना, ऑफिस मीटिंग, पेट्रोल" : "e.g., Take medicine, Team standup",
+							className: `w-full px-4 py-3 bg-slate-50 border ${taskError ? "border-red-500 ring-1 ring-red-500" : "border-slate-200"} rounded-xl text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all shadow-sm`
+						}),
+						taskError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-red-600 text-xs mt-1",
+							children: isHindi ? "कृपया काम का विवरण दर्ज करें" : "Please specify the reminder task"
+						})
+					] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "text-[11px] font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1 mb-2 font-mono",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "w-3 h-3 text-blue-600" }), isHindi ? "जल्दी से चुनें (Quick Presets)" : "Quick Presets"]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex flex-wrap gap-1.5",
+						children: QUICK_TASK_PRESETS.map((preset, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							onClick: () => applyPreset(preset),
+							className: "px-2.5 py-1 text-xs rounded-lg bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-600 transition-all cursor-pointer font-sans shadow-sm",
+							children: preset.label
+						}, idx))
+					})] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "pt-3 border-t border-slate-100 space-y-3",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center space-x-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3.5 h-3.5" })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-bold text-slate-900 font-mono",
+										children: isHindi ? "ऑटो कॉल संपर्क (Call Contact)" : "Auto-Call Contact"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[10px] text-slate-500",
+										children: isHindi ? "अलार्म बजने पर इस नंबर पर कॉल लगेगा" : "Outbound call when alarm triggers"
+									})] })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setShowCallPicker(!showCallPicker),
+									className: "text-xs font-bold px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded-xl transition-all cursor-pointer font-mono shadow-sm flex items-center gap-1.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Phone, { className: "w-3 h-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: callContactName ? isHindi ? "बदलों" : "Change" : isHindi ? "संपर्क चुनें" : "Select Contact" })]
+								})]
+							}),
+							callContactName ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between bg-blue-50/50 border border-blue-200 rounded-xl p-2.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "min-w-0",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs font-bold text-slate-900 truncate",
+										children: callContactName
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[11px] text-blue-600 font-mono truncate",
+										children: callContactNumber
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => {
+										setCallContactName("");
+										setCallContactNumber("");
+									},
+									className: "p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors cursor-pointer",
+									title: "Remove call contact",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+								})]
+							}) : null,
+							showCallPicker && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5 animate-in fade-in shadow-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "text",
+										value: callSearchQuery,
+										onChange: (e) => setCallSearchQuery(e.target.value),
+										placeholder: isHindi ? "कॉल संपर्क खोजें..." : "Search call contact...",
+										className: "w-full pl-8 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-blue-600"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "max-h-36 overflow-y-auto space-y-1",
+									children: loadingContacts ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500 text-center py-2 font-mono",
+										children: "Loading..."
+									}) : filteredCallContacts.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500 text-center py-2 font-mono",
+										children: "No contacts"
+									}) : filteredCallContacts.map((c, idx) => {
+										const isSelected = callContactNumber === c.phoneNumber;
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											onClick: () => {
+												setCallContactName(c.name);
+												setCallContactNumber(c.phoneNumber);
+												setShowCallPicker(false);
+											},
+											className: `flex items-center justify-between p-2 rounded-lg border cursor-pointer transition-all ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-sm" : "bg-white border-slate-200 hover:border-blue-300 text-slate-700"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: `text-xs font-bold ${isSelected ? "text-white" : "text-slate-900"}`,
+												children: c.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: `text-[10px] font-mono ${isSelected ? "text-blue-100" : "text-blue-600"}`,
+												children: c.phoneNumber
+											})] }), isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5 text-white" })]
+										}, idx);
+									})
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "pt-3 border-t border-slate-100 space-y-3",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center space-x-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppIcon, {
+											size: 16,
+											className: "text-blue-600"
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-bold text-slate-900 font-mono",
+										children: isHindi ? "WhatsApp संदेश संपर्क (WhatsApp Contact)" : "WhatsApp Contact & Message"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-[10px] text-slate-500",
+										children: isHindi ? "अलार्म बजने पर इस नंबर पर WhatsApp संदेश भेजा जाएगा" : "Automated WhatsApp message when alarm triggers"
+									})] })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									type: "button",
+									onClick: () => setShowWhatsappPicker(!showWhatsappPicker),
+									className: "text-xs font-bold px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded-xl transition-all cursor-pointer font-mono shadow-sm flex items-center gap-1.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppIcon, {
+										size: 14,
+										className: "text-blue-600"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: whatsappContactName ? isHindi ? "बदलों" : "Change" : isHindi ? "संपर्क चुनें" : "Select Contact" })]
+								})]
+							}),
+							whatsappContactName ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center justify-between bg-blue-50/50 border border-blue-200 rounded-xl p-2.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center space-x-2.5 min-w-0",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-6 h-6 rounded-md bg-blue-100 flex items-center justify-center shrink-0",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WhatsAppIcon, {
+											size: 14,
+											className: "text-blue-600"
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "min-w-0",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs font-bold text-slate-900 truncate",
+											children: whatsappContactName
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-[11px] text-blue-600 font-mono truncate",
+											children: whatsappContactNumber
+										})]
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									type: "button",
+									onClick: () => {
+										setWhatsappContactName("");
+										setWhatsappContactNumber("");
+									},
+									className: "p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors cursor-pointer",
+									title: "Remove WhatsApp contact",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+								})]
+							}) : null,
+							showWhatsappPicker && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5 animate-in fade-in shadow-sm",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "text",
+										value: whatsappSearchQuery,
+										onChange: (e) => setWhatsappSearchQuery(e.target.value),
+										placeholder: isHindi ? "WhatsApp संपर्क खोजें..." : "Search WhatsApp contact...",
+										className: "w-full pl-8 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-blue-600"
+									})]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "max-h-36 overflow-y-auto space-y-1",
+									children: loadingContacts ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500 text-center py-2 font-mono",
+										children: "Loading..."
+									}) : filteredWhatsappContacts.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-slate-500 text-center py-2 font-mono",
+										children: "No contacts"
+									}) : filteredWhatsappContacts.map((c, idx) => {
+										const isSelected = whatsappContactNumber === c.phoneNumber;
+										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											onClick: () => {
+												setWhatsappContactName(c.name);
+												setWhatsappContactNumber(c.phoneNumber);
+												setShowWhatsappPicker(false);
+											},
+											className: `flex items-center justify-between p-2 rounded-lg border cursor-pointer transition-all ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-sm" : "bg-white border-slate-200 hover:border-blue-300 text-slate-700"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: `text-xs font-bold ${isSelected ? "text-white" : "text-slate-900"}`,
+												children: c.name
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: `text-[10px] font-mono ${isSelected ? "text-blue-100" : "text-blue-600"}`,
+												children: c.phoneNumber
+											})] }), isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-3.5 h-3.5 text-white" })]
+										}, idx);
+									})
+								})]
+							}),
+							whatsappContactNumber && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-1.5 animate-in fade-in pt-1",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "block text-xs font-semibold text-slate-700 font-mono",
+									children: isHindi ? "कस्टम WhatsApp संदेश (खाली छोड़ें या टाइप करें)" : "Custom WhatsApp Message (Type from scratch)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+									rows: 2,
+									value: whatsappMessage,
+									onChange: (e) => setWhatsappMessage(e.target.value),
+									placeholder: isHindi ? "यहाँ अपना कस्टम WhatsApp संदेश टाइप करें..." : "Type custom WhatsApp message here...",
+									className: "w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "pt-2 border-t border-slate-100",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+								className: "text-sm font-semibold text-slate-900 mb-2 flex items-center gap-2 font-['Orbitron',sans-serif]",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "मैनुअल टाइम सिलेक्शन (Schedule & Time):" : "Schedule & Time Selection:" })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "block text-xs text-slate-500 mb-1 flex items-center gap-1 font-mono",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "w-3.5 h-3.5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "दिन चुनें (Select Day)" : "Select Day" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+									value: selectedDay,
+									onChange: (e) => setSelectedDay(e.target.value),
+									className: "w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600 cursor-pointer shadow-sm",
+									children: DAYS_LIST.map((day) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: day,
+										children: day
+									}, day))
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "grid grid-cols-3 gap-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-xs text-slate-500 mb-1 font-mono",
+										children: isHindi ? "घंटा (Hour)" : "Hour"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+										value: selectedHour,
+										onChange: (e) => setSelectedHour(e.target.value),
+										className: "w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600 cursor-pointer font-['Orbitron',monospace] shadow-sm",
+										children: HOURS_LIST.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: h,
+											children: h
+										}, h))
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between mb-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "block text-xs text-slate-500 font-mono",
+											children: isHindi ? "मिनट (Minute)" : "Minute"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] text-blue-600 font-mono",
+											children: "00-59"
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+										value: selectedMinute,
+										onChange: (e) => setSelectedMinute(e.target.value),
+										className: "w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-blue-600 cursor-pointer font-['Orbitron',monospace] shadow-sm",
+										children: MINUTES_LIST.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: m,
+											children: m
+										}, m))
+									})] }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-xs text-slate-500 mb-1 font-mono",
+										children: isHindi ? "प्रहर (AM/PM)" : "AM / PM"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+										value: selectedAmPm,
+										onChange: (e) => setSelectedAmPm(e.target.value),
+										className: "w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm font-bold focus:outline-none focus:border-blue-600 cursor-pointer font-mono shadow-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "AM",
+											children: "AM"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "PM",
+											children: "PM"
+										})]
+									})] })
+								]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "pt-2 border-t border-slate-100",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between mb-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center space-x-1.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-xs font-semibold text-slate-700 font-mono",
+									children: isHindi ? "रिंगटोन (Ringtone)" : "Ringtone"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: handleTestRingtone,
+								className: `text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${isPlayingPreview ? "bg-rose-100 text-rose-700 border border-rose-300 animate-pulse" : "bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 shadow-sm"}`,
+								children: isPlayingPreview ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "रोकें (Stop)" : "Stop" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "बीप सुनें (Test)" : "Preview Beep" })] })
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-sm shadow-sm",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center space-x-2.5",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-semibold text-slate-900 tracking-wide",
+									children: DEFAULT_RINGTONE
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 font-mono",
+								children: isHindi ? "डिफ़ॉल्ट फिक्स्ड" : "Fixed Default"
+							})]
+						})]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "pt-3",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "submit",
+							className: "w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-extrabold rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-4 h-4 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "अलार्म सेव करें" : "SAVE ALARM" })]
+						})
+					})
+				]
+			})]
+		})
+	});
+};
+// src/components/AlarmRingingModal.tsx
+var AlarmRingingModal = ({ alarm, onDismiss, onSnooze, isHindi }) => {
+	const [pulseScale, setPulseScale] = (0, import_react.useState)(1);
+	(0, import_react.useEffect)(() => {
+		audioEngine.play(alarm.ringtone, true);
+		const interval = setInterval(() => {
+			setPulseScale((prev) => prev === 1 ? 1.08 : 1);
+		}, 600);
+		return () => {
+			clearInterval(interval);
+			audioEngine.stop();
+		};
+	}, [alarm.ringtone]);
+	const handleSnoozeClick = () => {
+		audioEngine.stop();
+		onSnooze(alarm.id, 5);
+	};
+	const handleDismissClick = () => {
+		audioEngine.stop();
+		onDismiss();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-in fade-in duration-300",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "bg-white border-2 border-blue-500 rounded-3xl w-full max-w-sm p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden flex flex-col items-center text-slate-800",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-blue-500/5 pointer-events-none rounded-3xl" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "relative w-24 h-24 rounded-full bg-blue-50 border-4 border-blue-600 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-transform duration-300",
+					style: { transform: `scale(${pulseScale})` },
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-6 h-6 text-blue-600 animate-bounce" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "absolute -top-1 -right-1 flex h-4 w-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-4 w-4 bg-blue-600" })]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1.5 text-blue-600 text-xs font-bold font-mono tracking-widest uppercase mb-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "अलार्म बज रहा है!" : "ALARM RINGING!" })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+					className: "text-xl sm:text-2xl font-black text-slate-900 tracking-tight mb-2",
+					children: alarm.task
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 font-['Orbitron',monospace] text-sm font-bold mb-4 shadow-sm",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1.5 text-xs text-slate-500 font-mono mb-8",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5 text-blue-600" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.ringtone })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full space-y-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						onClick: handleSnoozeClick,
+						className: "w-full py-3.5 px-4 bg-slate-100 hover:bg-slate-200 border border-amber-300 text-amber-800 font-bold rounded-2xl text-sm transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "स्नूज़ करें (+5 मिनट)" : "Snooze (+5 mins)" })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: handleDismissClick,
+						className: "w-full py-4 px-4 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl text-base transition-all shadow-[0_4px_20px_rgba(239,68,68,0.35)] active:scale-95 cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+						children: isHindi ? "बंद करें (DISMISS)" : "DISMISS"
+					})]
+				})
+			]
+		})
+	});
+};
+// src/components/DeviceFrameWrapper.tsx
+var DeviceFrameWrapper = ({ children }) => {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen bg-[#05080F] flex flex-col items-center justify-start text-slate-100",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "w-full flex-1 flex flex-col bg-[#070B12]",
+			children
+		})
+	});
+};
+// src/components/MandatoryPermissionModal.tsx
+var MandatoryPermissionModal = ({ status, onRequestNotifications, onRequestOverlay, onRecheck, isHindi }) => {
+	if (status.allMandatoryGranted) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-300",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "bg-white border border-blue-200 rounded-3xl w-full max-w-md p-6 sm:p-7 text-left shadow-2xl relative overflow-hidden flex flex-col text-slate-800",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center space-x-3 mb-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shadow-sm shrink-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-7 h-7 text-blue-600 animate-pulse" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-[10px] font-mono font-bold text-blue-600 tracking-widest uppercase px-2 py-0.5 rounded bg-blue-50 border border-blue-200",
+						children: isHindi ? "अनिवार्य अनुमति" : "MANDATORY SETUP"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						className: "text-lg sm:text-xl font-black text-slate-900 font-['Orbitron',sans-serif] tracking-wide mt-1",
+						children: isHindi ? "अलार्म की 2 ज़रूरी अनुमतियाँ" : "2 Required Permissions"
+					})] })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-slate-600 mb-5 leading-relaxed",
+					children: isHindi ? "BGK Smart Alarm को ऐप बंद होने या लॉक स्क्रीन पर भी 100% सटीक बजने के लिए नीचे दी गई दोनों अनुमतियाँ अनिवार्य हैं। कृपया दोनों को Allow करें:" : "For BGK Smart Alarm to ring 100% reliably even when the app is closed or phone is locked, both permissions below are required:"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-3 mb-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: `p-4 rounded-2xl border transition-all ${status.notificationsGranted ? "bg-blue-50/60 border-blue-200" : "bg-slate-50 border-slate-200"}`,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center space-x-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: `w-9 h-9 rounded-xl flex items-center justify-center ${status.notificationsGranted ? "bg-blue-100 text-blue-600" : "bg-rose-100 text-rose-600"}`,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-5 h-5" })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-sm font-bold text-slate-900 flex items-center gap-1.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["1. ", isHindi ? "नोटिफिकेशन अनुमति" : "Notification Permission"] }), status.notificationsGranted && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 text-blue-600" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[11px] text-slate-500",
+									children: isHindi ? "अलार्म साउंड और अलर्ट सूचना के लिए" : "For sound, vibration & status alert"
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: status.notificationsGranted ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200 font-mono",
+								children: isHindi ? "मंजूर" : "GRANTED"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: onRequestNotifications,
+								className: "px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow-sm cursor-pointer transition-all font-mono",
+								children: isHindi ? "अनुमति दें" : "ALLOW"
+							}) })]
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: `p-4 rounded-2xl border transition-all ${status.overlayPermissionGranted ? "bg-blue-50/60 border-blue-200" : "bg-slate-50 border-slate-200"}`,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between gap-3",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center space-x-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: `w-9 h-9 rounded-xl flex items-center justify-center ${status.overlayPermissionGranted ? "bg-blue-100 text-blue-600" : "bg-purple-100 text-purple-600"}`,
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Monitor, { className: "w-5 h-5" })
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-sm font-bold text-slate-900 flex items-center gap-1.5",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["2. ", isHindi ? "अन्य ऐप्स के ऊपर दिखाएं" : "Display Over Other Apps"] }), status.overlayPermissionGranted && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 text-blue-600" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-[11px] text-slate-500",
+									children: isHindi ? "लॉक स्क्रीन पर फुल-स्क्रीन अलार्म दिखाने के लिए" : "To wake & show alarm screen when locked"
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: status.overlayPermissionGranted ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200 font-mono",
+								children: isHindi ? "मंजूर" : "GRANTED"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: onRequestOverlay,
+								className: "px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow-sm cursor-pointer transition-all font-mono",
+								children: isHindi ? "अनुमति दें" : "ALLOW"
+							}) })]
+						})
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "pt-3 border-t border-slate-100 flex flex-col gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: onRecheck,
+						className: "w-full py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-black rounded-xl text-sm shadow-[0_4px_15px_rgba(37,99,235,0.35)] cursor-pointer transition-all font-['Orbitron',sans-serif] tracking-wider text-center",
+						children: isHindi ? "अनुमति सत्यापित करें (VERIFY & CONTINUE)" : "VERIFY & CONTINUE"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-[11px] text-center text-slate-500",
+						children: isHindi ? "🔒 दोनों अनुमतियाँ स्वीकृत होने के बाद ही मुख्य अलार्म स्क्रीन खुलेगी।" : "🔒 Both permissions are mandatory to access the alarms dashboard."
+					})]
+				})
+			]
+		})
+	});
+};
 // node_modules/@capacitor/local-notifications/dist/esm/definitions.js
 /**
 * Day of the week. Used for scheduling notifications on a particular weekday.
@@ -13586,7 +14896,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 // node_modules/@capacitor/local-notifications/dist/esm/index.js
-var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-iBhKIurH.js").then((m) => new m.LocalNotificationsWeb()), []) });
+var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-DKRmAQBJ.js").then((m) => new m.LocalNotificationsWeb()), []) });
 // src/utils/notificationService.ts
 var AlarmPermission = registerPlugin("AlarmPermission");
 var NotificationService = class {
@@ -13595,41 +14905,39 @@ var NotificationService = class {
 	}
 	async checkSystemStatus() {
 		if (!this.isNative) return {
-			batteryOptimizationIgnored: true,
-			canScheduleExactAlarms: true,
 			notificationsGranted: true,
-			overlayPermissionGranted: true
+			overlayPermissionGranted: true,
+			allMandatoryGranted: true
 		};
 		try {
-			return await AlarmPermission.checkStatus();
+			const res = await AlarmPermission.checkStatus();
+			return {
+				notificationsGranted: Boolean(res.notificationsGranted),
+				overlayPermissionGranted: Boolean(res.overlayPermissionGranted),
+				allMandatoryGranted: Boolean(res.notificationsGranted && res.overlayPermissionGranted)
+			};
 		} catch (e) {
 			return {
-				batteryOptimizationIgnored: true,
-				canScheduleExactAlarms: true,
 				notificationsGranted: true,
-				overlayPermissionGranted: true
+				overlayPermissionGranted: true,
+				allMandatoryGranted: true
 			};
 		}
 	}
-	async requestPermissions() {
-		if (!this.isNative) return false;
+	async requestNotificationPermission() {
+		if (!this.isNative) {
+			if (typeof window !== "undefined" && "Notification" in window) try {
+				return await Notification.requestPermission() === "granted";
+			} catch {
+				return true;
+			}
+			return true;
+		}
 		try {
 			return (await LocalNotifications.requestPermissions()).display === "granted";
 		} catch (e) {
 			return false;
 		}
-	}
-	async triggerBatteryOptimization() {
-		if (!this.isNative) return;
-		try {
-			await AlarmPermission.requestBatteryOptimization();
-		} catch (e) {}
-	}
-	async triggerExactAlarm() {
-		if (!this.isNative) return;
-		try {
-			await AlarmPermission.requestExactAlarm();
-		} catch (e) {}
 	}
 	async triggerOverlayPermission() {
 		if (!this.isNative) return;
@@ -13746,979 +15054,6 @@ var NotificationService = class {
 	}
 };
 var notificationService = new NotificationService();
-// src/components/HomeScreen.tsx
-var HomeScreen = ({ userEmail, alarms, onAddAlarm, onEditAlarm, onDeleteAlarm, onToggleAlarm, onTriggerTestAlarm, onQuickAddOneMinAlarm, onLogout, isHindi, onToggleLanguage, diagnosticStatus, onRefreshDiagnostics }) => {
-	const [searchQuery, setSearchQuery] = (0, import_react.useState)("");
-	const [filterMode, setFilterMode] = (0, import_react.useState)("all");
-	const [currentlyPlayingTone, setCurrentlyPlayingTone] = (0, import_react.useState)(null);
-	const [currentTime, setCurrentTime] = (0, import_react.useState)(/* @__PURE__ */ new Date());
-	const [volume, setVolume] = (0, import_react.useState)(audioEngine.getVolume());
-	const [isMuted, setIsMuted] = (0, import_react.useState)(false);
-	const [deleteConfirmId, setDeleteConfirmId] = (0, import_react.useState)(null);
-	(0, import_react.useEffect)(() => {
-		const timer = setInterval(() => {
-			setCurrentTime(/* @__PURE__ */ new Date());
-		}, 1e3);
-		return () => clearInterval(timer);
-	}, []);
-	const formattedLiveTime = currentTime.toLocaleTimeString([], {
-		hour: "2-digit",
-		minute: "2-digit",
-		second: "2-digit",
-		hour12: true
-	});
-	const formattedLiveDate = currentTime.toLocaleDateString(isHindi ? "hi-IN" : "en-US", {
-		weekday: "long",
-		month: "short",
-		day: "numeric"
-	});
-	const handleTogglePlayTone = (ringtoneName) => {
-		if (currentlyPlayingTone === ringtoneName) {
-			audioEngine.stop();
-			setCurrentlyPlayingTone(null);
-		} else {
-			audioEngine.preview(ringtoneName, 3500);
-			setCurrentlyPlayingTone(ringtoneName);
-			setTimeout(() => {
-				setCurrentlyPlayingTone((curr) => curr === ringtoneName ? null : curr);
-			}, 3500);
-		}
-	};
-	const handleVolumeChange = (newVal) => {
-		setVolume(newVal);
-		audioEngine.setVolume(newVal);
-		if (newVal === 0) setIsMuted(true);
-		else setIsMuted(false);
-	};
-	const toggleMute = () => {
-		if (isMuted) {
-			setIsMuted(false);
-			audioEngine.setVolume(volume || .8);
-		} else {
-			setIsMuted(true);
-			audioEngine.setVolume(0);
-		}
-	};
-	const filteredAlarms = alarms.filter((item) => {
-		if (!(item.task.toLowerCase().includes(searchQuery.toLowerCase()) || item.time.toLowerCase().includes(searchQuery.toLowerCase()) || item.ringtone.toLowerCase().includes(searchQuery.toLowerCase()))) return false;
-		if (filterMode === "active") return item.enabled;
-		if (filterMode === "inactive") return !item.enabled;
-		return true;
-	});
-	const activeCount = alarms.filter((a) => a.enabled).length;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "min-h-full flex flex-col bg-[#090D16] text-slate-100 font-sans",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("header", {
-				className: "sticky top-0 z-30 bg-[#0C121E]/95 backdrop-blur-md border-b border-emerald-500/25 px-4 py-3 sm:px-6 shadow-[0_4px_20px_rgba(0,0,0,0.5)]",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "max-w-4xl mx-auto flex items-center justify-between",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center space-x-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "relative w-10 h-10 rounded-xl bg-[#070B12] border border-emerald-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,102,0.25)] group",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-5 h-5 rounded-full border-2 border-[#00FF66] flex items-center justify-center",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2 h-2 bg-[#00FF66] rounded-sm transform rotate-45 animate-pulse" })
-							})
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-							className: "text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-['Orbitron',sans-serif] tracking-wider text-white",
-								children: "BGK SMART ALARM"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "text-[11px] font-semibold text-[#00FF66] px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-500/30 hidden sm:inline",
-								children: ["OMNITRIX ", isHindi ? "रिमाइंडर्स" : "REMINDERS"]
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-[11px] text-slate-400 font-mono truncate max-w-[180px] sm:max-w-xs",
-							children: userEmail
-						})] })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center space-x-2",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onToggleLanguage,
-								className: "text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[#0F172A] hover:bg-[#1A2438] text-slate-300 hover:text-[#00FF66] border border-emerald-500/25 transition-all cursor-pointer font-mono",
-								title: "भाषा बदलें",
-								children: isHindi ? "EN" : "हिं"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => onTriggerTestAlarm(),
-								className: "px-2.5 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/50 text-[#00FF66] hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,255,102,0.15)] transition-all cursor-pointer",
-								title: "टेस्ट अलार्म बजाएँ",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 text-[#00FF66] animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "hidden sm:inline font-mono",
-									children: isHindi ? "टेस्ट बीप" : "TEST"
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: onLogout,
-								className: "p-2 rounded-lg bg-[#0F172A] hover:bg-rose-950/60 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/40 transition-colors cursor-pointer",
-								title: isHindi ? "लॉगआउट करें" : "Log Out",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4" })
-							})
-						]
-					})]
-				})
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
-				className: "flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DiagnosticCard, {
-						status: diagnosticStatus,
-						onFixBattery: async () => {
-							await notificationService.triggerBatteryOptimization();
-							setTimeout(onRefreshDiagnostics, 3e3);
-						},
-						onFixExactAlarm: async () => {
-							await notificationService.triggerExactAlarm();
-							setTimeout(onRefreshDiagnostics, 3e3);
-						},
-						onFixNotifications: async () => {
-							await notificationService.requestPermissions();
-							setTimeout(onRefreshDiagnostics, 1e3);
-						},
-						onFixOverlay: async () => {
-							await notificationService.triggerOverlayPermission();
-							setTimeout(onRefreshDiagnostics, 3e3);
-						},
-						isHindi
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-						className: "bg-gradient-to-br from-[#0C121E] via-[#090E18] to-[#070B12] border border-emerald-500/35 rounded-3xl p-5 sm:p-6 mb-5 shadow-[0_0_30px_rgba(0,255,102,0.08)] relative overflow-hidden",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-12 -right-12 w-48 h-48 bg-[#00FF66]/10 rounded-full blur-3xl pointer-events-none" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center space-x-2 text-[#00FF66] text-xs font-semibold uppercase tracking-wider mb-1 font-mono",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarDays, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formattedLiveDate })]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-baseline gap-3",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "font-['Orbitron',monospace] text-[#00FF66] drop-shadow-[0_0_12px_rgba(0,255,102,0.4)]",
-										children: formattedLiveTime
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-										className: "text-xs font-semibold text-emerald-300 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 font-mono",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "w-2 h-2 rounded-full bg-[#00FF66] animate-ping" }), isHindi ? "लाइव मॉनिटर" : "SYSTEM ACTIVE"]
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-									className: "text-xs text-slate-400 mt-1.5 flex items-center gap-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Activity, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "BGK SMART ALARM: समय पर सटीक अलर्ट, कभी न भूलें!" : "BGK SMART ALARM: Precision alerts, never forget!" })]
-								})
-							] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-emerald-500/20 pt-3 sm:pt-0",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "bg-[#070B12]/90 border border-emerald-500/30 rounded-2xl px-3.5 py-2 text-center min-w-[78px] shadow-sm",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-lg font-bold text-white font-['Orbitron',monospace]",
-											children: alarms.length
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-[10px] text-slate-400 uppercase font-bold tracking-wider",
-											children: isHindi ? "कुल" : "TOTAL"
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "bg-[#070B12]/90 border border-emerald-500/40 rounded-2xl px-3.5 py-2 text-center min-w-[78px] shadow-[0_0_15px_rgba(0,255,102,0.1)]",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-lg font-bold text-[#00FF66] font-['Orbitron',monospace]",
-											children: activeCount
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "text-[10px] text-emerald-400 uppercase font-bold tracking-wider",
-											children: isHindi ? "सक्रिय" : "ACTIVE"
-										})]
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "bg-[#070B12]/90 border border-emerald-500/30 rounded-2xl px-3 py-2 flex items-center space-x-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											type: "button",
-											onClick: toggleMute,
-											className: "text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer",
-											title: "Mute / Unmute",
-											children: isMuted || volume === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "w-4 h-4 text-rose-400" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-4 h-4 text-[#00FF66]" })
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-											type: "range",
-											min: "0",
-											max: "1",
-											step: "0.05",
-											value: isMuted ? 0 : volume,
-											onChange: (e) => handleVolumeChange(parseFloat(e.target.value)),
-											className: "w-16 accent-[#00FF66] cursor-pointer h-1.5 bg-slate-800 rounded-lg",
-											title: "अलार्म वॉल्यूम"
-										})]
-									})
-								]
-							})]
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-[#0C121E] border border-emerald-500/30 rounded-2xl p-3.5 mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-[0_0_20px_rgba(0,255,102,0.06)]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center space-x-3",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "relative flex h-3.5 w-3.5",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF66] opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-3.5 w-3.5 bg-[#00FF66] shadow-[0_0_8px_#00FF66]" })]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "text-xs font-bold text-white flex items-center gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "बैकग्राउंड टाइम चेकर सक्रिय" : "Background Time-Checker Active" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-[#00FF66] border border-emerald-500/40 font-mono",
-									children: "1-Sec Loop"
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-[11px] text-slate-400",
-								children: isHindi ? "डिवाइस का समय मिलते ही क्लासिक डिजिटल बीप अलार्म अपने आप बजेगा।" : "Classic Digital Beep triggers automatically the second scheduled time matches."
-							})] })]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "flex items-center space-x-2 w-full sm:w-auto justify-end",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								type: "button",
-								onClick: onQuickAddOneMinAlarm,
-								className: "px-3.5 py-2 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 active:scale-95 text-black font-extrabold rounded-xl text-xs flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,255,102,0.3)] cursor-pointer transition-all",
-								title: "अगले 1 मिनट बाद का अलार्म सेट करें",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Zap, { className: "w-3.5 h-3.5 fill-black text-black" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "+1 मिनट बाद का ऑटो टेस्ट" : "+1 Min Auto Test" })]
-							})
-						})]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-col sm:flex-row gap-3 mb-5 items-stretch sm:items-center justify-between",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "relative flex-1",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 absolute left-3.5 top-3 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-								type: "text",
-								value: searchQuery,
-								onChange: (e) => setSearchQuery(e.target.value),
-								placeholder: isHindi ? "रिमाइंडर खोजें (दवाई, पेट्रोल, मीटिंग...)" : "Search reminders...",
-								className: "w-full pl-10 pr-4 py-2.5 bg-[#0C121E] border border-emerald-500/25 rounded-xl text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66]/30 transition-all"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center bg-[#0C121E] border border-emerald-500/25 rounded-xl p-1 self-start sm:self-auto space-x-1",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => setFilterMode("all"),
-									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "all" ? "bg-[#00FF66] text-black shadow-[0_0_12px_rgba(0,255,102,0.35)]" : "text-slate-400 hover:text-slate-200"}`,
-									children: [
-										isHindi ? "सभी" : "All",
-										" (",
-										alarms.length,
-										")"
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => setFilterMode("active"),
-									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "active" ? "bg-[#00FF66] text-black shadow-[0_0_12px_rgba(0,255,102,0.35)]" : "text-slate-400 hover:text-slate-200"}`,
-									children: [
-										isHindi ? "सक्रिय" : "Active",
-										" (",
-										activeCount,
-										")"
-									]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => setFilterMode("inactive"),
-									className: `px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${filterMode === "inactive" ? "bg-[#00FF66] text-black shadow-[0_0_12px_rgba(0,255,102,0.35)]" : "text-slate-400 hover:text-slate-200"}`,
-									children: [
-										isHindi ? "बंद" : "Off",
-										" (",
-										alarms.length - activeCount,
-										")"
-									]
-								})
-							]
-						})]
-					}),
-					filteredAlarms.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-[#0C121E]/80 border border-dashed border-emerald-500/30 rounded-3xl p-8 sm:p-12 text-center max-w-lg mx-auto mt-6 shadow-[0_0_30px_rgba(0,255,102,0.04)]",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-16 h-16 rounded-2xl bg-emerald-950/60 text-[#00FF66] flex items-center justify-center mx-auto mb-4 border border-emerald-500/40 shadow-[0_0_15px_rgba(0,255,102,0.2)]",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-8 h-8" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-slate-200 font-semibold text-base mb-2 whitespace-pre-line leading-relaxed",
-								children: isHindi ? "कोई अलार्म सेट नहीं है!\nनीचे दिए गए '+' बटन से नया रिमाइंडर जोड़ें।" : "No alarms scheduled!\nTap the Omnitrix '+' button below to add an alert."
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs text-slate-400 mb-6",
-								children: isHindi ? "दवाई, पेट्रोल, मीटिंग या अपने जरूरी काम के लिए अलर्ट लगाएं।" : "Stay punctual for medicines, bike fuel, standups, and daily routines."
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: onAddAlarm,
-								className: "inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] transition-all cursor-pointer",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-4 h-4 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "नया अलार्म जोड़ें" : "Create Alarm" })]
-							})
-						]
-					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "space-y-3",
-						children: filteredAlarms.map((alarm) => {
-							const isPlayingThis = currentlyPlayingTone === alarm.ringtone;
-							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: `bg-[#0C121E] border transition-all rounded-2xl p-4 sm:p-5 shadow-md ${alarm.enabled ? "border-emerald-500/30 hover:border-emerald-500/60 shadow-[0_0_20px_rgba(0,255,102,0.06)]" : "border-slate-800/80 opacity-60 bg-[#070B12]/70"}`,
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-start sm:items-center justify-between gap-3",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-start sm:items-center space-x-3.5 flex-1 min-w-0",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: `w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${alarm.enabled ? "bg-emerald-950/70 text-[#00FF66] border border-emerald-500/50 shadow-[0_0_12px_rgba(0,255,102,0.2)]" : "bg-slate-900 text-slate-500 border border-slate-800"}`,
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlarmClock, { className: `w-6 h-6 ${alarm.enabled ? "text-[#00FF66]" : "text-slate-500"}` })
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "flex-1 min-w-0",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "flex items-center gap-2 flex-wrap",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-													className: `text-base sm:text-lg font-bold truncate ${alarm.enabled ? "text-white" : "text-slate-400 line-through"}`,
-													children: alarm.task
-												})
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-400 mt-1 font-mono",
-												children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "flex items-center gap-1 text-[#00FF66] font-semibold font-['Orbitron',monospace]",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-														className: "text-slate-600",
-														children: "•"
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "truncate max-w-[200px] sm:max-w-xs text-slate-400",
-														children: [isHindi ? "टोन: " : "Tone: ", DEFAULT_RINGTONE]
-													})
-												]
-											})]
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center space-x-1.5 sm:space-x-2 shrink-0",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												onClick: () => handleTogglePlayTone(alarm.ringtone),
-												className: `p-2 rounded-xl transition-all cursor-pointer ${isPlayingThis ? "bg-[#00FF66] text-black font-extrabold shadow-[0_0_12px_rgba(0,255,102,0.5)]" : "bg-[#0F172A] hover:bg-emerald-950 text-slate-300 hover:text-[#00FF66] border border-emerald-500/25"}`,
-												title: isPlayingThis ? "रोकें (Stop)" : "टोन सुनें (Preview)",
-												children: isPlayingThis ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Square, { className: "w-4 h-4 fill-current" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Play, { className: "w-4 h-4 fill-current" })
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												onClick: () => onToggleAlarm(alarm.id),
-												className: `relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${alarm.enabled ? "bg-[#00FF66] shadow-[0_0_12px_rgba(0,255,102,0.4)]" : "bg-slate-800"}`,
-												title: alarm.enabled ? "सक्रिय अलार्म (चालू)" : "निष्क्रिय अलार्म (बंद)",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `pointer-events-none inline-block h-5 w-5 transform rounded-full bg-slate-950 shadow-md ring-0 transition duration-200 ease-in-out ${alarm.enabled ? "translate-x-5" : "translate-x-0"}` })
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												onClick: () => onEditAlarm(alarm),
-												className: "p-2 rounded-xl bg-[#0F172A] hover:bg-amber-950/50 text-amber-400 border border-slate-800 hover:border-amber-500/40 transition-colors cursor-pointer",
-												title: isHindi ? "संशोधित करें" : "Edit",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pen, { className: "w-4 h-4" })
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-												type: "button",
-												onClick: () => setDeleteConfirmId(alarm.id),
-												className: "p-2 rounded-xl bg-[#0F172A] hover:bg-red-950/50 text-red-400 border border-slate-800 hover:border-red-500/40 transition-colors cursor-pointer",
-												title: isHindi ? "हटाएँ" : "Delete",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
-											})
-										]
-									})]
-								}), deleteConfirmId === alarm.id && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "mt-3 pt-3 border-t border-slate-800 flex items-center justify-between text-xs animate-in fade-in",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-red-300 font-medium",
-										children: isHindi ? "क्या आप इस अलार्म को हटाना चाहते हैं?" : "Delete this alarm?"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center space-x-2",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: () => {
-												onDeleteAlarm(alarm.id);
-												setDeleteConfirmId(null);
-											},
-											className: "px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg cursor-pointer",
-											children: isHindi ? "हाँ, हटाएँ" : "Delete"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: () => setDeleteConfirmId(null),
-											className: "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg cursor-pointer",
-											children: isHindi ? "रद्द करें" : "Cancel"
-										})]
-									})]
-								})]
-							}, alarm.id);
-						})
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "fixed bottom-6 right-6 z-40",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-					onClick: onAddAlarm,
-					className: "flex items-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 active:scale-95 text-black font-extrabold rounded-2xl shadow-[0_0_25px_rgba(0,255,102,0.45)] border border-white/20 transition-all cursor-pointer font-['Orbitron',sans-serif]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-5 h-5 rounded-full bg-black/20 flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-4 h-4 stroke-[3] text-black" })
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-sm font-extrabold tracking-wider",
-						children: isHindi ? "नया अलार्म" : "NEW ALARM"
-					})]
-				})
-			})
-		]
-	});
-};
-// src/components/ForgotPasswordModal.tsx
-var ForgotPasswordModal = ({ registeredUsers, onSavePassword, onClose, isHindi }) => {
-	const [email, setEmail] = (0, import_react.useState)("");
-	const [generatedCode, setGeneratedCode] = (0, import_react.useState)(null);
-	const [showCodeDialog, setShowCodeDialog] = (0, import_react.useState)(false);
-	const [enteredCode, setEnteredCode] = (0, import_react.useState)("");
-	const [codeVerified, setCodeVerified] = (0, import_react.useState)(false);
-	const [newPassword, setNewPassword] = (0, import_react.useState)("");
-	const [confirmPassword, setConfirmPassword] = (0, import_react.useState)("");
-	const [errorMsg, setErrorMsg] = (0, import_react.useState)("");
-	const [successMsg, setSuccessMsg] = (0, import_react.useState)("");
-	const [copied, setCopied] = (0, import_react.useState)(false);
-	const handleSendCode = (e) => {
-		e.preventDefault();
-		setErrorMsg("");
-		const trimmedEmail = email.trim();
-		if (!trimmedEmail) {
-			setErrorMsg(isHindi ? "कृपया ईमेल दर्ज करें!" : "Please enter an email address!");
-			return;
-		}
-		if (registeredUsers[trimmedEmail]) {
-			const code = (1e5 + Math.floor(Math.random() * 9e5)).toString();
-			setGeneratedCode(code);
-			setShowCodeDialog(true);
-		} else setErrorMsg(isHindi ? "यह ईमेल रजिस्टर नहीं है! कृपया पहले खाता बनाएँ।" : "This email is not registered! Please register first.");
-	};
-	const handleVerifyCode = (e) => {
-		e.preventDefault();
-		setErrorMsg("");
-		if (enteredCode.trim() === generatedCode) {
-			setCodeVerified(true);
-			setSuccessMsg(isHindi ? "कोड वेरिफाई हो गया! अब नया पासवर्ड सेट करें।" : "Code verified successfully! Please set your new password.");
-		} else setErrorMsg(isHindi ? "गलत कोड! पुनः प्रयास करें।" : "Incorrect verification code!");
-	};
-	const handleSavePassword = (e) => {
-		e.preventDefault();
-		setErrorMsg("");
-		if (!newPassword || newPassword.length < 4) {
-			setErrorMsg(isHindi ? "पासवर्ड कम से कम 4 अक्षरों का होना चाहिए!" : "Password must be at least 4 characters long!");
-			return;
-		}
-		if (newPassword !== confirmPassword) {
-			setErrorMsg(isHindi ? "दोनों पासवर्ड मेल नहीं खा रहे हैं!" : "Passwords do not match!");
-			return;
-		}
-		onSavePassword(email.trim(), newPassword);
-		setSuccessMsg(isHindi ? "पासवर्ड सफलतापूर्वक बदल गया! कृपया लॉगिन करें।" : "Password updated successfully!");
-		setTimeout(() => {
-			onClose();
-		}, 1500);
-	};
-	const copyCode = () => {
-		if (generatedCode) {
-			navigator.clipboard.writeText(generatedCode);
-			setCopied(true);
-			setTimeout(() => setCopied(false), 2e3);
-		}
-	};
-	const autoFillCode = () => {
-		if (generatedCode) {
-			setEnteredCode(generatedCode);
-			setShowCodeDialog(false);
-		}
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "bg-[#0C121E] border border-emerald-500/40 rounded-3xl p-6 w-full max-w-md shadow-[0_0_40px_rgba(0,255,102,0.15)] relative text-slate-100",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center justify-between border-b border-emerald-500/20 pb-4 mb-5",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center space-x-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							onClick: onClose,
-							className: "p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer",
-							title: "वापस जाएँ",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-5 h-5" })
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center space-x-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(KeyRound, { className: "w-5 h-5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "text-lg font-bold text-white font-['Orbitron',sans-serif]",
-								children: isHindi ? "पासवर्ड रीसेट करें" : "Reset Password"
-							})]
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						onClick: onClose,
-						className: "text-slate-400 hover:text-slate-200 text-sm font-medium px-2 py-1 rounded cursor-pointer",
-						children: "✕"
-					})]
-				}),
-				errorMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-4 p-3 bg-red-950/70 border border-red-500/50 rounded-xl text-red-200 text-sm flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "w-4 h-4 shrink-0 text-red-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: errorMsg })]
-				}),
-				successMsg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mb-4 p-3 bg-emerald-950/70 border border-emerald-500/50 rounded-xl text-emerald-200 text-sm flex items-center gap-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 shrink-0 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: successMsg })]
-				}),
-				!generatedCode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					onSubmit: handleSendCode,
-					className: "space-y-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-						className: "block text-xs font-semibold text-slate-300 mb-1.5 font-mono",
-						children: isHindi ? "अपनी रजिस्टर ईमेल आईडी दर्ज करें" : "Enter Registered Email ID"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "relative",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mail, { className: "absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "email",
-							required: true,
-							value: email,
-							onChange: (e) => setEmail(e.target.value),
-							placeholder: "name@example.com",
-							className: "w-full pl-10 pr-4 py-3 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66]/30 text-sm transition-all font-mono"
-						})]
-					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						type: "submit",
-						className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
-						children: isHindi ? "सुरक्षा कोड जनरेट करें (SEND CODE)" : "GENERATE SECURITY CODE"
-					})]
-				}),
-				generatedCode && !codeVerified && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					onSubmit: handleVerifyCode,
-					className: "space-y-4",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "p-3 bg-[#070B12] border border-emerald-500/30 rounded-xl text-xs text-slate-400 flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["ईमेल: ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", {
-								className: "text-slate-200 font-mono",
-								children: email
-							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								onClick: () => setShowCodeDialog(true),
-								className: "text-[#00FF66] hover:underline font-semibold cursor-pointer",
-								children: isHindi ? "कोड देखें" : "View Code"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-semibold text-slate-300 mb-1.5 font-mono",
-							children: isHindi ? "6 अंकों का कोड यहाँ लिखें" : "Enter 6-digit Code"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "text",
-							maxLength: 6,
-							value: enteredCode,
-							onChange: (e) => setEnteredCode(e.target.value),
-							placeholder: "123456",
-							className: "w-full text-center tracking-widest text-2xl font-['Orbitron',monospace] py-3 bg-[#070B12] border border-emerald-500/40 rounded-xl text-[#00FF66] placeholder-slate-600 focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66]/40"
-						})] }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "submit",
-							className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-sm shadow-[0_0_20px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
-							children: isHindi ? "कोड वेरिफाई करें (VERIFY)" : "VERIFY CODE"
-						})
-					]
-				}),
-				codeVerified && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					onSubmit: handleSavePassword,
-					className: "space-y-4",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-semibold text-slate-300 mb-1.5 font-mono",
-							children: isHindi ? "नया पासवर्ड" : "New Password"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "password",
-							required: true,
-							value: newPassword,
-							onChange: (e) => setNewPassword(e.target.value),
-							placeholder: "••••••••",
-							className: "w-full px-4 py-3 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00FF66] text-sm"
-						})] }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-semibold text-slate-300 mb-1.5 font-mono",
-							children: isHindi ? "नया पासवर्ड पुनः दर्ज करें (Confirm)" : "Confirm New Password"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "password",
-							required: true,
-							value: confirmPassword,
-							onChange: (e) => setConfirmPassword(e.target.value),
-							placeholder: "••••••••",
-							className: "w-full px-4 py-3 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:border-[#00FF66] text-sm"
-						})] }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "submit",
-							className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-sm shadow-[0_0_25px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
-							children: isHindi ? "पासवर्ड सेव करें" : "SAVE PASSWORD"
-						})
-					]
-				}),
-				showCodeDialog && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/85",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-[#0C121E] border border-emerald-500/50 rounded-2xl p-6 max-w-sm w-full shadow-[0_0_30px_rgba(0,255,102,0.2)] text-center animate-in zoom-in-95 duration-150",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-12 h-12 bg-emerald-950/80 text-[#00FF66] border border-emerald-500/40 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-[0_0_15px_rgba(0,255,102,0.25)]",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldCheck, { className: "w-6 h-6" })
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-								className: "text-base font-bold text-white mb-2 font-['Orbitron',sans-serif]",
-								children: isHindi ? "सुरक्षा कोड (Security Code)" : "Security Verification Code"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs text-slate-400 mb-4",
-								children: isHindi ? "आपका 6 अंकों का गुप्त कोड है:" : "Your 6-digit verification code is:"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "bg-[#070B12] border border-emerald-500/40 rounded-xl py-3 px-4 mb-4 flex items-center justify-center space-x-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-3xl font-['Orbitron',monospace] font-extrabold text-[#00FF66] tracking-widest drop-shadow-[0_0_10px_rgba(0,255,102,0.4)]",
-									children: generatedCode
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									onClick: copyCode,
-									className: "p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer",
-									title: "कॉपी करें",
-									children: copied ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-4 h-4 text-[#00FF66]" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "w-4 h-4" })
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-2 gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									onClick: autoFillCode,
-									className: "w-full py-2.5 px-3 bg-gradient-to-r from-emerald-500 to-[#00FF66] hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-xs font-mono cursor-pointer",
-									children: isHindi ? "ऑटो-फिल करें" : "Auto Fill"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									onClick: () => setShowCodeDialog(false),
-									className: "w-full py-2.5 px-3 bg-[#0F172A] hover:bg-slate-800 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold cursor-pointer",
-									children: isHindi ? "ठीक है" : "OK"
-								})]
-							})
-						]
-					})
-				})
-			]
-		})
-	});
-};
-// src/components/CreateAlarmSheet.tsx
-var CreateAlarmSheet = ({ existingAlarm, onSave, onClose, isHindi }) => {
-	const [task, setTask] = (0, import_react.useState)(existingAlarm ? existingAlarm.task : "");
-	const [selectedDay, setSelectedDay] = (0, import_react.useState)(existingAlarm ? existingAlarm.day : "प्रतिदिन (Every Day)");
-	const [selectedHour, setSelectedHour] = (0, import_react.useState)(existingAlarm ? existingAlarm.hour : "08");
-	const [selectedMinute, setSelectedMinute] = (0, import_react.useState)(existingAlarm ? existingAlarm.minute : "30");
-	const [selectedAmPm, setSelectedAmPm] = (0, import_react.useState)(existingAlarm ? existingAlarm.ampm : "AM");
-	const selectedRingtone = DEFAULT_RINGTONE;
-	const [isPlayingPreview, setIsPlayingPreview] = (0, import_react.useState)(false);
-	const [taskError, setTaskError] = (0, import_react.useState)(false);
-	(0, import_react.useEffect)(() => {
-		return () => {
-			audioEngine.stop();
-		};
-	}, []);
-	const handleTestRingtone = () => {
-		if (isPlayingPreview) {
-			audioEngine.stop();
-			setIsPlayingPreview(false);
-		} else {
-			setIsPlayingPreview(true);
-			audioEngine.preview(selectedRingtone, 3500);
-			setTimeout(() => {
-				setIsPlayingPreview(false);
-			}, 3500);
-		}
-	};
-	const handleSave = (e) => {
-		e.preventDefault();
-		const cleanTask = task.trim();
-		if (!cleanTask) {
-			setTaskError(true);
-			return;
-		}
-		audioEngine.stop();
-		onSave({
-			task: cleanTask,
-			day: selectedDay,
-			hour: selectedHour,
-			minute: selectedMinute,
-			ampm: selectedAmPm,
-			ringtone: selectedRingtone
-		});
-	};
-	const applyPreset = (preset) => {
-		setTask(preset.task);
-		setTaskError(false);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-md animate-in fade-in duration-200 p-0 sm:p-4",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "bg-[#0C121E] border border-emerald-500/40 rounded-t-3xl sm:rounded-3xl w-full max-w-xl max-h-[92vh] flex flex-col shadow-[0_0_40px_rgba(0,255,102,0.15)] relative overflow-hidden text-slate-100",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center justify-between px-6 pt-5 pb-4 border-b border-emerald-500/20 bg-[#070B12]/80",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center space-x-2.5",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-8 h-8 rounded-xl bg-emerald-950/80 text-[#00FF66] border border-emerald-500/40 flex items-center justify-center shadow-[0_0_10px_rgba(0,255,102,0.2)]",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-4 h-4" })
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
-						className: "text-lg font-bold text-white font-['Orbitron',sans-serif] tracking-wide flex items-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: existingAlarm ? isHindi ? "अलार्म संशोधित करें" : "Edit Alarm" : isHindi ? "नया अलार्म सेट करें" : "Set New Alarm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-xs text-[#00FF66] font-mono",
-							children: "OMNITRIX"
-						})]
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-					onClick: () => {
-						audioEngine.stop();
-						onClose();
-					},
-					className: "p-1.5 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors cursor-pointer",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(X$1, { className: "w-5 h-5" })
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-				onSubmit: handleSave,
-				className: "overflow-y-auto px-6 py-5 space-y-5",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "block text-xs font-semibold text-slate-300 mb-1.5 font-mono",
-							children: isHindi ? "क्या काम करना है? (जैसे: दवाई लेना, पेट्रोल भरवाना)" : "What is the task? (e.g. Medicine, Fuel)"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-							type: "text",
-							required: true,
-							value: task,
-							onChange: (e) => {
-								setTask(e.target.value);
-								if (taskError) setTaskError(false);
-							},
-							placeholder: isHindi ? "जैसे: शुगर की दवाई लेना, ऑफिस मीटिंग, पेट्रोल" : "e.g., Take medicine, Team standup",
-							className: `w-full px-4 py-3 bg-[#070B12] border ${taskError ? "border-red-500 ring-1 ring-red-500" : "border-emerald-500/30"} rounded-xl text-white placeholder-slate-600 text-sm focus:outline-none focus:border-[#00FF66] focus:ring-1 focus:ring-[#00FF66]/30 transition-all`
-						}),
-						taskError && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-red-400 text-xs mt-1",
-							children: isHindi ? "कृपया काम का विवरण दर्ज करें" : "Please specify the reminder task"
-						})
-					] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "text-[11px] font-semibold text-[#00FF66] uppercase tracking-wider flex items-center gap-1 mb-2 font-mono",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sparkles, { className: "w-3 h-3 text-[#00FF66]" }), isHindi ? "जल्दी से चुनें (Quick Presets)" : "Quick Presets"]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "flex flex-wrap gap-1.5",
-						children: QUICK_TASK_PRESETS.map((preset, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							onClick: () => applyPreset(preset),
-							className: "px-2.5 py-1 text-xs rounded-lg bg-[#0F172A] hover:bg-emerald-950/70 border border-emerald-500/25 text-slate-300 hover:text-[#00FF66] hover:border-emerald-500/50 transition-all cursor-pointer font-sans",
-							children: preset.label
-						}, idx))
-					})] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "pt-2 border-t border-emerald-500/20",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-								className: "text-sm font-semibold text-white mb-2 flex items-center gap-2 font-['Orbitron',sans-serif]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "मैनुअल टाइम सिलेक्शन (Schedule & Time):" : "Schedule & Time Selection:" })]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "mb-3",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-									className: "block text-xs text-slate-400 mb-1 flex items-center gap-1 font-mono",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "दिन चुनें (Select Day)" : "Select Day" })]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
-									value: selectedDay,
-									onChange: (e) => setSelectedDay(e.target.value),
-									className: "w-full px-3 py-2.5 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white text-sm focus:outline-none focus:border-[#00FF66] cursor-pointer",
-									children: DAYS_LIST.map((day) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-										value: day,
-										children: day
-									}, day))
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "grid grid-cols-3 gap-2",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-										className: "block text-xs text-slate-400 mb-1 font-mono",
-										children: isHindi ? "घंटा (Hour)" : "Hour"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
-										value: selectedHour,
-										onChange: (e) => setSelectedHour(e.target.value),
-										className: "w-full px-3 py-2.5 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white text-sm focus:outline-none focus:border-[#00FF66] cursor-pointer font-['Orbitron',monospace]",
-										children: HOURS_LIST.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-											value: h,
-											children: h
-										}, h))
-									})] }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center justify-between mb-1",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-											className: "block text-xs text-slate-400 font-mono",
-											children: isHindi ? "मिनट (Minute)" : "Minute"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[10px] text-[#00FF66] font-mono",
-											children: "00-59"
-										})]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
-										value: selectedMinute,
-										onChange: (e) => setSelectedMinute(e.target.value),
-										className: "w-full px-3 py-2.5 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white text-sm focus:outline-none focus:border-[#00FF66] cursor-pointer font-['Orbitron',monospace]",
-										children: MINUTES_LIST.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-											value: m,
-											children: m
-										}, m))
-									})] }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-										className: "block text-xs text-slate-400 mb-1 font-mono",
-										children: isHindi ? "प्रहर (AM/PM)" : "AM / PM"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
-										value: selectedAmPm,
-										onChange: (e) => setSelectedAmPm(e.target.value),
-										className: "w-full px-3 py-2.5 bg-[#070B12] border border-emerald-500/30 rounded-xl text-white text-sm font-bold focus:outline-none focus:border-[#00FF66] cursor-pointer font-mono",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-											value: "AM",
-											children: "AM"
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-											value: "PM",
-											children: "PM"
-										})]
-									})] })
-								]
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "pt-2 border-t border-emerald-500/20",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between mb-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center space-x-1.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-										className: "text-xs font-semibold text-slate-300 font-mono",
-										children: isHindi ? "रिंगटोन (Ringtone)" : "Ringtone"
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									onClick: handleTestRingtone,
-									className: `text-xs font-bold px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${isPlayingPreview ? "bg-rose-950 text-rose-300 border border-rose-500/50 animate-pulse" : "bg-emerald-950/70 text-[#00FF66] border border-emerald-500/40 hover:bg-emerald-900/60 shadow-[0_0_10px_rgba(0,255,102,0.15)]"}`,
-									children: isPlayingPreview ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(VolumeX, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "रोकें (Stop)" : "Stop" })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "बीप सुनें (Test)" : "Preview Beep" })] })
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex items-center justify-between px-4 py-3 bg-[#070B12] border border-emerald-500/35 rounded-xl text-white text-sm shadow-[0_0_15px_rgba(0,255,102,0.08)]",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center space-x-2.5",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2.5 h-2.5 rounded-full bg-[#00FF66] shadow-[0_0_8px_#00FF66] animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "font-semibold text-white tracking-wide",
-										children: DEFAULT_RINGTONE
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-[11px] px-2 py-0.5 rounded-md bg-emerald-950 text-[#00FF66] border border-emerald-500/40 font-mono",
-									children: isHindi ? "डिफ़ॉल्ट फिक्स्ड" : "Fixed Default"
-								})]
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-[11px] text-slate-400 mt-1.5 font-mono",
-								children: isHindi ? "🔔 सभी अलार्म के लिए क्लासिक डिजिटल बीप को स्थायी रूप से निर्धारित किया गया है।" : "🔔 Classic digital beep is permanently fixed as the alarm ringtone for all alerts."
-							})
-						]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "pt-3",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							type: "submit",
-							className: "w-full py-3.5 px-4 bg-gradient-to-r from-emerald-500 via-[#00FF66] to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-extrabold rounded-xl text-sm shadow-[0_0_25px_rgba(0,255,102,0.35)] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-4 h-4 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "अलार्म सेव करें" : "SAVE ALARM" })]
-						})
-					})
-				]
-			})]
-		})
-	});
-};
-// src/components/AlarmRingingModal.tsx
-var AlarmRingingModal = ({ alarm, onDismiss, onSnooze, isHindi }) => {
-	const [pulseScale, setPulseScale] = (0, import_react.useState)(1);
-	(0, import_react.useEffect)(() => {
-		audioEngine.play(alarm.ringtone, true);
-		const interval = setInterval(() => {
-			setPulseScale((prev) => prev === 1 ? 1.08 : 1);
-		}, 600);
-		return () => {
-			clearInterval(interval);
-			audioEngine.stop();
-		};
-	}, [alarm.ringtone]);
-	const handleSnoozeClick = () => {
-		audioEngine.stop();
-		onSnooze(alarm.id, 5);
-	};
-	const handleDismissClick = () => {
-		audioEngine.stop();
-		onDismiss();
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 animate-in fade-in duration-300",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "bg-gradient-to-b from-[#0C121E] to-[#070B12] border-2 border-emerald-500 rounded-3xl w-full max-w-sm p-6 sm:p-8 text-center shadow-[0_0_50px_rgba(0,255,102,0.4)] relative overflow-hidden flex flex-col items-center",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-emerald-500/10 pointer-events-none rounded-3xl" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "relative w-24 h-24 rounded-full bg-[#070B12] border-4 border-[#00FF66] flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,255,102,0.6)] transition-transform duration-300",
-					style: { transform: `scale(${pulseScale})` },
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-12 h-12 rounded-full border-2 border-[#00FF66] flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-6 h-6 text-[#00FF66] animate-bounce" })
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: "absolute -top-1 -right-1 flex h-4 w-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF66] opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-4 w-4 bg-[#00FF66]" })]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-1.5 text-[#00FF66] text-xs font-bold font-mono tracking-widest uppercase mb-1",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "अलार्म बज रहा है!" : "ALARM RINGING!" })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-					className: "text-xl sm:text-2xl font-black text-white tracking-tight mb-2 drop-shadow-md",
-					children: alarm.task
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-[#00FF66] font-mono text-sm font-bold mb-4 shadow-[0_0_15px_rgba(0,255,102,0.2)]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-1.5 text-xs text-slate-400 font-mono mb-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.ringtone })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "w-full space-y-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						onClick: handleSnoozeClick,
-						className: "w-full py-3.5 px-4 bg-[#0F172A] hover:bg-[#1E293B] border border-amber-500/50 hover:border-amber-400 text-amber-300 font-bold rounded-2xl text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer flex items-center justify-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "स्नूज़ करें (+5 मिनट)" : "Snooze (+5 mins)" })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						onClick: handleDismissClick,
-						className: "w-full py-4 px-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-2xl text-base transition-all shadow-[0_0_25px_rgba(239,68,68,0.4)] active:scale-95 cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
-						children: isHindi ? "बंद करें (DISMISS)" : "DISMISS"
-					})]
-				})
-			]
-		})
-	});
-};
-// src/components/DeviceFrameWrapper.tsx
-var DeviceFrameWrapper = ({ children }) => {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "min-h-screen bg-[#05080F] flex flex-col items-center justify-start text-slate-100",
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "w-full flex-1 flex flex-col bg-[#070B12]",
-			children
-		})
-	});
-};
 // node_modules/@firebase/util/dist/postinstall.mjs
 /**
 * @license
@@ -51420,16 +51755,16 @@ function App() {
 	const [alarmToEdit, setAlarmToEdit] = (0, import_react.useState)(null);
 	const [activeRingingAlarm, setActiveRingingAlarm] = (0, import_react.useState)(null);
 	const [isLoading, setIsLoading] = (0, import_react.useState)(true);
-	const [diagnosticStatus, setDiagnosticStatus] = (0, import_react.useState)({
-		batteryOptimizationIgnored: true,
-		canScheduleExactAlarms: true,
-		notificationsGranted: true,
-		overlayPermissionGranted: true
+	const [permissionStatus, setPermissionStatus] = (0, import_react.useState)({
+		notificationsGranted: false,
+		overlayPermissionGranted: false,
+		allMandatoryGranted: false
 	});
-	const checkDiagnostics = async () => {
+	const checkPermissions = (0, import_react.useCallback)(async () => {
 		const status = await notificationService.checkSystemStatus();
-		setDiagnosticStatus(status);
-	};
+		setPermissionStatus(status);
+		return status;
+	}, []);
 	(0, import_react.useEffect)(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			if (user) {
@@ -51437,7 +51772,7 @@ function App() {
 				setCurrentScreen("home");
 				const alarms = await firebaseService.getUserAlarms();
 				setCurrentAlarms(alarms);
-				checkDiagnostics();
+				await checkPermissions();
 				if (alarms.some((a) => a.enabled)) notificationService.enableBackgroundProtection(true);
 			} else {
 				setCurrentUserEmail(null);
@@ -51447,7 +51782,18 @@ function App() {
 			setIsLoading(false);
 		});
 		return () => unsubscribe();
-	}, []);
+	}, [checkPermissions]);
+	(0, import_react.useEffect)(() => {
+		const onVisibilityOrFocusChange = () => {
+			if (currentUserEmail) checkPermissions();
+		};
+		window.addEventListener("focus", onVisibilityOrFocusChange);
+		document.addEventListener("visibilitychange", onVisibilityOrFocusChange);
+		return () => {
+			window.removeEventListener("focus", onVisibilityOrFocusChange);
+			document.removeEventListener("visibilitychange", onVisibilityOrFocusChange);
+		};
+	}, [currentUserEmail, checkPermissions]);
 	(0, import_react.useEffect)(() => {
 		const unlock = () => {
 			audioEngine.initContext();
@@ -51480,19 +51826,17 @@ function App() {
 			sub.then((s) => s.remove());
 		};
 	}, [currentUserEmail, currentAlarms]);
-	const triggerNativePermissionCheck = async () => {
-		if (typeof window !== "undefined" && "Notification" in window) {
-			if (Notification.permission === "default") try {
-				await notificationService.requestPermissions();
-			} catch {}
-		}
-		await notificationService.triggerBatteryOptimization();
-		await notificationService.triggerExactAlarm();
+	const handleRequestNotifications = async () => {
+		await notificationService.requestNotificationPermission();
+		setTimeout(() => {
+			checkPermissions();
+		}, 800);
+	};
+	const handleRequestOverlay = async () => {
 		await notificationService.triggerOverlayPermission();
-		try {
-			backgroundTimer.requestWakeLock();
-			audioEngine.initContext();
-		} catch {}
+		setTimeout(() => {
+			checkPermissions();
+		}, 1500);
 	};
 	const triggeredAlarmsMapRef = (0, import_react.useRef)(/* @__PURE__ */ new Map());
 	const checkAlarms = (0, import_react.useCallback)(() => {
@@ -51550,6 +51894,7 @@ function App() {
 		try {
 			await signInWithEmailAndPassword(auth, email.trim(), pass);
 			await firebaseService.saveUser(email.trim());
+			await checkPermissions();
 			return true;
 		} catch (error) {
 			console.error("Login error:", error);
@@ -51560,6 +51905,7 @@ function App() {
 		try {
 			await createUserWithEmailAndPassword(auth, email.trim(), pass);
 			await firebaseService.saveUser(email.trim());
+			await checkPermissions();
 			return true;
 		} catch (error) {
 			console.error("Registration error:", error);
@@ -51581,13 +51927,19 @@ function App() {
 	};
 	const handleSaveAlarm = async (alarmData) => {
 		if (!currentUserEmail) return;
+		if (!(await checkPermissions()).allMandatoryGranted) return;
 		const timeString = `${alarmData.day}, ${alarmData.hour}:${alarmData.minute} ${alarmData.ampm}`;
 		if (alarmToEdit) {
 			const updatedAlarm = {
 				...alarmToEdit,
 				...alarmData,
 				ringtone: DEFAULT_RINGTONE,
-				time: timeString
+				time: timeString,
+				callContactName: alarmData.callContactName || "",
+				callContactNumber: alarmData.callContactNumber || "",
+				whatsappContactName: alarmData.whatsappContactName || "",
+				whatsappContactNumber: alarmData.whatsappContactNumber || "",
+				whatsappMessage: alarmData.whatsappMessage || ""
 			};
 			await firebaseService.saveAlarm(updatedAlarm);
 			setCurrentAlarms((prev) => prev.map((a) => a.id === updatedAlarm.id ? updatedAlarm : a));
@@ -51602,6 +51954,11 @@ function App() {
 				ampm: alarmData.ampm,
 				ringtone: DEFAULT_RINGTONE,
 				enabled: true,
+				callContactName: alarmData.callContactName || "",
+				callContactNumber: alarmData.callContactNumber || "",
+				whatsappContactName: alarmData.whatsappContactName || "",
+				whatsappContactNumber: alarmData.whatsappContactNumber || "",
+				whatsappMessage: alarmData.whatsappMessage || "",
 				createdAt: Date.now()
 			};
 			await firebaseService.saveAlarm(newAlarm);
@@ -51609,10 +51966,10 @@ function App() {
 		}
 		setIsCreateAlarmOpen(false);
 		setAlarmToEdit(null);
-		triggerNativePermissionCheck();
 	};
 	const handleQuickAddOneMinAlarm = async () => {
 		if (!currentUserEmail) return;
+		if (!(await checkPermissions()).allMandatoryGranted) return;
 		const nextMin = new Date((/* @__PURE__ */ new Date()).getTime() + 6e4);
 		let hours = nextMin.getHours();
 		const ampm = hours >= 12 ? "PM" : "AM";
@@ -51635,9 +51992,9 @@ function App() {
 		};
 		await firebaseService.saveAlarm(newAlarm);
 		setCurrentAlarms((prev) => [newAlarm, ...prev]);
-		triggerNativePermissionCheck();
 	};
 	const handleEditAlarm = (alarm) => {
+		if (!permissionStatus.allMandatoryGranted) return;
 		setAlarmToEdit(alarm);
 		setIsCreateAlarmOpen(true);
 	};
@@ -51648,6 +52005,10 @@ function App() {
 	};
 	const handleToggleAlarm = async (alarmId) => {
 		if (!currentUserEmail) return;
+		if (!permissionStatus.allMandatoryGranted) {
+			await checkPermissions();
+			return;
+		}
 		const alarm = currentAlarms.find((a) => a.id === alarmId);
 		if (!alarm) return;
 		const newStatus = !alarm.enabled;
@@ -51724,12 +52085,23 @@ function App() {
 			onBackToLogin: () => setCurrentScreen("login"),
 			isHindi
 		}),
-		currentScreen === "home" && currentUserEmail && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HomeScreen, {
+		currentScreen === "home" && currentUserEmail && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [!permissionStatus.allMandatoryGranted && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MandatoryPermissionModal, {
+			status: permissionStatus,
+			onRequestNotifications: handleRequestNotifications,
+			onRequestOverlay: handleRequestOverlay,
+			onRecheck: async () => {
+				await checkPermissions();
+			},
+			isHindi
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HomeScreen, {
 			userEmail: currentUserEmail,
 			alarms: currentAlarms,
-			diagnosticStatus,
-			onRefreshDiagnostics: checkDiagnostics,
+			permissionStatus,
 			onAddAlarm: () => {
+				if (!permissionStatus.allMandatoryGranted) {
+					checkPermissions();
+					return;
+				}
 				setAlarmToEdit(null);
 				setIsCreateAlarmOpen(true);
 			},
@@ -51741,7 +52113,7 @@ function App() {
 			onLogout: handleLogout,
 			isHindi,
 			onToggleLanguage: () => setIsHindi(!isHindi)
-		}),
+		})] }),
 		showForgotPassword && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ForgotPasswordModal, {
 			registeredUsers: {},
 			onSavePassword: handleSavePassword,

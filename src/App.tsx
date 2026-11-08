@@ -15,7 +15,8 @@ import { ForgotPasswordModal } from './components/ForgotPasswordModal';
 import { CreateAlarmSheet } from './components/CreateAlarmSheet';
 import { AlarmRingingModal } from './components/AlarmRingingModal';
 import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
-import { notificationService } from './utils/notificationService';
+import { MandatoryPermissionModal } from './components/MandatoryPermissionModal';
+import { notificationService, PermissionStatusResult } from './utils/notificationService';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 // Firebase Imports
@@ -39,17 +40,19 @@ export default function App() {
   const [alarmToEdit, setAlarmToEdit] = useState<AlarmItem | null>(null);
   const [activeRingingAlarm, setActiveRingingAlarm] = useState<AlarmItem | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [diagnosticStatus, setDiagnosticStatus] = useState({
-    batteryOptimizationIgnored: true,
-    canScheduleExactAlarms: true,
-    notificationsGranted: true,
-    overlayPermissionGranted: true,
+
+  // 2 Mandatory Permissions: Notification & Display Over Other Apps
+  const [permissionStatus, setPermissionStatus] = useState<PermissionStatusResult>({
+    notificationsGranted: false,
+    overlayPermissionGranted: false,
+    allMandatoryGranted: false,
   });
 
-  const checkDiagnostics = async () => {
+  const checkPermissions = useCallback(async (): Promise<PermissionStatusResult> => {
     const status = await notificationService.checkSystemStatus();
-    setDiagnosticStatus(status);
-  };
+    setPermissionStatus(status);
+    return status;
+  }, []);
 
   // 1. Firebase Auth Listener
   useEffect(() => {
@@ -60,7 +63,8 @@ export default function App() {
         // Fetch Alarms from Firestore
         const alarms = await firebaseService.getUserAlarms();
         setCurrentAlarms(alarms);
-        checkDiagnostics();
+        // Verify mandatory permissions
+        await checkPermissions();
         if (alarms.some(a => a.enabled)) {
           notificationService.enableBackgroundProtection(true);
         }
@@ -72,7 +76,22 @@ export default function App() {
       setIsLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [checkPermissions]);
+
+  // Handle App Focus / Resume to re-check permissions immediately when user returns from Settings
+  useEffect(() => {
+    const onVisibilityOrFocusChange = () => {
+      if (currentUserEmail) {
+        checkPermissions();
+      }
+    };
+    window.addEventListener('focus', onVisibilityOrFocusChange);
+    document.addEventListener('visibilitychange', onVisibilityOrFocusChange);
+    return () => {
+      window.removeEventListener('focus', onVisibilityOrFocusChange);
+      document.removeEventListener('visibilitychange', onVisibilityOrFocusChange);
+    };
+  }, [currentUserEmail, checkPermissions]);
 
   // Audio Context unlocker
   useEffect(() => {
@@ -117,26 +136,18 @@ export default function App() {
     };
   }, [currentUserEmail, currentAlarms]);
 
-  const triggerNativePermissionCheck = async () => {
-    if (typeof window !== 'undefined' && 'Notification' in window) {
-      if (Notification.permission === 'default') {
-        try {
-          await notificationService.requestPermissions();
-        } catch {
-          // Ignored
-        }
-      }
-    }
-    await notificationService.triggerBatteryOptimization();
-    await notificationService.triggerExactAlarm();
-    await notificationService.triggerOverlayPermission();
+  const handleRequestNotifications = async () => {
+    await notificationService.requestNotificationPermission();
+    setTimeout(() => {
+      checkPermissions();
+    }, 800);
+  };
 
-    try {
-      backgroundTimer.requestWakeLock();
-      audioEngine.initContext();
-    } catch {
-      // Ignored
-    }
+  const handleRequestOverlay = async () => {
+    await notificationService.triggerOverlayPermission();
+    setTimeout(() => {
+      checkPermissions();
+    }, 1500);
   };
 
   // ================= FOREGROUND / BACKGROUND PERSISTENCE & TIMER =================
@@ -217,6 +228,8 @@ export default function App() {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), pass);
       await firebaseService.saveUser(email.trim());
+      // Recheck permissions after login
+      await checkPermissions();
       return true;
     } catch (error) {
       console.error('Login error:', error);
@@ -228,6 +241,7 @@ export default function App() {
     try {
       await createUserWithEmailAndPassword(auth, email.trim(), pass);
       await firebaseService.saveUser(email.trim());
+      await checkPermissions();
       return true;
     } catch (error) {
       console.error('Registration error:', error);
@@ -258,8 +272,19 @@ export default function App() {
     minute: string;
     ampm: 'AM' | 'PM';
     ringtone: string;
+    callContactName?: string;
+    callContactNumber?: string;
+    whatsappContactName?: string;
+    whatsappContactNumber?: string;
+    whatsappMessage?: string;
   }) => {
     if (!currentUserEmail) return;
+
+    // Verify mandatory permissions before saving
+    const currentPerm = await checkPermissions();
+    if (!currentPerm.allMandatoryGranted) {
+      return;
+    }
 
     const timeString = `${alarmData.day}, ${alarmData.hour}:${alarmData.minute} ${alarmData.ampm}`;
 
@@ -269,6 +294,11 @@ export default function App() {
         ...alarmData,
         ringtone: DEFAULT_RINGTONE,
         time: timeString,
+        callContactName: alarmData.callContactName || '',
+        callContactNumber: alarmData.callContactNumber || '',
+        whatsappContactName: alarmData.whatsappContactName || '',
+        whatsappContactNumber: alarmData.whatsappContactNumber || '',
+        whatsappMessage: alarmData.whatsappMessage || '',
       };
       await firebaseService.saveAlarm(updatedAlarm);
       setCurrentAlarms(prev => prev.map(a => a.id === updatedAlarm.id ? updatedAlarm : a));
@@ -283,6 +313,11 @@ export default function App() {
         ampm: alarmData.ampm,
         ringtone: DEFAULT_RINGTONE,
         enabled: true,
+        callContactName: alarmData.callContactName || '',
+        callContactNumber: alarmData.callContactNumber || '',
+        whatsappContactName: alarmData.whatsappContactName || '',
+        whatsappContactNumber: alarmData.whatsappContactNumber || '',
+        whatsappMessage: alarmData.whatsappMessage || '',
         createdAt: Date.now(),
       };
       await firebaseService.saveAlarm(newAlarm);
@@ -291,11 +326,16 @@ export default function App() {
 
     setIsCreateAlarmOpen(false);
     setAlarmToEdit(null);
-    triggerNativePermissionCheck();
   };
 
   const handleQuickAddOneMinAlarm = async () => {
     if (!currentUserEmail) return;
+
+    const currentPerm = await checkPermissions();
+    if (!currentPerm.allMandatoryGranted) {
+      return;
+    }
+
     const now = new Date();
     const nextMin = new Date(now.getTime() + 60 * 1000);
 
@@ -323,10 +363,10 @@ export default function App() {
 
     await firebaseService.saveAlarm(newAlarm);
     setCurrentAlarms(prev => [newAlarm, ...prev]);
-    triggerNativePermissionCheck();
   };
 
   const handleEditAlarm = (alarm: AlarmItem) => {
+    if (!permissionStatus.allMandatoryGranted) return;
     setAlarmToEdit(alarm);
     setIsCreateAlarmOpen(true);
   };
@@ -339,6 +379,10 @@ export default function App() {
 
   const handleToggleAlarm = async (alarmId: string) => {
     if (!currentUserEmail) return;
+    if (!permissionStatus.allMandatoryGranted) {
+      await checkPermissions();
+      return;
+    }
     const alarm = currentAlarms.find(a => a.id === alarmId);
     if (!alarm) return;
     
@@ -435,24 +479,42 @@ export default function App() {
       )}
 
       {currentScreen === 'home' && currentUserEmail && (
-        <HomeScreen
-          userEmail={currentUserEmail}
-          alarms={currentAlarms}
-          diagnosticStatus={diagnosticStatus}
-          onRefreshDiagnostics={checkDiagnostics}
-          onAddAlarm={() => {
-            setAlarmToEdit(null);
-            setIsCreateAlarmOpen(true);
-          }}
-          onEditAlarm={handleEditAlarm}
-          onDeleteAlarm={handleDeleteAlarm}
-          onToggleAlarm={handleToggleAlarm}
-          onTriggerTestAlarm={handleTriggerTestAlarm}
-          onQuickAddOneMinAlarm={handleQuickAddOneMinAlarm}
-          onLogout={handleLogout}
-          isHindi={isHindi}
-          onToggleLanguage={() => setIsHindi(!isHindi)}
-        />
+        <>
+          {/* If mandatory permissions are NOT granted yet, show blocking popup and disable home interaction */}
+          {!permissionStatus.allMandatoryGranted && (
+            <MandatoryPermissionModal
+              status={permissionStatus}
+              onRequestNotifications={handleRequestNotifications}
+              onRequestOverlay={handleRequestOverlay}
+              onRecheck={async () => {
+                await checkPermissions();
+              }}
+              isHindi={isHindi}
+            />
+          )}
+
+          <HomeScreen
+            userEmail={currentUserEmail}
+            alarms={currentAlarms}
+            permissionStatus={permissionStatus}
+            onAddAlarm={() => {
+              if (!permissionStatus.allMandatoryGranted) {
+                checkPermissions();
+                return;
+              }
+              setAlarmToEdit(null);
+              setIsCreateAlarmOpen(true);
+            }}
+            onEditAlarm={handleEditAlarm}
+            onDeleteAlarm={handleDeleteAlarm}
+            onToggleAlarm={handleToggleAlarm}
+            onTriggerTestAlarm={handleTriggerTestAlarm}
+            onQuickAddOneMinAlarm={handleQuickAddOneMinAlarm}
+            onLogout={handleLogout}
+            isHindi={isHindi}
+            onToggleLanguage={() => setIsHindi(!isHindi)}
+          />
+        </>
       )}
 
       {showForgotPassword && (
