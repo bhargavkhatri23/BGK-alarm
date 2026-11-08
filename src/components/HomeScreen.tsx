@@ -16,11 +16,12 @@ import {
   Bell,
   Clock,
   CalendarDays,
+  Radio,
   Zap,
   Activity,
 } from 'lucide-react';
 import { DiagnosticCard } from './DiagnosticCard';
-import NativeAlarm from '../nativeAlarm';
+import { notificationService } from '../utils/notificationService';
 
 interface HomeScreenProps {
   userEmail: string;
@@ -29,15 +30,18 @@ interface HomeScreenProps {
   onEditAlarm: (alarm: AlarmItem) => void;
   onDeleteAlarm: (id: string) => void;
   onToggleAlarm: (id: string) => void;
+  onTriggerTestAlarm: (alarm?: AlarmItem) => void;
   onQuickAddOneMinAlarm: () => void;
   onLogout: () => void;
   isHindi: boolean;
   onToggleLanguage: () => void;
-  permissionStatus: {
-    notifications: boolean;
-    fullScreen: boolean;
+  diagnosticStatus: {
+    batteryOptimizationIgnored: boolean;
+    canScheduleExactAlarms: boolean;
+    notificationsGranted: boolean;
+    overlayPermissionGranted: boolean;
   };
-  onRefreshPermissions: () => void;
+  onRefreshDiagnostics: () => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
@@ -47,12 +51,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   onEditAlarm,
   onDeleteAlarm,
   onToggleAlarm,
+  onTriggerTestAlarm,
   onQuickAddOneMinAlarm,
   onLogout,
   isHindi,
   onToggleLanguage,
-  permissionStatus,
-  onRefreshPermissions,
+  diagnosticStatus,
+  onRefreshDiagnostics,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMode, setFilterMode] = useState<'all' | 'active' | 'inactive'>('all');
@@ -167,6 +172,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               {isHindi ? 'EN' : 'हिं'}
             </button>
 
+            {/* Test Alarm Trigger Button */}
+            <button
+              onClick={() => onTriggerTestAlarm()}
+              className="px-2.5 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/50 text-[#00FF66] hover:text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-[0_0_10px_rgba(0,255,102,0.15)] transition-all cursor-pointer"
+              title="टेस्ट अलार्म बजाएँ"
+            >
+              <Radio className="w-3.5 h-3.5 text-[#00FF66] animate-pulse" />
+              <span className="hidden sm:inline font-mono">
+                {isHindi ? 'टेस्ट बीप' : 'TEST'}
+              </span>
+            </button>
+
             {/* Logout Button */}
             <button
               onClick={onLogout}
@@ -183,13 +200,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28">
         {/* ================= 1.5 SYSTEM DIAGNOSTICS ================= */}
         <DiagnosticCard 
-          permissionStatus={permissionStatus}
-          onFixPermissions={onRefreshPermissions}
-          onOpenNotificationSettings={async () => {
-            try { await NativeAlarm.openNotificationSettings(); } catch {}
+          status={diagnosticStatus}
+          onFixBattery={async () => {
+            await notificationService.triggerBatteryOptimization();
+            setTimeout(onRefreshDiagnostics, 3000);
           }}
-          onOpenFullScreenSettings={async () => {
-            try { await NativeAlarm.openFullScreenSettings(); } catch {}
+          onFixExactAlarm={async () => {
+            await notificationService.triggerExactAlarm();
+            setTimeout(onRefreshDiagnostics, 3000);
+          }}
+          onFixNotifications={async () => {
+            await notificationService.requestPermissions();
+            setTimeout(onRefreshDiagnostics, 1000);
+          }}
+          onFixOverlay={async () => {
+            await notificationService.triggerOverlayPermission();
+            setTimeout(onRefreshDiagnostics, 3000);
           }}
           isHindi={isHindi}
         />
@@ -274,15 +300,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </div>
             <div>
               <div className="text-xs font-bold text-white flex items-center gap-2">
-                <span>{isHindi ? 'नेटिव अलार्म मैनेजर क्लॉक सक्रिय' : 'Native AlarmManager Clock Active'}</span>
+                <span>{isHindi ? 'बैकग्राउंड टाइम चेकर सक्रिय' : 'Background Time-Checker Active'}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-[#00FF66] border border-emerald-500/40 font-mono">
-                  Exact AlarmClock
+                  1-Sec Loop
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
                 {isHindi
-                  ? 'ऐंड्रॉयड सिस्टम क्लॉक द्वारा नियंत्रित। ऐप पूरी तरह बंद रहने पर भी अलार्म रिंग होगा।'
-                  : 'Controlled by Android system clock. Ringer will fire even if the app process is closed.'}
+                  ? 'डिवाइस का समय मिलते ही क्लासिक डिजिटल बीप अलार्म अपने आप बजेगा।'
+                  : 'Classic Digital Beep triggers automatically the second scheduled time matches.'}
               </p>
             </div>
           </div>

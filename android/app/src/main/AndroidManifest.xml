@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Essential Android Alarm & Notification Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- (A) permissions -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -49,35 +51,30 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
-        <!-- (B) components, inside <application> -->
-        <receiver
-            android:name="com.bgkyadgiri.alarm.AlarmReceiver"
-            android:exported="false" />
-
-        <receiver
-            android:name="com.bgkyadgiri.alarm.BootReceiver"
-            android:exported="true">
+        <!-- Native Background Alarm Components -->
+        <receiver android:name=".AlarmReceiver" android:enabled="true" android:exported="true" />
+        <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name="com.bgkyadgiri.alarm.AlarmService"
-            android:exported="false"
+        <service 
+            android:name=".AlarmService" 
+            android:enabled="true" 
+            android:exported="false" 
             android:foregroundServiceType="mediaPlayback" />
 
         <activity
-            android:name="com.bgkyadgiri.alarm.AlarmActivity"
+            android:name=".AlarmActivity"
             android:exported="false"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true"
-            android:theme="@android:style/Theme.Material.NoActionBar" />
+            android:turnScreenOn="true" />
 
     </application>
 

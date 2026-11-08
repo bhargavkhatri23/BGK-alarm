@@ -2,155 +2,136 @@ package com.bgkyadgiri.alarm;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/** Full-screen alarm screen shown over the lock screen. Built in code (no XML needed). */
 public class AlarmActivity extends Activity {
-    private int alarmId;
-    private String label = "";
-
-    private final BroadcastReceiver closeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            finish();
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= 27) {
+        // Wake up screen and show over keyguard
+        Window window = getWindow();
+        window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+        );
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true);
             setTurnScreenOn(true);
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        }
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        KeyguardManager km = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        if (Build.VERSION.SDK_INT >= 26 && km != null) {
-            km.requestDismissKeyguard(this, null);
+            KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+            if (keyguardManager != null) {
+                keyguardManager.requestDismissKeyguard(this, null);
+            }
         }
 
-        readIntent(getIntent());
-        buildUi();
+        // Set up Ben 10 dark neon green theme UI in Hindi
+        setContentView(createAlarmView());
+    }
 
-        ContextCompat.registerReceiver(this, closeReceiver,
-                new IntentFilter(AlarmService.ACTION_CLOSE_UI), ContextCompat.RECEIVER_NOT_EXPORTED);
+    private View createAlarmView() {
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setBackgroundColor(0xFF070B12); // Dark Omnitrix background
+        layout.setGravity(android.view.Gravity.CENTER);
+        layout.setPadding(48, 48, 48, 48);
+
+        Intent intent = getIntent();
+        String rawLabel = intent != null ? intent.getStringExtra("label") : "अलार्म";
+        final String label = (rawLabel != null) ? rawLabel : "रिमाइंडर";
+        final String alarmId = intent != null ? intent.getStringExtra("id") : "alarm_id";
+
+        // Title
+        TextView title = new TextView(this);
+        title.setText("⚡ BGK SMART ALARM ⚡");
+        title.setTextColor(0xFF00FF66); // Neon green
+        title.setTextSize(22);
+        title.setGravity(android.view.Gravity.CENTER);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        layout.addView(title);
+
+        // Time display
+        TextView timeView = new TextView(this);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        timeView.setText(sdf.format(new Date()));
+        timeView.setTextColor(0xFFFFFFFF);
+        timeView.setTextSize(48);
+        timeView.setGravity(android.view.Gravity.CENTER);
+        timeView.setPadding(0, 32, 0, 32);
+        layout.addView(timeView);
+
+        // Label / Task
+        TextView labelView = new TextView(this);
+        labelView.setText("काम / रिमाइंडर: " + label);
+        labelView.setTextColor(0xFF94A3B8);
+        labelView.setTextSize(18);
+        labelView.setGravity(android.view.Gravity.CENTER);
+        labelView.setPadding(0, 0, 0, 64);
+        layout.addView(labelView);
+
+        // Snooze Button (+5 min)
+        Button snoozeBtn = new Button(this);
+        snoozeBtn.setText("स्नूज़ +5 मिनट (Snooze)");
+        snoozeBtn.setTextColor(0xFF000000);
+        snoozeBtn.setTextSize(16);
+        snoozeBtn.setBackgroundColor(0xFF00FF66);
+        snoozeBtn.setPadding(32, 32, 32, 32);
+        android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, 24);
+        snoozeBtn.setLayoutParams(params);
+        snoozeBtn.setOnClickListener(v -> {
+            Intent snoozeIntent = new Intent(this, AlarmService.class);
+            snoozeIntent.setAction(AlarmService.ACTION_SNOOZE);
+            snoozeIntent.putExtra("id", alarmId);
+            snoozeIntent.putExtra("label", label);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(snoozeIntent);
+            } else {
+                startService(snoozeIntent);
+            }
+            finish();
+        });
+        layout.addView(snoozeBtn);
+
+        // Dismiss Button
+        Button dismissBtn = new Button(this);
+        dismissBtn.setText("बंद करें / Dismiss");
+        dismissBtn.setTextColor(0xFFFFFFFF);
+        dismissBtn.setTextSize(16);
+        dismissBtn.setBackgroundColor(0xFFEF4444); // Red
+        dismissBtn.setPadding(32, 32, 32, 32);
+        dismissBtn.setLayoutParams(params);
+        dismissBtn.setOnClickListener(v -> {
+            Intent stopIntent = new Intent(this, AlarmService.class);
+            stopIntent.setAction(AlarmService.ACTION_STOP);
+            startService(stopIntent);
+            finish();
+        });
+        layout.addView(dismissBtn);
+
+        return layout;
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        readIntent(intent);
-    }
-
-    private void readIntent(Intent i) {
-        alarmId = i.getIntExtra("id", 0);
-        String l = i.getStringExtra("label");
-        label = l == null ? "" : l;
-    }
-
-    private int dp(int v) {
-        return (int) (v * getResources().getDisplayMetrics().density);
-    }
-
-    private void buildUi() {
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(Gravity.CENTER);
-        root.setBackgroundColor(Color.parseColor("#0F172A"));
-        root.setPadding(dp(24), dp(24), dp(24), dp(24));
-
-        TextView icon = new TextView(this);
-        icon.setText("⏰");
-        icon.setTextSize(64);
-        icon.setGravity(Gravity.CENTER);
-        root.addView(icon);
-
-        TextView time = new TextView(this);
-        time.setText(new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(new Date()));
-        time.setTextColor(Color.WHITE);
-        time.setTextSize(52);
-        time.setTypeface(Typeface.DEFAULT_BOLD);
-        time.setGravity(Gravity.CENTER);
-        root.addView(time);
-
-        TextView lbl = new TextView(this);
-        lbl.setText(label.isEmpty() ? "अलार्म का समय हो गया" : label);
-        lbl.setTextColor(Color.parseColor("#CBD5E1"));
-        lbl.setTextSize(22);
-        lbl.setGravity(Gravity.CENTER);
-        lbl.setPadding(0, dp(12), 0, dp(40));
-        root.addView(lbl);
-
-        Button snooze = makeButton("स्नूज़ (5 मिनट)", "#F59E0B", Color.BLACK);
-        snooze.setOnClickListener((View v) -> {
-            send(AlarmService.ACTION_SNOOZE);
-            finish();
-        });
-        root.addView(snooze);
-
-        Button dismiss = makeButton("बंद करें", "#EF4444", Color.WHITE);
-        dismiss.setOnClickListener((View v) -> {
-            send(AlarmService.ACTION_DISMISS);
-            finish();
-        });
-        root.addView(dismiss);
-
-        setContentView(root);
-    }
-
-    private Button makeButton(String text, String bg, int fg) {
-        Button b = new Button(this);
-        b.setText(text);
-        b.setTextSize(20);
-        b.setTextColor(fg);
-        b.setAllCaps(false);
-        b.setBackgroundColor(Color.parseColor(bg));
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, dp(72));
-        lp.setMargins(0, dp(10), 0, dp(10));
-        b.setLayoutParams(lp);
-        return b;
-    }
-
-    private void send(String action) {
-        Intent i = new Intent(this, AlarmService.class);
-        i.setAction(action);
-        i.putExtra("id", alarmId);
-        i.putExtra("label", label);
-        startService(i);
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            unregisterReceiver(closeReceiver);
-        } catch (Exception ignored) {
-        }
-        super.onDestroy();
+    public void onBackPressed() {
+        // Prevent accidental dismissal with back button
     }
 }

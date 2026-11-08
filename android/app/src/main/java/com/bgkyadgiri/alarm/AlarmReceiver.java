@@ -3,45 +3,43 @@ package com.bgkyadgiri.alarm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Build;
+import android.os.PowerManager;
 
-import androidx.core.content.ContextCompat;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-/** Fired by the Android system at alarm time, even if the app is closed. */
 public class AlarmReceiver extends BroadcastReceiver {
-    private static final String TAG = "BGAlarm";
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        int id = intent.getIntExtra("id", 0);
-        String label = intent.getStringExtra("label");
-        if (label == null) label = "";
-        Log.d(TAG, "Alarm fired id=" + id);
-
-        // Repeating alarm: schedule the next occurrence. One-time alarm: remove it.
-        try {
-            JSONObject a = AlarmStore.get(context, id);
-            if (a != null) {
-                JSONArray days = a.optJSONArray("repeatDays");
-                if (days != null && days.length() > 0) {
-                    a.put("time", AlarmStore.nextOccurrence(a.optLong("time"), days));
-                    AlarmStore.put(context, a);
-                    AlarmStore.schedule(context, a);
-                } else {
-                    AlarmStore.remove(context, id);
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "reschedule failed", e);
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = null;
+        if (pm != null) {
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BGK:AlarmReceiverWakeLock");
+            wakeLock.acquire(60 * 1000L); // 1 min lock
         }
 
-        Intent svc = new Intent(context, AlarmService.class);
-        svc.setAction(AlarmService.ACTION_RING);
-        svc.putExtra("id", id);
-        svc.putExtra("label", label);
-        ContextCompat.startForegroundService(context, svc);
+        String alarmId = intent.getStringExtra("alarmId");
+        String task = intent.getStringExtra("task");
+
+        // Start Foreground AlarmService
+        Intent serviceIntent = new Intent(context, AlarmService.class);
+        serviceIntent.putExtra("id", alarmId);
+        serviceIntent.putExtra("label", task);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.startService(serviceIntent);
+        }
+
+        // Open full-screen lockscreen activity
+        Intent activityIntent = new Intent(context, AlarmActivity.class);
+        activityIntent.putExtra("id", alarmId);
+        activityIntent.putExtra("label", task);
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(activityIntent);
+
+        if (wakeLock != null && wakeLock.isHeld()) {
+            try {
+                wakeLock.release();
+            } catch (Exception ignored) {}
+        }
     }
 }

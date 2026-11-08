@@ -1,139 +1,191 @@
 package com.bgkyadgiri.alarm;
 
-import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.provider.Settings;
 
-import androidx.core.app.NotificationManagerCompat;
-
-import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.annotation.Permission;
-import com.getcapacitor.annotation.PermissionCallback;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@CapacitorPlugin(
-        name = "NativeAlarm",
-        permissions = {
-                @Permission(strings = {Manifest.permission.POST_NOTIFICATIONS}, alias = "notifications")
-        }
-)
+@CapacitorPlugin(name = "NativeAlarm")
 public class NativeAlarmPlugin extends Plugin {
+    private static final String PREF_NAME = "bgk_alarms_pref";
+    private static final String KEY_STORED_ALARMS = "stored_alarms";
 
-    private JSObject status() {
-        JSObject r = new JSObject();
-        r.put("notifications", NotificationManagerCompat.from(getContext()).areNotificationsEnabled());
-        boolean fullScreen = true;
-        if (Build.VERSION.SDK_INT >= 34) {
-            android.app.NotificationManager nm = (android.app.NotificationManager)
-                    getContext().getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-            fullScreen = nm.canUseFullScreenIntent();
+    @PluginMethod
+    public void canScheduleExact(PluginCall call) {
+        Context context = getContext();
+        boolean canExact = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (am != null) {
+                canExact = am.canScheduleExactAlarms();
+            }
         }
-        r.put("fullScreen", fullScreen);
-        return r;
+        JSObject ret = new JSObject();
+        ret.put("granted", canExact);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void openExactAlarmSettings(PluginCall call) {
+        Context context = getContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                    android.net.Uri.parse("package:" + context.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+        call.resolve();
     }
 
     @PluginMethod
     public void schedule(PluginCall call) {
-        Integer id = call.getInt("id");
-        Long time = call.getLong("time");
-        if (id == null || time == null) {
-            call.reject("id and time are required");
+        String id = call.getString("id");
+        Long timeMillis = call.getLong("timeMillis");
+        String label = call.getString("label", "Alarm");
+        String repeatDays = call.getString("repeatDays", "");
+
+        if (id == null || timeMillis == null) {
+            call.reject("id and timeMillis are required");
             return;
         }
-        try {
-            JSArray daysIn = call.getArray("repeatDays", new JSArray());
-            JSONArray days = new JSONArray();
-            for (int i = 0; i < daysIn.length(); i++) days.put(daysIn.getInt(i));
 
-            JSONObject a = new JSONObject();
-            a.put("id", id);
-            a.put("time", time);
-            a.put("label", call.getString("label", ""));
-            a.put("repeatDays", days);
-
-            AlarmStore.put(getContext(), a);
-            AlarmStore.schedule(getContext(), a);
-            call.resolve();
-        } catch (Exception e) {
-            call.reject("schedule failed: " + e.getMessage());
-        }
+        scheduleExactAlarmInternal(getContext(), id, timeMillis, label, repeatDays);
+        saveAlarmToPrefs(getContext(), id, timeMillis, label, repeatDays);
+        call.resolve();
     }
 
     @PluginMethod
     public void cancel(PluginCall call) {
-        Integer id = call.getInt("id");
+        String id = call.getString("id");
         if (id == null) {
             call.reject("id is required");
             return;
         }
-        AlarmStore.cancel(getContext(), id);
+        cancelAlarmInternal(getContext(), id);
+        removeAlarmFromPrefs(getContext(), id);
         call.resolve();
     }
 
     @PluginMethod
     public void cancelAll(PluginCall call) {
-        AlarmStore.cancelAll(getContext());
+        Context context = getContext();
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        try {
+            String jsonStr = prefs.getString(KEY_STORED_ALARMS, "[]");
+            JSONArray arr = new JSONArray(jsonStr);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                cancelAlarmInternal(context, obj.getString("id"));
+            }
+        } catch (Exception ignored) {}
+        prefs.edit().remove(KEY_STORED_ALARMS).apply();
         call.resolve();
     }
 
-    @PluginMethod
-    public void getStatus(PluginCall call) {
-        call.resolve(status());
-    }
+    public static void scheduleExactAlarmInternal(Context context, String id, long triggerTime, String label, String repeatDays) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (am == null) return;
 
-    @PluginMethod
-    public void requestNotifications(PluginCall call) {
-        if (Build.VERSION.SDK_INT >= 33
-                && !NotificationManagerCompat.from(getContext()).areNotificationsEnabled()) {
-            requestPermissionForAlias("notifications", call, "notifCallback");
-        } else {
-            call.resolve(status());
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("alarmId", id);
+        intent.putExtra("task", label);
+        intent.putExtra("repeatDays", repeatDays);
+        intent.putExtra("timeMillis", triggerTime);
+
+        int requestCode = Math.abs(id.hashCode());
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags |= PendingIntent.FLAG_MUTABLE;
         }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
+
+        Intent showIntent = new Intent(context, AlarmActivity.class);
+        showIntent.putExtra("id", id);
+        showIntent.putExtra("label", label);
+        PendingIntent showPendingIntent = PendingIntent.getActivity(context, requestCode, showIntent, flags);
+
+        AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(triggerTime, showPendingIntent);
+        am.setAlarmClock(clockInfo, pendingIntent);
     }
 
-    @PermissionCallback
-    private void notifCallback(PluginCall call) {
-        call.resolve(status());
+    public static void cancelAlarmInternal(Context context, String id) {
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (am == null) return;
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        int requestCode = Math.abs(id.hashCode());
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            flags |= PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, flags);
+        am.cancel(pendingIntent);
     }
 
-    @PluginMethod
-    public void openFullScreenSettings(PluginCall call) {
+    private static void saveAlarmToPrefs(Context context, String id, long timeMillis, String label, String repeatDays) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
-            Intent i;
-            if (Build.VERSION.SDK_INT >= 34) {
-                i = new Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
-                        Uri.parse("package:" + getContext().getPackageName()));
-            } else {
-                i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                        .putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName());
+            JSONArray arr = new JSONArray(prefs.getString(KEY_STORED_ALARMS, "[]"));
+            JSONArray newArr = new JSONArray();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                if (!obj.getString("id").equals(id)) {
+                    newArr.put(obj);
+                }
             }
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(i);
-            call.resolve();
-        } catch (Exception e) {
-            call.reject("cannot open settings: " + e.getMessage());
-        }
+            JSONObject newObj = new JSONObject();
+            newObj.put("id", id);
+            newObj.put("timeMillis", timeMillis);
+            newObj.put("label", label);
+            newObj.put("repeatDays", repeatDays);
+            newArr.put(newObj);
+            prefs.edit().putString(KEY_STORED_ALARMS, newArr.toString()).apply();
+        } catch (Exception ignored) {}
     }
 
-    @PluginMethod
-    public void openNotificationSettings(PluginCall call) {
+    private static void removeAlarmFromPrefs(Context context, String id) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         try {
-            Intent i = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                    .putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName())
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(i);
-            call.resolve();
-        } catch (Exception e) {
-            call.reject("cannot open settings: " + e.getMessage());
-        }
+            JSONArray arr = new JSONArray(prefs.getString(KEY_STORED_ALARMS, "[]"));
+            JSONArray newArr = new JSONArray();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                if (!obj.getString("id").equals(id)) {
+                    newArr.put(obj);
+                }
+            }
+            prefs.edit().putString(KEY_STORED_ALARMS, newArr.toString()).apply();
+        } catch (Exception ignored) {}
+    }
+
+    public static void rescheduleAllStoredAlarms(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        try {
+            JSONArray arr = new JSONArray(prefs.getString(KEY_STORED_ALARMS, "[]"));
+            long now = System.currentTimeMillis();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                long time = obj.getLong("timeMillis");
+                String id = obj.getString("id");
+                String label = obj.getString("label");
+                String repeatDays = obj.getString("repeatDays");
+                if (time > now) {
+                    scheduleExactAlarmInternal(context, id, time, label, repeatDays);
+                }
+            }
+        } catch (Exception ignored) {}
     }
 }

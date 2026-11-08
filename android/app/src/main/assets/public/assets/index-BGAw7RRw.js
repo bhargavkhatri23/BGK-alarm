@@ -11733,111 +11733,68 @@ var audioEngine = new AudioAlarmEngine();
 // src/utils/backgroundTimer.ts
 var BackgroundTimerService = class {
 	constructor() {
-		this.worker = null;
-		this.intervalId = null;
-		this.tickCallbacks = /* @__PURE__ */ new Set();
-		this.wakeLockSentinel = null;
-		this.isWakeLockSupported = false;
-		this.isWakeLockSupported = typeof navigator !== "undefined" && "wakeLock" in navigator;
-		this.initWorker();
-		this.initVisibilityListener();
+		this.timerId = null;
+		this.subscribers = /* @__PURE__ */ new Set();
+		this.isRunning = false;
+		this.wakeLock = null;
+		this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
+		if (typeof document !== "undefined") document.addEventListener("visibilitychange", this.handleVisibilityChange);
 	}
-	/**
-	* Creates an inline Web Worker that runs in its own execution thread.
-	* Browsers do not throttle Web Worker timers the same way as main-thread window.setInterval
-	* when the tab is backgrounded or minimized.
-	*/
-	initWorker() {
-		if (typeof window === "undefined" || typeof Worker === "undefined") return;
+	subscribe(callback) {
+		this.subscribers.add(callback);
+		if (!this.isRunning) this.start();
+		return () => {
+			this.subscribers.delete(callback);
+			if (this.subscribers.size === 0) this.stop();
+		};
+	}
+	async requestWakeLock() {
 		try {
-			const blob = new Blob([`
-        let timer = null;
-        self.onmessage = function(e) {
-          if (e.data === 'start') {
-            if (timer) clearInterval(timer);
-            timer = setInterval(function() {
-              self.postMessage('tick');
-            }, 1000);
-          } else if (e.data === 'stop') {
-            if (timer) {
-              clearInterval(timer);
-              timer = null;
-            }
-          }
-        };
-      `], { type: "application/javascript" });
-			const workerUrl = URL.createObjectURL(blob);
-			this.worker = new Worker(workerUrl);
-			this.worker.onmessage = (e) => {
-				if (e.data === "tick") this.emitTick();
-			};
-		} catch {
-			this.worker = null;
+			if ("wakeLock" in navigator && !this.wakeLock) {
+				this.wakeLock = await navigator.wakeLock.request("screen");
+				this.wakeLock.addEventListener("release", () => {
+					this.wakeLock = null;
+				});
+			}
+		} catch {}
+	}
+	start() {
+		if (this.isRunning) return;
+		this.isRunning = true;
+		this.requestWakeLock();
+		const tick = () => {
+			this.notifySubscribers();
+			if (this.isRunning) this.timerId = window.setTimeout(tick, 1e3);
+		};
+		this.timerId = window.setTimeout(tick, 1e3);
+	}
+	stop() {
+		this.isRunning = false;
+		if (this.timerId !== null) {
+			clearTimeout(this.timerId);
+			this.timerId = null;
+		}
+		if (this.wakeLock) {
+			try {
+				this.wakeLock.release();
+			} catch {}
+			this.wakeLock = null;
 		}
 	}
-	initVisibilityListener() {
-		if (typeof document === "undefined") return;
-		document.addEventListener("visibilitychange", () => {
-			if (!document.hidden) {
-				this.emitTick();
-				this.requestWakeLock();
+	notifySubscribers() {
+		this.subscribers.forEach((callback) => {
+			try {
+				callback();
+			} catch (err) {
+				console.error("Error in background timer subscriber:", err);
 			}
 		});
 	}
-	emitTick() {
-		if (this.tickCallbacks.size > 0 && Math.random() < .01) this.requestWakeLock();
-		this.tickCallbacks.forEach((cb) => {
-			try {
-				cb();
-			} catch {}
-		});
-	}
-	subscribe(cb) {
-		this.tickCallbacks.add(cb);
-		if (this.tickCallbacks.size === 1) this.start();
-		return () => {
-			this.tickCallbacks.delete(cb);
-			if (this.tickCallbacks.size === 0) this.stop();
-		};
-	}
-	start() {
-		if (this.worker) this.worker.postMessage("start");
-		if (!this.intervalId) this.intervalId = window.setInterval(() => {
-			this.emitTick();
-		}, 1e3);
-	}
-	stop() {
-		if (this.worker) this.worker.postMessage("stop");
-		if (this.intervalId) {
-			window.clearInterval(this.intervalId);
-			this.intervalId = null;
+	handleVisibilityChange() {
+		if (document.visibilityState === "visible") {
+			this.requestWakeLock();
+			this.notifySubscribers();
 		}
-		this.releaseWakeLock();
-	}
-	/**
-	* Requests Screen Wake Lock to prevent aggressive system sleeping
-	* when alarms are actively armed.
-	*/
-	async requestWakeLock() {
-		if (!this.isWakeLockSupported) return false;
-		try {
-			const nav = navigator;
-			this.wakeLockSentinel = await nav.wakeLock.request("screen");
-			return true;
-		} catch {
-			return false;
-		}
-	}
-	releaseWakeLock() {
-		if (this.wakeLockSentinel) {
-			try {
-				this.wakeLockSentinel.release();
-			} catch {}
-			this.wakeLockSentinel = null;
-		}
-	}
-	isWorkerActive() {
-		return this.worker !== null;
 	}
 };
 var backgroundTimer = new BackgroundTimerService();
@@ -12365,26 +12322,6 @@ var Search = createLucideIcon("search", [["path", {
 	r: "8",
 	key: "4ej97u"
 }]]);
-/**
-* @license lucide-react v0.546.0 - ISC
-*
-* This source code is licensed under the ISC license.
-* See the LICENSE file in the root directory of this source tree.
-*/
-var ShieldAlert = createLucideIcon("shield-alert", [
-	["path", {
-		d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-		key: "oel41y"
-	}],
-	["path", {
-		d: "M12 8v4",
-		key: "1got3b"
-	}],
-	["path", {
-		d: "M12 16h.01",
-		key: "1drbdi"
-	}]
-]);
 /**
 * @license lucide-react v0.546.0 - ISC
 *
@@ -13649,7 +13586,7 @@ var __vitePreload = function preload(baseModule, deps, importerUrl) {
 	});
 };
 // node_modules/@capacitor/local-notifications/dist/esm/index.js
-var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-uwhazejj.js").then((m) => new m.LocalNotificationsWeb()), []) });
+var LocalNotifications = registerPlugin("LocalNotifications", { web: () => __vitePreload(() => import("./web-iBhKIurH.js").then((m) => new m.LocalNotificationsWeb()), []) });
 // src/utils/notificationService.ts
 var AlarmPermission = registerPlugin("AlarmPermission");
 var NotificationService = class {
@@ -14702,702 +14639,70 @@ var CreateAlarmSheet = ({ existingAlarm, onSave, onClose, isHindi }) => {
 		})
 	});
 };
-// node_modules/canvas-confetti/dist/confetti.module.mjs
-var module$1 = {};
-(function main(global, module, isWorker, workerSize) {
-	var canUseWorker = !!(global.Worker && global.Blob && global.Promise && global.OffscreenCanvas && global.OffscreenCanvasRenderingContext2D && global.HTMLCanvasElement && global.HTMLCanvasElement.prototype.transferControlToOffscreen && global.URL && global.URL.createObjectURL);
-	var canUsePaths = typeof Path2D === "function" && typeof DOMMatrix === "function";
-	var canDrawBitmap = (function() {
-		if (!global.OffscreenCanvas) return false;
-		try {
-			var canvas = new OffscreenCanvas(1, 1);
-			var ctx = canvas.getContext("2d");
-			ctx.fillRect(0, 0, 1, 1);
-			var bitmap = canvas.transferToImageBitmap();
-			ctx.createPattern(bitmap, "no-repeat");
-		} catch (e) {
-			return false;
-		}
-		return true;
-	})();
-	function noop() {}
-	function promise(func) {
-		var ModulePromise = module.exports.Promise;
-		var Prom = ModulePromise !== void 0 ? ModulePromise : global.Promise;
-		if (typeof Prom === "function") return new Prom(func);
-		func(noop, noop);
-		return null;
-	}
-	var bitmapMapper = (function(skipTransform, map) {
-		return {
-			transform: function(bitmap) {
-				if (skipTransform) return bitmap;
-				if (map.has(bitmap)) return map.get(bitmap);
-				var canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-				canvas.getContext("2d").drawImage(bitmap, 0, 0);
-				map.set(bitmap, canvas);
-				return canvas;
-			},
-			clear: function() {
-				map.clear();
-			}
-		};
-	})(canDrawBitmap, /* @__PURE__ */ new Map());
-	var raf = function() {
-		var TIME = Math.floor(1e3 / 60);
-		var frame, cancel;
-		var frames = {};
-		var lastFrameTime = 0;
-		if (typeof requestAnimationFrame === "function" && typeof cancelAnimationFrame === "function") {
-			frame = function(cb) {
-				var id = Math.random();
-				frames[id] = requestAnimationFrame(function onFrame(time) {
-					if (lastFrameTime === time || lastFrameTime + TIME - 1 < time) {
-						lastFrameTime = time;
-						delete frames[id];
-						cb();
-					} else frames[id] = requestAnimationFrame(onFrame);
-				});
-				return id;
-			};
-			cancel = function(id) {
-				if (frames[id]) cancelAnimationFrame(frames[id]);
-			};
-		} else {
-			frame = function(cb) {
-				return setTimeout(cb, TIME);
-			};
-			cancel = function(timer) {
-				return clearTimeout(timer);
-			};
-		}
-		return {
-			frame,
-			cancel
-		};
-	}();
-	var getWorker = (function() {
-		var worker;
-		var prom;
-		var resolves = {};
-		function decorate(worker) {
-			function execute(options, callback) {
-				worker.postMessage({
-					options: options || {},
-					callback
-				});
-			}
-			worker.init = function initWorker(canvas) {
-				var offscreen = canvas.transferControlToOffscreen();
-				worker.postMessage({ canvas: offscreen }, [offscreen]);
-			};
-			worker.fire = function fireWorker(options, size, done) {
-				if (prom) {
-					execute(options, null);
-					return prom;
-				}
-				var id = Math.random().toString(36).slice(2);
-				prom = promise(function(resolve) {
-					function workerDone(msg) {
-						if (msg.data.callback !== id) return;
-						delete resolves[id];
-						worker.removeEventListener("message", workerDone);
-						prom = null;
-						bitmapMapper.clear();
-						done();
-						resolve();
-					}
-					worker.addEventListener("message", workerDone);
-					execute(options, id);
-					resolves[id] = workerDone.bind(null, { data: { callback: id } });
-				});
-				return prom;
-			};
-			worker.reset = function resetWorker() {
-				worker.postMessage({ reset: true });
-				for (var id in resolves) {
-					resolves[id]();
-					delete resolves[id];
-				}
-			};
-		}
-		return function() {
-			if (worker) return worker;
-			if (!isWorker && canUseWorker) {
-				var code = [
-					"var CONFETTI, SIZE = {}, module = {};",
-					"(" + main.toString() + ")(this, module, true, SIZE);",
-					"onmessage = function(msg) {",
-					"  if (msg.data.options) {",
-					"    CONFETTI(msg.data.options).then(function () {",
-					"      if (msg.data.callback) {",
-					"        postMessage({ callback: msg.data.callback });",
-					"      }",
-					"    });",
-					"  } else if (msg.data.reset) {",
-					"    CONFETTI && CONFETTI.reset();",
-					"  } else if (msg.data.resize) {",
-					"    SIZE.width = msg.data.resize.width;",
-					"    SIZE.height = msg.data.resize.height;",
-					"  } else if (msg.data.canvas) {",
-					"    SIZE.width = msg.data.canvas.width;",
-					"    SIZE.height = msg.data.canvas.height;",
-					"    CONFETTI = module.exports.create(msg.data.canvas);",
-					"  }",
-					"}"
-				].join("\n");
-				try {
-					worker = new Worker(URL.createObjectURL(new Blob([code])));
-				} catch (e) {
-					typeof console !== "undefined" && typeof console.warn === "function" && console.warn("🎊 Could not load worker", e);
-					return null;
-				}
-				decorate(worker);
-			}
-			return worker;
-		};
-	})();
-	var defaults = {
-		particleCount: 50,
-		angle: 90,
-		spread: 45,
-		startVelocity: 45,
-		decay: .9,
-		gravity: 1,
-		drift: 0,
-		ticks: 200,
-		x: .5,
-		y: .5,
-		shapes: ["square", "circle"],
-		zIndex: 100,
-		colors: [
-			"#26ccff",
-			"#a25afd",
-			"#ff5e7e",
-			"#88ff5a",
-			"#fcff42",
-			"#ffa62d",
-			"#ff36ff"
-		],
-		disableForReducedMotion: false,
-		scalar: 1
-	};
-	function convert(val, transform) {
-		return transform ? transform(val) : val;
-	}
-	function isOk(val) {
-		return !(val === null || val === void 0);
-	}
-	function prop(options, name, transform) {
-		return convert(options && isOk(options[name]) ? options[name] : defaults[name], transform);
-	}
-	function onlyPositiveInt(number) {
-		return number < 0 ? 0 : Math.floor(number);
-	}
-	function randomInt(min, max) {
-		return Math.floor(Math.random() * (max - min)) + min;
-	}
-	function toDecimal(str) {
-		return parseInt(str, 16);
-	}
-	function colorsToRgb(colors) {
-		return colors.map(hexToRgb);
-	}
-	function hexToRgb(str) {
-		var val = String(str).replace(/[^0-9a-f]/gi, "");
-		if (val.length < 6) val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
-		return {
-			r: toDecimal(val.substring(0, 2)),
-			g: toDecimal(val.substring(2, 4)),
-			b: toDecimal(val.substring(4, 6))
-		};
-	}
-	function getOrigin(options) {
-		var origin = prop(options, "origin", Object);
-		origin.x = prop(origin, "x", Number);
-		origin.y = prop(origin, "y", Number);
-		return origin;
-	}
-	function setCanvasWindowSize(canvas) {
-		canvas.width = document.documentElement.clientWidth;
-		canvas.height = document.documentElement.clientHeight;
-	}
-	function setCanvasRectSize(canvas) {
-		var rect = canvas.getBoundingClientRect();
-		canvas.width = rect.width;
-		canvas.height = rect.height;
-	}
-	function getCanvas(zIndex) {
-		var canvas = document.createElement("canvas");
-		canvas.style.position = "fixed";
-		canvas.style.top = "0px";
-		canvas.style.left = "0px";
-		canvas.style.pointerEvents = "none";
-		canvas.style.zIndex = zIndex;
-		return canvas;
-	}
-	function ellipse(context, x, y, radiusX, radiusY, rotation, startAngle, endAngle, antiClockwise) {
-		context.save();
-		context.translate(x, y);
-		context.rotate(rotation);
-		context.scale(radiusX, radiusY);
-		context.arc(0, 0, 1, startAngle, endAngle, antiClockwise);
-		context.restore();
-	}
-	function randomPhysics(opts) {
-		var radAngle = opts.angle * (Math.PI / 180);
-		var radSpread = opts.spread * (Math.PI / 180);
-		return {
-			x: opts.x,
-			y: opts.y,
-			wobble: Math.random() * 10,
-			wobbleSpeed: Math.min(.11, Math.random() * .1 + .05),
-			velocity: opts.startVelocity * .5 + Math.random() * opts.startVelocity,
-			angle2D: -radAngle + (.5 * radSpread - Math.random() * radSpread),
-			tiltAngle: (Math.random() * .5 + .25) * Math.PI,
-			color: opts.color,
-			shape: opts.shape,
-			tick: 0,
-			totalTicks: opts.ticks,
-			decay: opts.decay,
-			drift: opts.drift,
-			random: Math.random() + 2,
-			tiltSin: 0,
-			tiltCos: 0,
-			wobbleX: 0,
-			wobbleY: 0,
-			gravity: opts.gravity * 3,
-			ovalScalar: .6,
-			scalar: opts.scalar,
-			flat: opts.flat
-		};
-	}
-	function updateFetti(context, fetti) {
-		fetti.x += Math.cos(fetti.angle2D) * fetti.velocity + fetti.drift;
-		fetti.y += Math.sin(fetti.angle2D) * fetti.velocity + fetti.gravity;
-		fetti.velocity *= fetti.decay;
-		if (fetti.flat) {
-			fetti.wobble = 0;
-			fetti.wobbleX = fetti.x + 10 * fetti.scalar;
-			fetti.wobbleY = fetti.y + 10 * fetti.scalar;
-			fetti.tiltSin = 0;
-			fetti.tiltCos = 0;
-			fetti.random = 1;
-		} else {
-			fetti.wobble += fetti.wobbleSpeed;
-			fetti.wobbleX = fetti.x + 10 * fetti.scalar * Math.cos(fetti.wobble);
-			fetti.wobbleY = fetti.y + 10 * fetti.scalar * Math.sin(fetti.wobble);
-			fetti.tiltAngle += .1;
-			fetti.tiltSin = Math.sin(fetti.tiltAngle);
-			fetti.tiltCos = Math.cos(fetti.tiltAngle);
-			fetti.random = Math.random() + 2;
-		}
-		var progress = fetti.tick++ / fetti.totalTicks;
-		var x1 = fetti.x + fetti.random * fetti.tiltCos;
-		var y1 = fetti.y + fetti.random * fetti.tiltSin;
-		var x2 = fetti.wobbleX + fetti.random * fetti.tiltCos;
-		var y2 = fetti.wobbleY + fetti.random * fetti.tiltSin;
-		context.fillStyle = "rgba(" + fetti.color.r + ", " + fetti.color.g + ", " + fetti.color.b + ", " + (1 - progress) + ")";
-		context.beginPath();
-		if (canUsePaths && fetti.shape.type === "path" && typeof fetti.shape.path === "string" && Array.isArray(fetti.shape.matrix)) context.fill(transformPath2D(fetti.shape.path, fetti.shape.matrix, fetti.x, fetti.y, Math.abs(x2 - x1) * .1, Math.abs(y2 - y1) * .1, Math.PI / 10 * fetti.wobble));
-		else if (fetti.shape.type === "bitmap") {
-			var rotation = Math.PI / 10 * fetti.wobble;
-			var scaleX = Math.abs(x2 - x1) * .1;
-			var scaleY = Math.abs(y2 - y1) * .1;
-			var width = fetti.shape.bitmap.width * fetti.scalar;
-			var height = fetti.shape.bitmap.height * fetti.scalar;
-			var matrix = new DOMMatrix([
-				Math.cos(rotation) * scaleX,
-				Math.sin(rotation) * scaleX,
-				-Math.sin(rotation) * scaleY,
-				Math.cos(rotation) * scaleY,
-				fetti.x,
-				fetti.y
-			]);
-			matrix.multiplySelf(new DOMMatrix(fetti.shape.matrix));
-			var pattern = context.createPattern(bitmapMapper.transform(fetti.shape.bitmap), "no-repeat");
-			pattern.setTransform(matrix);
-			context.globalAlpha = 1 - progress;
-			context.fillStyle = pattern;
-			context.fillRect(fetti.x - width / 2, fetti.y - height / 2, width, height);
-			context.globalAlpha = 1;
-		} else if (fetti.shape === "circle") context.ellipse ? context.ellipse(fetti.x, fetti.y, Math.abs(x2 - x1) * fetti.ovalScalar, Math.abs(y2 - y1) * fetti.ovalScalar, Math.PI / 10 * fetti.wobble, 0, 2 * Math.PI) : ellipse(context, fetti.x, fetti.y, Math.abs(x2 - x1) * fetti.ovalScalar, Math.abs(y2 - y1) * fetti.ovalScalar, Math.PI / 10 * fetti.wobble, 0, 2 * Math.PI);
-		else if (fetti.shape === "star") {
-			var rot = Math.PI / 2 * 3;
-			var innerRadius = 4 * fetti.scalar;
-			var outerRadius = 8 * fetti.scalar;
-			var x = fetti.x;
-			var y = fetti.y;
-			var spikes = 5;
-			var step = Math.PI / spikes;
-			while (spikes--) {
-				x = fetti.x + Math.cos(rot) * outerRadius;
-				y = fetti.y + Math.sin(rot) * outerRadius;
-				context.lineTo(x, y);
-				rot += step;
-				x = fetti.x + Math.cos(rot) * innerRadius;
-				y = fetti.y + Math.sin(rot) * innerRadius;
-				context.lineTo(x, y);
-				rot += step;
-			}
-		} else {
-			context.moveTo(Math.floor(fetti.x), Math.floor(fetti.y));
-			context.lineTo(Math.floor(fetti.wobbleX), Math.floor(y1));
-			context.lineTo(Math.floor(x2), Math.floor(y2));
-			context.lineTo(Math.floor(x1), Math.floor(fetti.wobbleY));
-		}
-		context.closePath();
-		context.fill();
-		return fetti.tick < fetti.totalTicks;
-	}
-	function animate(canvas, fettis, resizer, size, done) {
-		var animatingFettis = fettis.slice();
-		var context = canvas.getContext("2d");
-		var animationFrame;
-		var destroy;
-		var prom = promise(function(resolve) {
-			function onDone() {
-				animationFrame = destroy = null;
-				context.clearRect(0, 0, size.width, size.height);
-				bitmapMapper.clear();
-				done();
-				resolve();
-			}
-			function update() {
-				if (isWorker && !(size.width === workerSize.width && size.height === workerSize.height)) {
-					size.width = canvas.width = workerSize.width;
-					size.height = canvas.height = workerSize.height;
-				}
-				if (!size.width && !size.height) {
-					resizer(canvas);
-					size.width = canvas.width;
-					size.height = canvas.height;
-				}
-				context.clearRect(0, 0, size.width, size.height);
-				animatingFettis = animatingFettis.filter(function(fetti) {
-					return updateFetti(context, fetti);
-				});
-				if (animatingFettis.length) animationFrame = raf.frame(update);
-				else onDone();
-			}
-			animationFrame = raf.frame(update);
-			destroy = onDone;
-		});
-		return {
-			addFettis: function(fettis) {
-				animatingFettis = animatingFettis.concat(fettis);
-				return prom;
-			},
-			canvas,
-			promise: prom,
-			reset: function() {
-				if (animationFrame) raf.cancel(animationFrame);
-				if (destroy) destroy();
-			}
-		};
-	}
-	function confettiCannon(canvas, globalOpts) {
-		var isLibCanvas = !canvas;
-		var allowResize = !!prop(globalOpts || {}, "resize");
-		var hasResizeEventRegistered = false;
-		var globalDisableForReducedMotion = prop(globalOpts, "disableForReducedMotion", Boolean);
-		var worker = canUseWorker && !!prop(globalOpts || {}, "useWorker") ? getWorker() : null;
-		var resizer = isLibCanvas ? setCanvasWindowSize : setCanvasRectSize;
-		var initialized = canvas && worker ? !!canvas.__confetti_initialized : false;
-		var preferLessMotion = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion)").matches;
-		var animationObj;
-		function fireLocal(options, size, done) {
-			var particleCount = prop(options, "particleCount", onlyPositiveInt);
-			var angle = prop(options, "angle", Number);
-			var spread = prop(options, "spread", Number);
-			var startVelocity = prop(options, "startVelocity", Number);
-			var decay = prop(options, "decay", Number);
-			var gravity = prop(options, "gravity", Number);
-			var drift = prop(options, "drift", Number);
-			var colors = prop(options, "colors", colorsToRgb);
-			var ticks = prop(options, "ticks", Number);
-			var shapes = prop(options, "shapes");
-			var scalar = prop(options, "scalar");
-			var flat = !!prop(options, "flat");
-			var origin = getOrigin(options);
-			var temp = particleCount;
-			var fettis = [];
-			var startX = canvas.width * origin.x;
-			var startY = canvas.height * origin.y;
-			while (temp--) fettis.push(randomPhysics({
-				x: startX,
-				y: startY,
-				angle,
-				spread,
-				startVelocity,
-				color: colors[temp % colors.length],
-				shape: shapes[randomInt(0, shapes.length)],
-				ticks,
-				decay,
-				gravity,
-				drift,
-				scalar,
-				flat
-			}));
-			if (animationObj) return animationObj.addFettis(fettis);
-			animationObj = animate(canvas, fettis, resizer, size, done);
-			return animationObj.promise;
-		}
-		function fire(options) {
-			var disableForReducedMotion = globalDisableForReducedMotion || prop(options, "disableForReducedMotion", Boolean);
-			var zIndex = prop(options, "zIndex", Number);
-			if (disableForReducedMotion && preferLessMotion) return promise(function(resolve) {
-				resolve();
-			});
-			if (isLibCanvas && animationObj) canvas = animationObj.canvas;
-			else if (isLibCanvas && !canvas) {
-				canvas = getCanvas(zIndex);
-				document.body.appendChild(canvas);
-			}
-			if (allowResize && !initialized) resizer(canvas);
-			var size = {
-				width: canvas.width,
-				height: canvas.height
-			};
-			if (worker && !initialized) worker.init(canvas);
-			initialized = true;
-			if (worker) canvas.__confetti_initialized = true;
-			function onResize() {
-				if (worker) {
-					var obj = { getBoundingClientRect: function() {
-						if (!isLibCanvas) return canvas.getBoundingClientRect();
-					} };
-					resizer(obj);
-					worker.postMessage({ resize: {
-						width: obj.width,
-						height: obj.height
-					} });
-					return;
-				}
-				size.width = size.height = null;
-			}
-			function done() {
-				animationObj = null;
-				if (allowResize) {
-					hasResizeEventRegistered = false;
-					global.removeEventListener("resize", onResize);
-				}
-				if (isLibCanvas && canvas) {
-					if (document.body.contains(canvas)) document.body.removeChild(canvas);
-					canvas = null;
-					initialized = false;
-				}
-			}
-			if (allowResize && !hasResizeEventRegistered) {
-				hasResizeEventRegistered = true;
-				global.addEventListener("resize", onResize, false);
-			}
-			if (worker) return worker.fire(options, size, done);
-			return fireLocal(options, size, done);
-		}
-		fire.reset = function() {
-			if (worker) worker.reset();
-			if (animationObj) animationObj.reset();
-		};
-		return fire;
-	}
-	var defaultFire;
-	function getDefaultFire() {
-		if (!defaultFire) defaultFire = confettiCannon(null, {
-			useWorker: true,
-			resize: true
-		});
-		return defaultFire;
-	}
-	function transformPath2D(pathString, pathMatrix, x, y, scaleX, scaleY, rotation) {
-		var path2d = new Path2D(pathString);
-		var t1 = new Path2D();
-		t1.addPath(path2d, new DOMMatrix(pathMatrix));
-		var t2 = new Path2D();
-		t2.addPath(t1, new DOMMatrix([
-			Math.cos(rotation) * scaleX,
-			Math.sin(rotation) * scaleX,
-			-Math.sin(rotation) * scaleY,
-			Math.cos(rotation) * scaleY,
-			x,
-			y
-		]));
-		return t2;
-	}
-	function shapeFromPath(pathData) {
-		if (!canUsePaths) throw new Error("path confetti are not supported in this browser");
-		var path, matrix;
-		if (typeof pathData === "string") path = pathData;
-		else {
-			path = pathData.path;
-			matrix = pathData.matrix;
-		}
-		var path2d = new Path2D(path);
-		var tempCtx = document.createElement("canvas").getContext("2d");
-		if (!matrix) {
-			var maxSize = 1e3;
-			var minX = maxSize;
-			var minY = maxSize;
-			var maxX = 0;
-			var maxY = 0;
-			var width, height;
-			for (var x = 0; x < maxSize; x += 2) for (var y = 0; y < maxSize; y += 2) if (tempCtx.isPointInPath(path2d, x, y, "nonzero")) {
-				minX = Math.min(minX, x);
-				minY = Math.min(minY, y);
-				maxX = Math.max(maxX, x);
-				maxY = Math.max(maxY, y);
-			}
-			width = maxX - minX;
-			height = maxY - minY;
-			var maxDesiredSize = 10;
-			var scale = Math.min(maxDesiredSize / width, maxDesiredSize / height);
-			matrix = [
-				scale,
-				0,
-				0,
-				scale,
-				-Math.round(width / 2 + minX) * scale,
-				-Math.round(height / 2 + minY) * scale
-			];
-		}
-		return {
-			type: "path",
-			path,
-			matrix
-		};
-	}
-	function shapeFromText(textData) {
-		var text, scalar = 1, color = "#000000", fontFamily = "\"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\", \"EmojiOne Color\", \"Android Emoji\", \"Twemoji Mozilla\", \"system emoji\", sans-serif";
-		if (typeof textData === "string") text = textData;
-		else {
-			text = textData.text;
-			scalar = "scalar" in textData ? textData.scalar : scalar;
-			fontFamily = "fontFamily" in textData ? textData.fontFamily : fontFamily;
-			color = "color" in textData ? textData.color : color;
-		}
-		var fontSize = 10 * scalar;
-		var font = "" + fontSize + "px " + fontFamily;
-		var canvas = new OffscreenCanvas(fontSize, fontSize);
-		var ctx = canvas.getContext("2d");
-		ctx.font = font;
-		var size = ctx.measureText(text);
-		var width = Math.ceil(size.actualBoundingBoxRight + size.actualBoundingBoxLeft);
-		var height = Math.ceil(size.actualBoundingBoxAscent + size.actualBoundingBoxDescent);
-		var padding = 2;
-		var x = size.actualBoundingBoxLeft + padding;
-		var y = size.actualBoundingBoxAscent + padding;
-		width += padding + padding;
-		height += padding + padding;
-		canvas = new OffscreenCanvas(width, height);
-		ctx = canvas.getContext("2d");
-		ctx.font = font;
-		ctx.fillStyle = color;
-		ctx.fillText(text, x, y);
-		var scale = 1 / scalar;
-		return {
-			type: "bitmap",
-			bitmap: canvas.transferToImageBitmap(),
-			matrix: [
-				scale,
-				0,
-				0,
-				scale,
-				-width * scale / 2,
-				-height * scale / 2
-			]
-		};
-	}
-	module.exports = function() {
-		return getDefaultFire().apply(this, arguments);
-	};
-	module.exports.reset = function() {
-		getDefaultFire().reset();
-	};
-	module.exports.create = confettiCannon;
-	module.exports.shapeFromPath = shapeFromPath;
-	module.exports.shapeFromText = shapeFromText;
-})((function() {
-	if (typeof window !== "undefined") return window;
-	if (typeof self !== "undefined") return self;
-	return this || {};
-})(), module$1, false);
-var confetti_module_default = module$1.exports;
-module$1.exports.create;
 // src/components/AlarmRingingModal.tsx
 var AlarmRingingModal = ({ alarm, onDismiss, onSnooze, isHindi }) => {
+	const [pulseScale, setPulseScale] = (0, import_react.useState)(1);
 	(0, import_react.useEffect)(() => {
 		audioEngine.play(alarm.ringtone, true);
-		if ("vibrate" in navigator) try {
-			navigator.vibrate([
-				400,
-				200,
-				400,
-				200,
-				800
-			]);
-		} catch {}
+		const interval = setInterval(() => {
+			setPulseScale((prev) => prev === 1 ? 1.08 : 1);
+		}, 600);
 		return () => {
+			clearInterval(interval);
 			audioEngine.stop();
 		};
-	}, [alarm]);
-	const handleDismiss = () => {
-		audioEngine.stop();
-		try {
-			confetti_module_default({
-				particleCount: 50,
-				spread: 60,
-				origin: { y: .7 }
-			});
-		} catch {}
-		onDismiss();
-	};
-	const handleSnooze = () => {
+	}, [alarm.ringtone]);
+	const handleSnoozeClick = () => {
 		audioEngine.stop();
 		onSnooze(alarm.id, 5);
 	};
+	const handleDismissClick = () => {
+		audioEngine.stop();
+		onDismiss();
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200",
+		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 animate-in fade-in duration-300",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "bg-gradient-to-b from-[#0C121E] via-[#090D16] to-[#05080F] border-2 border-red-500/80 rounded-3xl p-6 sm:p-8 w-full max-w-md shadow-[0_0_50px_rgba(239,68,68,0.3)] text-center relative overflow-hidden animate-urgent-pulse",
+			className: "bg-gradient-to-b from-[#0C121E] to-[#070B12] border-2 border-emerald-500 rounded-3xl w-full max-w-sm p-6 sm:p-8 text-center shadow-[0_0_50px_rgba(0,255,102,0.4)] relative overflow-hidden flex flex-col items-center",
 			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-emerald-500/10 pointer-events-none rounded-3xl" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950/80 text-red-300 border border-red-500/50 text-xs font-extrabold uppercase tracking-wider mb-5 font-['Orbitron',sans-serif]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShieldAlert, { className: "w-3.5 h-3.5 animate-pulse text-red-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "हाई अलर्ट अलार्म बज रहा है!" : "OMNITRIX HIGH ALERT ACTIVE" })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "relative w-28 h-28 mx-auto mb-6 flex items-center justify-center",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 rounded-full bg-gradient-to-tr from-red-600 via-rose-500 to-amber-400 opacity-30 blur-xl animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-24 h-24 rounded-2xl bg-gradient-to-tr from-red-600 via-rose-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-red-500/50 border-2 border-white/20",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BellRing, { className: "w-12 h-12 text-white animate-ring-shake" })
+					className: "relative w-24 h-24 rounded-full bg-[#070B12] border-4 border-[#00FF66] flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,255,102,0.6)] transition-transform duration-300",
+					style: { transform: `scale(${pulseScale})` },
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-12 h-12 rounded-full border-2 border-[#00FF66] flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bell, { className: "w-6 h-6 text-[#00FF66] animate-bounce" })
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "absolute -top-1 -right-1 flex h-4 w-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF66] opacity-75" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "relative inline-flex rounded-full h-4 w-4 bg-[#00FF66]" })]
 					})]
 				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1.5 text-[#00FF66] text-xs font-bold font-mono tracking-widest uppercase mb-1",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Radio, { className: "w-3.5 h-3.5 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "अलार्म बज रहा है!" : "ALARM RINGING!" })]
+				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-					className: "text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight",
+					className: "text-xl sm:text-2xl font-black text-white tracking-tight mb-2 drop-shadow-md",
 					children: alarm.task
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center justify-center gap-2 text-[#00FF66] text-sm font-semibold mb-4 bg-[#070B12] py-2 px-4 rounded-xl border border-emerald-500/40 inline-flex shadow-[0_0_15px_rgba(0,255,102,0.15)] font-['Orbitron',monospace]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
+					className: "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-[#00FF66] font-mono text-sm font-bold mb-4 shadow-[0_0_15px_rgba(0,255,102,0.2)]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.time })]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center justify-center gap-1.5 text-xs text-slate-300 mb-6 bg-[#0F172A] py-1.5 px-3 rounded-lg max-w-xs mx-auto border border-slate-800 font-mono",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5 text-[#00FF66] shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "truncate",
-						children: alarm.ringtone
-					})]
+					className: "flex items-center gap-1.5 text-xs text-slate-400 font-mono mb-8",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Volume2, { className: "w-3.5 h-3.5 text-[#00FF66]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: alarm.ringtone })]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "grid grid-cols-2 gap-3 pt-2",
+					className: "w-full space-y-3",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						type: "button",
-						onClick: handleSnooze,
-						className: "w-full py-3.5 px-4 bg-[#0F172A] hover:bg-slate-800 active:bg-slate-750 text-slate-200 border border-emerald-500/30 hover:border-emerald-500/60 font-semibold rounded-2xl text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer font-['Orbitron',sans-serif]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4 text-amber-400" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "स्नूज़ (5 मिनट)" : "Snooze 5m" })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						type: "button",
-						onClick: handleDismiss,
-						className: "w-full py-3.5 px-4 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-2xl text-sm shadow-[0_0_20px_rgba(239,68,68,0.4)] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer font-['Orbitron',sans-serif]",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, { className: "w-4 h-4 stroke-[3]" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "बंद करें (DISMISS)" : "DISMISS" })]
+						onClick: handleSnoozeClick,
+						className: "w-full py-3.5 px-4 bg-[#0F172A] hover:bg-[#1E293B] border border-amber-500/50 hover:border-amber-400 text-amber-300 font-bold rounded-2xl text-sm transition-all shadow-[0_0_15px_rgba(245,158,11,0.2)] cursor-pointer flex items-center justify-center gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-4 h-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isHindi ? "स्नूज़ करें (+5 मिनट)" : "Snooze (+5 mins)" })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: handleDismissClick,
+						className: "w-full py-4 px-4 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white font-extrabold rounded-2xl text-base transition-all shadow-[0_0_25px_rgba(239,68,68,0.4)] active:scale-95 cursor-pointer font-['Orbitron',sans-serif] tracking-wider",
+						children: isHindi ? "बंद करें (DISMISS)" : "DISMISS"
 					})]
 				})
 			]
@@ -52261,7 +51566,7 @@ function App() {
 			return false;
 		}
 	};
-	const handleSavePassword = async (email, newPass) => {
+	const handleSavePassword = async (email) => {
 		try {
 			await sendPasswordResetEmail(auth, email.trim());
 		} catch (e) {
@@ -52315,15 +51620,6 @@ function App() {
 		hours = hours ? hours : 12;
 		const hourStr = hours.toString().padStart(2, "0");
 		const minuteStr = nextMin.getMinutes().toString().padStart(2, "0");
-		[
-			"रविवार (Sunday)",
-			"सोमवार (Monday)",
-			"मंगलवार (Tuesday)",
-			"बुधवार (Wednesday)",
-			"गुरुवार (Thursday)",
-			"शुक्रवार (Friday)",
-			"शनिवार (Saturday)"
-		][nextMin.getDay()];
 		const timeString = `प्रतिदिन (Every Day), ${hourStr}:${minuteStr} ${ampm}`;
 		const newAlarm = {
 			id: `auto-test-${Date.now()}`,

@@ -7,8 +7,9 @@ import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Must be registered BEFORE super.onCreate
+        // Register native plugins before super.onCreate
         registerPlugin(NativeAlarmPlugin.class);
+        registerPlugin(AlarmPermissionPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }
