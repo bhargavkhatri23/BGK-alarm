@@ -15,11 +15,26 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@CapacitorPlugin(name = "NativeAlarm")
+@CapacitorPlugin(
+    name = "NativeAlarm",
+    permissions = {
+        @Permission(
+            alias = "contacts",
+            strings = { android.Manifest.permission.READ_CONTACTS }
+        ),
+        @Permission(
+            alias = "phone",
+            strings = { android.Manifest.permission.CALL_PHONE }
+        )
+    }
+)
 public class NativeAlarmPlugin extends Plugin {
     private static final String PREF_NAME = "bgk_alarms_pref";
     private static final String KEY_STORED_ALARMS = "stored_alarms";
@@ -53,11 +68,15 @@ public class NativeAlarmPlugin extends Plugin {
 
     @PluginMethod
     public void requestContactsAndCallPermissions(PluginCall call) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{
-                android.Manifest.permission.READ_CONTACTS,
-                android.Manifest.permission.CALL_PHONE
-            }, 9988);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity() != null) {
+            ActivityCompat.requestPermissions(
+                getActivity(),
+                new String[]{
+                    android.Manifest.permission.READ_CONTACTS,
+                    android.Manifest.permission.CALL_PHONE
+                },
+                9988
+            );
         }
         JSObject ret = new JSObject();
         ret.put("success", true);
