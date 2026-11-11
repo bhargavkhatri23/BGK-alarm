@@ -23,11 +23,26 @@ import {
 import { DiagnosticCard } from './DiagnosticCard';
 import { PermissionStatusResult } from '../utils/notificationService';
 import { WhatsAppIcon } from './WhatsAppIcon';
+import { SmartVoiceCommand } from './SmartVoiceCommand';
 
 interface HomeScreenProps {
   userEmail: string;
   alarms: AlarmItem[];
   onAddAlarm: () => void;
+  onSaveVoiceAlarm: (alarmData: {
+    task: string;
+    day: string;
+    hour: string;
+    minute: string;
+    ampm: 'AM' | 'PM';
+    ringtone: string;
+    callContactName?: string;
+    callContactNumber?: string;
+    whatsappContactName?: string;
+    whatsappContactNumber?: string;
+    whatsappMessage?: string;
+  }) => Promise<void>;
+  contacts?: Array<{ name: string; phoneNumber: string }>;
   onEditAlarm: (alarm: AlarmItem) => void;
   onDeleteAlarm: (id: string) => void;
   onToggleAlarm: (id: string) => void;
@@ -43,6 +58,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   userEmail,
   alarms,
   onAddAlarm,
+  onSaveVoiceAlarm,
+  contacts = [],
   onEditAlarm,
   onDeleteAlarm,
   onToggleAlarm,
@@ -163,6 +180,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </button>
 
             <button
+              onClick={onAddAlarm}
+              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+              title={isHindi ? 'नया अलार्म सेट करें' : 'Create Alarm'}
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[3]" />
+              <span className="hidden xs:inline sm:inline">
+                {isHindi ? 'नया अलार्म' : 'New Alarm'}
+              </span>
+            </button>
+
+            <button
               onClick={() => onTriggerTestAlarm()}
               className="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 hover:text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
               title="टेस्ट अलार्म बजाएँ"
@@ -185,10 +213,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28">
+      <main className="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-12">
         {/* System Diagnostics */}
         <DiagnosticCard 
           status={permissionStatus}
+          isHindi={isHindi}
+        />
+
+        {/* ================= 1.8 SMART AI VOICE COMMAND WITH "BGK" WAKE-WORD ================= */}
+        <SmartVoiceCommand
+          onAddAlarm={onSaveVoiceAlarm}
+          contacts={contacts}
           isHindi={isHindi}
         />
 
@@ -311,36 +346,47 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             />
           </div>
 
-          <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 self-start sm:self-auto space-x-1 shadow-sm">
+          <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+            <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 space-x-1 shadow-sm">
+              <button
+                onClick={() => setFilterMode('all')}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  filterMode === 'all'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {isHindi ? 'सभी' : 'All'} ({alarms.length})
+              </button>
+              <button
+                onClick={() => setFilterMode('active')}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  filterMode === 'active'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {isHindi ? 'सक्रिय' : 'Active'} ({activeCount})
+              </button>
+              <button
+                onClick={() => setFilterMode('inactive')}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  filterMode === 'inactive'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                {isHindi ? 'बंद' : 'Off'} ({alarms.length - activeCount})
+              </button>
+            </div>
+
             <button
-              onClick={() => setFilterMode('all')}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                filterMode === 'all'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
+              onClick={onAddAlarm}
+              className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-all cursor-pointer whitespace-nowrap"
+              title={isHindi ? 'नया अलार्म सेट करें' : 'Create Alarm'}
             >
-              {isHindi ? 'सभी' : 'All'} ({alarms.length})
-            </button>
-            <button
-              onClick={() => setFilterMode('active')}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                filterMode === 'active'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {isHindi ? 'सक्रिय' : 'Active'} ({activeCount})
-            </button>
-            <button
-              onClick={() => setFilterMode('inactive')}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                filterMode === 'inactive'
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {isHindi ? 'बंद' : 'Off'} ({alarms.length - activeCount})
+              <Plus className="w-3.5 h-3.5 stroke-[3]" />
+              <span>{isHindi ? '+ नया अलार्म' : '+ New Alarm'}</span>
             </button>
           </div>
         </div>
@@ -519,21 +565,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           </div>
         )}
       </main>
-
-      {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          onClick={onAddAlarm}
-          className="flex items-center gap-2.5 px-5 py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-extrabold rounded-2xl shadow-xl border border-white/20 transition-all cursor-pointer font-['Orbitron',sans-serif]"
-        >
-          <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-            <Plus className="w-4 h-4 stroke-[3] text-white" />
-          </div>
-          <span className="text-sm font-extrabold tracking-wider">
-            {isHindi ? 'नया अलार्म' : 'NEW ALARM'}
-          </span>
-        </button>
-      </div>
     </div>
   );
 };

@@ -19,6 +19,12 @@ interface INativeAlarmPlugin {
   openExactAlarmSettings(): Promise<void>;
   getContacts(): Promise<{ contacts: Array<{ name: string; phoneNumber: string }> }>;
   requestContactsAndCallPermissions(): Promise<void>;
+  startSpeechRecognition(options?: { language?: string }): Promise<{
+    transcript: string;
+    alternatives?: string[];
+    cancelled?: boolean;
+    error?: string;
+  }>;
 }
 
 const NativeAlarm = registerPlugin<INativeAlarmPlugin>('NativeAlarm');
@@ -68,6 +74,23 @@ class NativeAlarmService {
       return res.contacts || [];
     } catch {
       return [];
+    }
+  }
+
+  public async startSpeechRecognition(language: string = 'hi-IN'): Promise<{
+    transcript: string;
+    alternatives?: string[];
+    cancelled?: boolean;
+    error?: string;
+  }> {
+    if (!this.isNative) {
+      return { transcript: '', cancelled: false };
+    }
+    try {
+      return await NativeAlarm.startSpeechRecognition({ language });
+    } catch (err: any) {
+      console.warn('Native speech recognition call failed', err);
+      return { transcript: '', cancelled: true, error: err?.message || 'Failed' };
     }
   }
 

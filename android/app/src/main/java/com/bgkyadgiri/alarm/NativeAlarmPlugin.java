@@ -10,6 +10,11 @@ import android.provider.Settings;
 import android.provider.ContactsContract;
 import android.database.Cursor;
 
+import android.speech.RecognizerIntent;
+import androidx.activity.result.ActivityResult;
+import com.getcapacitor.annotation.ActivityCallback;
+import java.util.ArrayList;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -32,6 +37,10 @@ import org.json.JSONObject;
         @Permission(
             alias = "phone",
             strings = { android.Manifest.permission.CALL_PHONE }
+        ),
+        @Permission(
+            alias = "audio",
+            strings = { android.Manifest.permission.RECORD_AUDIO }
         )
     }
 )
@@ -80,6 +89,65 @@ public class NativeAlarmPlugin extends Plugin {
         }
         JSObject ret = new JSObject();
         ret.put("success", true);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void startSpeechRecognition(PluginCall call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity() != null) {
+            if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.RECORD_AUDIO) 
+                    != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    getActivity(),
+                    new String[]{ android.Manifest.permission.RECORD_AUDIO },
+                    7788
+                );
+            }
+        }
+
+        try {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            String lang = call.getString("language", "hi-IN");
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, lang);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, lang);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "BGK अलार्म: बोलिए (जैसे 'BGK 9:00 बजे का अलार्म लगाओ')");
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+
+            startActivityForResult(call, intent, "speechResultCallback");
+        } catch (Exception e) {
+            JSObject ret = new JSObject();
+            ret.put("transcript", "");
+            ret.put("cancelled", true);
+            ret.put("error", e.getMessage());
+            call.resolve(ret);
+        }
+    }
+
+    @ActivityCallback
+    private void speechResultCallback(PluginCall call, ActivityResult result) {
+        if (call == null) return;
+        try {
+            if (result != null && result.getResultCode() == android.app.Activity.RESULT_OK && result.getData() != null) {
+                ArrayList<String> matches = result.getData().getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (matches != null && !matches.isEmpty()) {
+                    JSObject ret = new JSObject();
+                    ret.put("transcript", matches.get(0));
+                    JSONArray altArr = new JSONArray();
+                    for (String m : matches) {
+                        altArr.put(m);
+                    }
+                    ret.put("alternatives", altArr);
+                    ret.put("cancelled", false);
+                    call.resolve(ret);
+                    return;
+                }
+            }
+        } catch (Exception ignored) {}
+
+        JSObject ret = new JSObject();
+        ret.put("transcript", "");
+        ret.put("cancelled", true);
         call.resolve(ret);
     }
 

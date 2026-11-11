@@ -17,6 +17,7 @@ import { AlarmRingingModal } from './components/AlarmRingingModal';
 import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
 import { MandatoryPermissionModal } from './components/MandatoryPermissionModal';
 import { notificationService, PermissionStatusResult } from './utils/notificationService';
+import { nativeAlarmService } from './utils/nativeAlarm';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 // Firebase Imports
@@ -40,6 +41,15 @@ export default function App() {
   const [alarmToEdit, setAlarmToEdit] = useState<AlarmItem | null>(null);
   const [activeRingingAlarm, setActiveRingingAlarm] = useState<AlarmItem | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [deviceContacts, setDeviceContacts] = useState<Array<{ name: string; phoneNumber: string }>>([]);
+
+  useEffect(() => {
+    nativeAlarmService.getDeviceContacts().then((list) => {
+      if (list && list.length > 0) {
+        setDeviceContacts(list);
+      }
+    }).catch(() => {});
+  }, []);
 
   // 2 Mandatory Permissions: Notification & Display Over Other Apps
   const [permissionStatus, setPermissionStatus] = useState<PermissionStatusResult>({
@@ -497,6 +507,8 @@ export default function App() {
             userEmail={currentUserEmail}
             alarms={currentAlarms}
             permissionStatus={permissionStatus}
+            contacts={deviceContacts}
+            onSaveVoiceAlarm={handleSaveAlarm}
             onAddAlarm={() => {
               if (!permissionStatus.allMandatoryGranted) {
                 checkPermissions();

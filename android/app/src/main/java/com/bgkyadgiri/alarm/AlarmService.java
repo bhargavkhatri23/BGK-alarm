@@ -69,11 +69,16 @@ public class AlarmService extends Service {
             Intent mainIntent = new Intent(this, MainActivity.class);
             PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, flagsPending);
 
+            Intent voiceIntent = new Intent(this, VoiceActivity.class);
+            voiceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent voicePendingIntent = PendingIntent.getActivity(this, 9922, voiceIntent, flagsPending);
+
             Notification guardianNotification = new NotificationCompat.Builder(this, GUARDIAN_CHANNEL_ID)
-                    .setContentTitle("BGK Smart Alarm: Background protection active")
-                    .setContentText(contentText)
+                    .setContentTitle("BGK Smart Alarm: बैकग्राउंड सुरक्षा सक्रिय")
+                    .setContentText(contentText + " • [🎙️ बोलें]")
                     .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
                     .setContentIntent(mainPendingIntent)
+                    .addAction(android.R.drawable.ic_btn_speak_now, "🎙️ BGK बोलें", voicePendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setOngoing(true)
                     .setAutoCancel(false)
