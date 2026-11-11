@@ -130,26 +130,25 @@ public class AlarmService extends Service {
             } catch (Exception ignored) {}
         }
 
-        // 2. Execute independent WhatsApp action if whatsappContactNumber is present and message is non-empty
+        // 2. Execute WhatsApp Action (API Automation or Fallback Intent)
         if (whatsappContactNumber != null && !whatsappContactNumber.trim().isEmpty() && whatsappMessage != null && !whatsappMessage.trim().isEmpty()) {
-            try {
-                String cleanNumber = whatsappContactNumber.replaceAll("[^0-9+]", "");
-                String encodedMsg = android.net.Uri.encode(whatsappMessage);
-                String url = "https://api.whatsapp.com/send?phone=" + cleanNumber + "&text=" + encodedMsg;
-                
-                Intent waIntent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
-                waIntent.setPackage("com.whatsapp");
-                waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(waIntent);
-            } catch (Exception e) {
-                try {
-                    String cleanNumber = whatsappContactNumber.replaceAll("[^0-9+]", "");
-                    String encodedMsg = android.net.Uri.encode(whatsappMessage);
-                    String url = "https://api.whatsapp.com/send?phone=" + cleanNumber + "&text=" + encodedMsg;
-                    Intent waIntent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
-                    waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(waIntent);
-                } catch (Exception ignored) {}
+            android.content.SharedPreferences waPrefs = getSharedPreferences("bgk_wa_api_pref", Context.MODE_PRIVATE);
+            boolean apiEnabled = waPrefs.getBoolean("enabled", false);
+            String provider = waPrefs.getString("provider", "meta_cloud");
+            String phoneNumberId = waPrefs.getString("phoneNumberId", "");
+            String accessToken = waPrefs.getString("accessToken", "");
+            String endpointUrl = waPrefs.getString("endpointUrl", "");
+            String apiKey = waPrefs.getString("apiKey", "");
+
+            final String fTargetNumber = whatsappContactNumber;
+            final String fMessage = whatsappMessage;
+
+            if (apiEnabled && "meta_cloud".equals(provider) && !phoneNumberId.isEmpty() && !accessToken.isEmpty()) {
+                new Thread(() -> sendWhatsAppViaMetaCloud(phoneNumberId, accessToken, fTargetNumber, fMessage)).start();
+            } else if (apiEnabled && "gateway_rest".equals(provider) && !endpointUrl.isEmpty()) {
+                new Thread(() -> sendWhatsAppViaGateway(endpointUrl, apiKey, fTargetNumber, fMessage)).start();
+            } else {
+                fallbackLaunchWhatsAppApp(fTargetNumber, fMessage);
             }
         }
 
@@ -349,5 +348,91 @@ public class AlarmService extends Service {
                 manager.createNotificationChannel(channel);
             }
         }
+    }
+
+    private void sendWhatsAppViaMetaCloud(String phoneNumberId, String accessToken, String targetNumber, String message) {
+        try {
+            String cleanNumber = targetNumber.replaceAll("[^0-9]", "");
+            if (cleanNumber.length() == 10) cleanNumber = "91" + cleanNumber;
+
+            java.net.URL url = new java.net.URL("https://graph.facebook.com/v19.0/" + phoneNumberId + "/messages");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+
+            org.json.JSONObject payload = new org.json.JSONObject();
+            payload.put("messaging_product", "whatsapp");
+            payload.put("recipient_type", "individual");
+            payload.put("to", cleanNumber);
+            payload.put("type", "text");
+            org.json.JSONObject textObj = new org.json.JSONObject();
+            textObj.put("preview_url", false);
+            textObj.put("body", message);
+            payload.put("text", textObj);
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                byte[] input = payload.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int code = conn.getResponseCode();
+            if (code < 200 || code >= 300) {
+                fallbackLaunchWhatsAppApp(targetNumber, message);
+            }
+        } catch (Exception e) {
+            fallbackLaunchWhatsAppApp(targetNumber, message);
+        }
+    }
+
+    private void sendWhatsAppViaGateway(String endpointUrl, String apiKey, String targetNumber, String message) {
+        try {
+            String cleanNumber = targetNumber.replaceAll("[^0-9]", "");
+            if (cleanNumber.length() == 10) cleanNumber = "91" + cleanNumber;
+
+            java.net.URL url = new java.net.URL(endpointUrl);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+
+            org.json.JSONObject payload = new org.json.JSONObject();
+            payload.put("to", cleanNumber);
+            payload.put("body", message);
+            payload.put("message", message);
+            if (apiKey != null && !apiKey.isEmpty()) {
+                payload.put("token", apiKey);
+                payload.put("token_key", apiKey);
+            }
+
+            try (java.io.OutputStream os = conn.getOutputStream()) {
+                byte[] input = payload.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int code = conn.getResponseCode();
+            if (code < 200 || code >= 300) {
+                fallbackLaunchWhatsAppApp(targetNumber, message);
+            }
+        } catch (Exception e) {
+            fallbackLaunchWhatsAppApp(targetNumber, message);
+        }
+    }
+
+    private void fallbackLaunchWhatsAppApp(String targetNumber, String message) {
+        try {
+            String cleanNumber = targetNumber.replaceAll("[^0-9+]", "");
+            String encodedMsg = android.net.Uri.encode(message);
+            String url = "https://api.whatsapp.com/send?phone=" + cleanNumber + "&text=" + encodedMsg;
+            Intent waIntent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
+            waIntent.setPackage("com.whatsapp");
+            waIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(waIntent);
+        } catch (Exception ignored) {}
     }
 }

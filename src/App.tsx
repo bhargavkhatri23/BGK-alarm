@@ -18,6 +18,8 @@ import { DeviceFrameWrapper } from './components/DeviceFrameWrapper';
 import { MandatoryPermissionModal } from './components/MandatoryPermissionModal';
 import { notificationService, PermissionStatusResult } from './utils/notificationService';
 import { nativeAlarmService } from './utils/nativeAlarm';
+import { whatsappApiService } from './utils/whatsappApiService';
+import { WhatsAppApiSettingsModal } from './components/WhatsAppApiSettingsModal';
 import { LocalNotifications } from '@capacitor/local-notifications';
 
 // Firebase Imports
@@ -201,6 +203,22 @@ export default function App() {
           triggeredAlarmsMapRef.current.set(triggerKey, Date.now());
           setActiveRingingAlarm(alarm);
           audioEngine.play(DEFAULT_RINGTONE, true);
+
+          // Automated WhatsApp Message API Dispatch (Without Manual User Intervention)
+          if (alarm.whatsappContactNumber && alarm.whatsappMessage) {
+            whatsappApiService.sendAutomatedWhatsAppMessage({
+              phoneNumber: alarm.whatsappContactNumber,
+              message: alarm.whatsappMessage,
+              recipientName: alarm.whatsappContactName,
+              alarmTask: alarm.task,
+            }).then(result => {
+              if (result.success) {
+                console.log(`WhatsApp API message sent automatically to ${alarm.whatsappContactNumber} via ${result.provider}`);
+              } else {
+                console.warn('WhatsApp API message automated dispatch notice:', result.error);
+              }
+            });
+          }
 
           if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
             try {
@@ -525,6 +543,8 @@ export default function App() {
             onLogout={handleLogout}
             isHindi={isHindi}
             onToggleLanguage={() => setIsHindi(!isHindi)}
+            activeRingingAlarm={activeRingingAlarm}
+            onDismissRingingAlarm={handleDismiss}
           />
         </>
       )}

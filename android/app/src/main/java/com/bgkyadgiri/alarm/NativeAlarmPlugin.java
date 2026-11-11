@@ -152,6 +152,29 @@ public class NativeAlarmPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void saveWhatsAppApiConfig(PluginCall call) {
+        Context context = getContext();
+        SharedPreferences prefs = context.getSharedPreferences("bgk_wa_api_pref", Context.MODE_PRIVATE);
+        boolean enabled = call.getBoolean("enabled", false);
+        String provider = call.getString("provider", "meta_cloud");
+        String phoneNumberId = call.getString("phoneNumberId", "");
+        String accessToken = call.getString("accessToken", "");
+        String endpointUrl = call.getString("endpointUrl", "");
+        String apiKey = call.getString("apiKey", "");
+
+        prefs.edit()
+            .putBoolean("enabled", enabled)
+            .putString("provider", provider)
+            .putString("phoneNumberId", phoneNumberId)
+            .putString("accessToken", accessToken)
+            .putString("endpointUrl", endpointUrl)
+            .putString("apiKey", apiKey)
+            .apply();
+
+        call.resolve();
+    }
+
+    @PluginMethod
     public void getContacts(PluginCall call) {
         Context context = getContext();
         JSONArray contactArray = new JSONArray();

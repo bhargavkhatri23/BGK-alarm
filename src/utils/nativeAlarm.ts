@@ -25,6 +25,14 @@ interface INativeAlarmPlugin {
     cancelled?: boolean;
     error?: string;
   }>;
+  saveWhatsAppApiConfig(options: {
+    enabled: boolean;
+    provider: string;
+    phoneNumberId?: string;
+    accessToken?: string;
+    endpointUrl?: string;
+    apiKey?: string;
+  }): Promise<void>;
 }
 
 const NativeAlarm = registerPlugin<INativeAlarmPlugin>('NativeAlarm');
@@ -91,6 +99,22 @@ class NativeAlarmService {
     } catch (err: any) {
       console.warn('Native speech recognition call failed', err);
       return { transcript: '', cancelled: true, error: err?.message || 'Failed' };
+    }
+  }
+
+  public async syncWhatsAppApiConfig(config: any) {
+    if (!this.isNative) return;
+    try {
+      await NativeAlarm.saveWhatsAppApiConfig({
+        enabled: Boolean(config.enabled),
+        provider: config.provider || 'meta_cloud',
+        phoneNumberId: config.metaCloud?.phoneNumberId || '',
+        accessToken: config.metaCloud?.accessToken || '',
+        endpointUrl: config.gatewayRest?.endpointUrl || '',
+        apiKey: config.gatewayRest?.apiKey || '',
+      });
+    } catch (e) {
+      console.warn('Failed to sync WhatsApp API config to NativeAlarm', e);
     }
   }
 
